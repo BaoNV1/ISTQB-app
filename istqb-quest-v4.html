@@ -39,6 +39,33 @@
         }
         .lesson-card { transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); }
         .lesson-card:hover { transform: translateY(-4px); }
+        .markdown-preview {
+            max-height: 70vh;
+            overflow: auto;
+            line-height: 1.7;
+        }
+        .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #f5f5f5;
+        }
+        .markdown-preview ul, .markdown-preview ol {
+            padding-left: 1.2rem;
+            margin: 0.5rem 0 0.75rem;
+        }
+        .markdown-preview p { margin: 0.5rem 0; }
+        .markdown-preview code {
+            background: rgba(255,255,255,0.08);
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.35rem;
+        }
+        .markdown-preview .mermaid {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen">
@@ -62,6 +89,7 @@
             </nav>
 
             <div class="flex items-center gap-x-4">
+                <button onclick="toggleLanguage()" id="lang-toggle" class="px-3 py-2 rounded-2xl border border-zinc-700 bg-zinc-900 text-sm font-semibold">EN / VI</button>
                 <button onclick="toggleTheme()" id="theme-toggle" class="p-3 hover:bg-zinc-800 rounded-2xl transition-colors">
                     <i class="fa-solid fa-moon text-xl"></i>
                 </button>
@@ -74,6 +102,18 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 py-10">
+        <div id="markdown-modal" class="fixed inset-0 z-[100] hidden bg-black/85 backdrop-blur-sm">
+            <div class="max-w-5xl mx-auto mt-8 h-[88vh] rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl overflow-hidden">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+                    <div>
+                        <h3 id="markdown-modal-title" class="text-lg font-semibold">Study content</h3>
+                        <p class="text-sm text-zinc-400">Rendered markdown preview</p>
+                    </div>
+                    <button onclick="closeMarkdownModal()" class="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800">Close</button>
+                </div>
+                <div id="markdown-modal-body" class="markdown-preview p-6 text-zinc-300"></div>
+            </div>
+        </div>
         <!-- HOME -->
         <section id="home-section" class="section">
             <div class="text-center py-16">
@@ -92,8 +132,8 @@
         <section id="study-section" class="section hidden">
             <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
                 <div>
-                    <h2 class="title text-4xl font-bold">Study Path from Chapter 1 to Chapter 6</h2>
-                    <p class="text-zinc-400 mt-2">A local-friendly learning page with summaries, glossary links, and study checkpoints.</p>
+                    <h2 id="study-title" class="title text-4xl font-bold">Study Path from Chapter 1 to Chapter 6</h2>
+                    <p id="study-subtitle" class="text-zinc-400 mt-2">A local-friendly learning page with summaries, glossary links, and study checkpoints.</p>
                 </div>
                 <div class="flex gap-3">
                     <a href="doc/study_pack_vi/one_page_summary.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-2xl text-sm font-semibold">Open One-Page Summary</a>
@@ -103,8 +143,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
-                    <h3 class="text-xl font-semibold mb-3">How to use this page</h3>
-                    <ul class="text-sm text-zinc-300 space-y-2">
+                    <h3 id="usage-title" class="text-xl font-semibold mb-3">How to use this page</h3>
+                    <ul id="usage-list" class="text-sm text-zinc-300 space-y-2">
                         <li>• Start with Chapter 1 and move in order.</li>
                         <li>• Read the summary, then open the glossary and mind map.</li>
                         <li>• Use flashcards and quizzes to check understanding.</li>
@@ -112,7 +152,7 @@
                     </ul>
                 </div>
                 <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
-                    <h3 class="text-xl font-semibold mb-3">Study progress</h3>
+                    <h3 id="progress-title" class="text-xl font-semibold mb-3">Study progress</h3>
                     <div id="study-progress-summary" class="text-sm text-zinc-300"></div>
                 </div>
             </div>
@@ -120,86 +160,86 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 1</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Fundamentals of Testing</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Testing principles, test objectives, defects, failures, debugging, verification, validation.</p>
+                    <h3 id="chapter1-title" class="text-2xl font-semibold mt-1 mb-3">Fundamentals of Testing</h3>
+                    <p id="chapter1-desc" class="text-zinc-400 mb-4 text-sm">Testing principles, test objectives, defects, failures, debugging, verification, validation.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> quality, defects, root cause, test process, traceability.</p>
+                        <p id="chapter1-keyideas"><strong>Key ideas:</strong> quality, defects, root cause, test process, traceability.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter1/glossary_chapter1_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter1/mind_map_chapter1_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(1, 'glossary')" id="chapter1-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(1, 'mindmap')" id="chapter1-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(1)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(1)" id="chapter1-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
 
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 2</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Testing Throughout SDLC</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Test levels, test types, maintenance testing, shift left, DevOps, confirmation and regression.</p>
+                    <h3 id="chapter2-title" class="text-2xl font-semibold mt-1 mb-3">Testing Throughout SDLC</h3>
+                    <p id="chapter2-desc" class="text-zinc-400 mb-4 text-sm">Test levels, test types, maintenance testing, shift left, DevOps, confirmation and regression.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> component, integration, system, acceptance testing.</p>
+                        <p id="chapter2-keyideas"><strong>Key ideas:</strong> component, integration, system, acceptance testing.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter2/glossary_chapter2_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter2/mind_map_chapter2_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(2, 'glossary')" id="chapter2-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(2, 'mindmap')" id="chapter2-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(2)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(2)" id="chapter2-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
 
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 3</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Static Testing</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Reviews, walkthroughs, inspections, informal and formal review processes.</p>
+                    <h3 id="chapter3-title" class="text-2xl font-semibold mt-1 mb-3">Static Testing</h3>
+                    <p id="chapter3-desc" class="text-zinc-400 mb-4 text-sm">Reviews, walkthroughs, inspections, informal and formal review processes.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> static vs dynamic testing, review roles, review success factors.</p>
+                        <p id="chapter3-keyideas"><strong>Key ideas:</strong> static vs dynamic testing, review roles, review success factors.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter3/glossary_chapter3_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter3/mind_map_chapter3_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(3, 'glossary')" id="chapter3-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(3, 'mindmap')" id="chapter3-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(3)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(3)" id="chapter3-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
 
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 4</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Test Analysis and Design</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.</p>
+                    <h3 id="chapter4-title" class="text-2xl font-semibold mt-1 mb-3">Test Analysis and Design</h3>
+                    <p id="chapter4-desc" class="text-zinc-400 mb-4 text-sm">Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> black-box, white-box, experience-based, and collaboration-based techniques.</p>
+                        <p id="chapter4-keyideas"><strong>Key ideas:</strong> black-box, white-box, experience-based, and collaboration-based techniques.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter4/glossary_chapter4_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter4/mind_map_chapter4_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(4, 'glossary')" id="chapter4-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(4, 'mindmap')" id="chapter4-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(4)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(4)" id="chapter4-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
 
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 5</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Managing the Test Activities</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Planning, estimation, risk management, monitoring, defects, configuration management.</p>
+                    <h3 id="chapter5-title" class="text-2xl font-semibold mt-1 mb-3">Managing the Test Activities</h3>
+                    <p id="chapter5-desc" class="text-zinc-400 mb-4 text-sm">Planning, estimation, risk management, monitoring, defects, configuration management.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> entry/exit criteria, risk-based testing, defect reporting.</p>
+                        <p id="chapter5-keyideas"><strong>Key ideas:</strong> entry/exit criteria, risk-based testing, defect reporting.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter5/glossary_chapter5_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter5/mind_map_chapter5_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(5, 'glossary')" id="chapter5-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(5, 'mindmap')" id="chapter5-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(5)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(5)" id="chapter5-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
 
                 <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
                     <span class="text-emerald-400 text-sm font-medium">Chapter 6</span>
-                    <h3 class="text-2xl font-semibold mt-1 mb-3">Test Tools and Automation</h3>
-                    <p class="text-zinc-400 mb-4 text-sm">Test management tools, automation, benefits, risks, continuous testing.</p>
+                    <h3 id="chapter6-title" class="text-2xl font-semibold mt-1 mb-3">Test Tools and Automation</h3>
+                    <p id="chapter6-desc" class="text-zinc-400 mb-4 text-sm">Test management tools, automation, benefits, risks, continuous testing.</p>
                     <div class="text-sm text-zinc-300 space-y-2 mb-4">
-                        <p><strong>Key ideas:</strong> tools support testing but do not replace human judgement.</p>
+                        <p id="chapter6-keyideas"><strong>Key ideas:</strong> tools support testing but do not replace human judgement.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <a href="doc/study_pack_vi/chapter6/glossary_chapter6_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</a>
-                        <a href="doc/study_pack_vi/chapter6/mind_map_chapter6_vi.md" target="_blank" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</a>
+                        <button onclick="openChapterContent(6, 'glossary')" id="chapter6-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(6, 'mindmap')" id="chapter6-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
                     </div>
-                    <button onclick="toggleChapterComplete(6)" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                    <button onclick="toggleChapterComplete(6)" id="chapter6-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
                 </div>
             </div>
         </section>
@@ -279,7 +319,175 @@
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
+        let currentLanguage = localStorage.getItem('istqb-study-language') || 'en';
+
+        const languageContent = {
+            en: {
+                studyTitle: 'Study Path from Chapter 1 to Chapter 6',
+                studySubtitle: 'A local-friendly learning page with summaries, glossary links, and study checkpoints.',
+                usageTitle: 'How to use this page',
+                usageItems: [
+                    'Start with Chapter 1 and move in order.',
+                    'Read the summary, then open the glossary and mind map.',
+                    'Use flashcards and quizzes to check understanding.',
+                    'Review the mock exam before your final revision.'
+                ],
+                progressTitle: 'Study progress',
+                progressLabel: 'Completed chapters',
+                glossaryLabel: 'Glossary',
+                mindmapLabel: 'Mind Map',
+                markDone: 'Mark as done',
+                chapterCards: [
+                    { title: 'Fundamentals of Testing', desc: 'Testing principles, test objectives, defects, failures, debugging, verification, validation.', keyIdeas: 'quality, defects, root cause, test process, traceability' },
+                    { title: 'Testing Throughout SDLC', desc: 'Test levels, test types, maintenance testing, shift left, DevOps, confirmation and regression.', keyIdeas: 'component, integration, system, acceptance testing' },
+                    { title: 'Static Testing', desc: 'Reviews, walkthroughs, inspections, informal and formal review processes.', keyIdeas: 'static vs dynamic testing, review roles, review success factors' },
+                    { title: 'Test Analysis and Design', desc: 'Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.', keyIdeas: 'black-box, white-box, experience-based, and collaboration-based techniques' },
+                    { title: 'Managing the Test Activities', desc: 'Planning, estimation, risk management, monitoring, defects, configuration management.', keyIdeas: 'entry/exit criteria, risk-based testing, defect reporting' },
+                    { title: 'Test Tools and Automation', desc: 'Test management tools, automation, benefits, risks, continuous testing.', keyIdeas: 'tools support testing but do not replace human judgement' }
+                ]
+            },
+            vi: {
+                studyTitle: 'Lộ trình học từ Chương 1 đến Chương 6',
+                studySubtitle: 'Trang học thân thiện để đọc tóm tắt, mở từ vựng và sơ đồ tư duy theo từng chương.',
+                usageTitle: 'Cách dùng trang này',
+                usageItems: [
+                    'Bắt đầu từ Chương 1 và học theo thứ tự.',
+                    'Đọc tóm tắt trước rồi mở từ vựng và sơ đồ tư duy.',
+                    'Dùng flashcards và quiz để kiểm tra hiểu biết.',
+                    'Ôn lại mock exam trước khi kết thúc.'
+                ],
+                progressTitle: 'Tiến độ học',
+                progressLabel: 'Chương đã hoàn thành',
+                glossaryLabel: 'Từ vựng',
+                mindmapLabel: 'Sơ đồ tư duy',
+                markDone: 'Đánh dấu xong',
+                chapterCards: [
+                    { title: 'Cơ bản về kiểm thử', desc: 'Nguyên tắc kiểm thử, mục tiêu kiểm thử, lỗi, thất bại, gỡ lỗi, xác thực và xác nhận.', keyIdeas: 'chất lượng, lỗi, nguyên nhân gốc, quy trình kiểm thử, traceability' },
+                    { title: 'Kiểm thử trong vòng đời phát triển phần mềm', desc: 'Các mức kiểm thử, loại kiểm thử, kiểm thử bảo trì, shift left, DevOps, confirmation và regression.', keyIdeas: 'component, integration, system, acceptance testing' },
+                    { title: 'Kiểm thử tĩnh', desc: 'Review, walkthrough, inspection, quy trình review hình thức và bán hình thức.', keyIdeas: 'kiểm thử tĩnh so với động, vai trò review, yếu tố thành công' },
+                    { title: 'Phân tích và thiết kế kiểm thử', desc: 'Phân vùng tương đương, phân tích giá trị biên, decision table, state transition, ATDD.', keyIdeas: 'black-box, white-box, experience-based, collaboration-based' },
+                    { title: 'Quản lý hoạt động kiểm thử', desc: 'Kế hoạch kiểm thử, ước lượng, quản trị rủi ro, giám sát, quản lý defect, cấu hình.', keyIdeas: 'entry/exit criteria, risk-based testing, defect reporting' },
+                    { title: 'Công cụ kiểm thử và tự động hóa', desc: 'Công cụ quản lý kiểm thử, tự động hóa, lợi ích, rủi ro, continuous testing.', keyIdeas: 'công cụ hỗ trợ kiểm thử nhưng không thay thế con người' }
+                ]
+            }
+        };
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function renderMarkdownToHtml(markdownText) {
+            const withMermaid = markdownText.replace(/```mermaid\s*([\s\S]*?)```/g, (_match, code) => {
+                return `<div class="mermaid">${escapeHtml(code.trim())}</div>`;
+            });
+            return marked.parse(withMermaid);
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'vi' : 'en';
+            localStorage.setItem('istqb-study-language', currentLanguage);
+            applyLanguage();
+        }
+
+        function getChapterPreviewPath(chapterNumber, type) {
+            if (type === 'glossary') {
+                return currentLanguage === 'vi'
+                    ? `doc/study_pack_vi/chapter${chapterNumber}/glossary_chapter${chapterNumber}_vi.md`
+                    : `doc/chapter${chapterNumber}/glossary_chapter${chapterNumber}.md`;
+            }
+
+            if (currentLanguage === 'vi') {
+                return `doc/study_pack_vi/chapter${chapterNumber}/mind_map_chapter${chapterNumber}_vi.md`;
+            }
+
+            if (chapterNumber === 1) {
+                return 'doc/ISTQB_mind_map.md';
+            }
+            return `doc/chapter${chapterNumber}/mind_map_chapter${chapterNumber}.md`;
+        }
+
+        function openChapterContent(chapterNumber, type) {
+            const content = languageContent[currentLanguage];
+            const filePath = getChapterPreviewPath(chapterNumber, type);
+            const title = `${content.chapterCards[chapterNumber - 1].title} - ${type === 'glossary' ? content.glossaryLabel : content.mindmapLabel}`;
+            openMarkdownPreview(filePath, title);
+        }
+
+        function applyLanguage() {
+            const content = languageContent[currentLanguage];
+            document.getElementById('study-title').textContent = content.studyTitle;
+            document.getElementById('study-subtitle').textContent = content.studySubtitle;
+            document.getElementById('usage-title').textContent = content.usageTitle;
+            document.getElementById('usage-list').innerHTML = content.usageItems.map(item => `<li>• ${item}</li>`).join('');
+            document.getElementById('progress-title').textContent = content.progressTitle;
+            document.getElementById('lang-toggle').textContent = currentLanguage === 'en' ? 'EN / VI' : 'VI / EN';
+
+            for (let i = 0; i < 6; i++) {
+                const card = content.chapterCards[i];
+                document.getElementById(`chapter${i + 1}-title`).textContent = card.title;
+                document.getElementById(`chapter${i + 1}-desc`).textContent = card.desc;
+                document.getElementById(`chapter${i + 1}-keyideas`).innerHTML = `<strong>Key ideas:</strong> ${card.keyIdeas}`;
+                document.getElementById(`chapter${i + 1}-glossary`).textContent = content.glossaryLabel;
+                document.getElementById(`chapter${i + 1}-mindmap`).textContent = content.mindmapLabel;
+                document.getElementById(`chapter${i + 1}-done`).textContent = content.markDone;
+            }
+
+            document.getElementById('study-progress-summary').innerHTML = `
+                <p class="mb-2">${content.progressLabel}: <span class="text-emerald-400 font-semibold">${Object.values(chapterProgress).filter(Boolean).length}/6</span></p>
+                <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-2 bg-emerald-500 rounded-full" style="width:${(Object.values(chapterProgress).filter(Boolean).length / 6) * 100}%"></div>
+                </div>
+            `;
+        }
+
+        function openMarkdownPreview(path, title) {
+            const modal = document.getElementById('markdown-modal');
+            const body = document.getElementById('markdown-modal-body');
+            const titleEl = document.getElementById('markdown-modal-title');
+            titleEl.textContent = title;
+            body.innerHTML = '<div class="text-zinc-400">Loading preview...</div>';
+            modal.classList.remove('hidden');
+
+            fetch(path, { cache: 'no-store' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Unable to load file');
+                    return response.text();
+                })
+                .then(text => {
+                    const html = renderMarkdownToHtml(text);
+                    body.innerHTML = DOMPurify.sanitize(html, {
+                        USE_PROFILES: { html: true },
+                        ADD_TAGS: ['svg', 'path', 'circle', 'rect', 'g', 'text', 'tspan', 'foreignObject', 'defs', 'marker', 'polyline', 'line', 'ellipse', 'style'],
+                        ADD_ATTR: ['class', 'd', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'viewBox', 'xmlns', 'width', 'height', 'x', 'y', 'rx', 'ry', 'transform', 'preserveAspectRatio', 'id', 'marker-start', 'marker-end', 'points', 'cx', 'cy', 'r']
+                    });
+                    if (window.mermaid) {
+                        mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+                        mermaid.run({ nodes: body.querySelectorAll('.mermaid') });
+                    }
+                })
+                .catch(() => {
+                    body.innerHTML = `
+                        <div class="space-y-3">
+                            <p class="text-amber-400">Preview could not be loaded directly from disk.</p>
+                            <p>Open the page through a local web server for markdown rendering:</p>
+                            <code class="block bg-zinc-900 p-3 rounded-xl">python -m http.server 8000</code>
+                            <p>Then visit <strong>http://localhost:8000/istqb-quest-v4.html</strong>.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function closeMarkdownModal() {
+            document.getElementById('markdown-modal').classList.add('hidden');
+        }
+
         // Theme
         function toggleTheme() {
             if (document.documentElement.classList.contains('light')) {
@@ -628,12 +836,14 @@
         function updateStudyProgress() {
             const completed = Object.values(chapterProgress).filter(Boolean).length;
             const total = 6;
-            document.getElementById('study-progress-summary').innerHTML = `
-                <p class="mb-2">Completed chapters: <span class="text-emerald-400 font-semibold">${completed}/${total}</span></p>
-                <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                    <div class="h-2 bg-emerald-500 rounded-full" style="width:${(completed / total) * 100}%"></div>
-                </div>
-            `;
+            if (document.getElementById('study-progress-summary')) {
+                document.getElementById('study-progress-summary').innerHTML = `
+                    <p class="mb-2">${languageContent[currentLanguage].progressLabel}: <span class="text-emerald-400 font-semibold">${completed}/${total}</span></p>
+                    <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                        <div class="h-2 bg-emerald-500 rounded-full" style="width:${(completed / total) * 100}%"></div>
+                    </div>
+                `;
+            }
         }
 
         function startMockExam() {
@@ -702,6 +912,7 @@
             // Default to home
             showSection('home');
             loadFlashcard();
+            applyLanguage();
             updateStudyProgress();
             
             // Theme persistence
