@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISTQB Quest v5.0 - CTFL Personal Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&display=swap');
+        body { font-family: 'Poppins', system-ui, sans-serif; }
+        .title { font-family: 'Space Grotesk', sans-serif; }
+        .flashcard {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .bug-float {
+            animation: bugFloat 4s ease-in-out infinite;
+        }
+        @keyframes bugFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        .lesson-card { transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .lesson-card:hover { transform: translateY(-4px); }
+        .markdown-preview {
+            max-height: 70vh;
+            overflow: auto;
+            line-height: 1.7;
+        }
+        .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #f5f5f5;
+        }
+        .markdown-preview ul, .markdown-preview ol {
+            padding-left: 1.2rem;
+            margin: 0.5rem 0 0.75rem;
+        }
+        .markdown-preview p { margin: 0.5rem 0; }
+        .markdown-preview code {
+            background: rgba(255,255,255,0.08);
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.35rem;
+        }
+        .markdown-preview .mermaid {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+    
+        .coach-card { background: rgba(24,24,27,.82); border: 1px solid rgba(63,63,70,.9); border-radius: 1.5rem; }
+        .coach-bar { height: 9px; background: #27272a; border-radius: 999px; overflow: hidden; }
+        .coach-fill { height: 100%; background: #10b981; border-radius: 999px; transition: width .4s ease; }
+        .coach-fill.warn { background: #f59e0b; }
+        .coach-fill.danger { background: #ef4444; }
+        .coach-chip { display:inline-flex; align-items:center; padding:.35rem .65rem; border-radius:999px; background:#27272a; color:#d4d4d8; font-size:.78rem; }
+
+</style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+    <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-x-3">
+                <div class="w-11 h-11 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl bug-float">🐛</div>
+                <div>
+                    <h1 class="title text-3xl font-bold tracking-tighter text-white">ISTQB Quest</h1>
+                    <p class="text-emerald-400 text-sm -mt-1">v5.0 • CTFL Personal Coach</p>
+                </div>
+            </div>
+            
+            <nav class="flex gap-x-8 text-sm font-medium">
+                <a href="#home" onclick="showSection('home')" class="hover:text-emerald-400 transition-colors">Home</a>
+                <a href="#coach" onclick="showSection('coach'); renderCoachDashboard()" class="hover:text-emerald-400 transition-colors">Coach</a>
+                <a href="#study" onclick="showSection('study')" class="hover:text-emerald-400 transition-colors">Study</a>
+                <a href="#flashcards" onclick="showSection('flashcards')" class="hover:text-emerald-400 transition-colors">Flashcards</a>
+                <a href="#quizzes" onclick="showSection('quizzes')" class="hover:text-emerald-400 transition-colors">Quizzes</a>
+                <a href="#mock" onclick="showSection('mock')" class="hover:text-emerald-400 transition-colors">Mock Exam</a>
+                <a href="#progress" onclick="showSection('progress')" class="hover:text-emerald-400 transition-colors">Progress</a>
+            </nav>
+
+            <div class="flex items-center gap-x-4">
+                <button onclick="toggleLanguage()" id="lang-toggle" class="px-3 py-2 rounded-2xl border border-zinc-700 bg-zinc-900 text-sm font-semibold">EN / VI</button>
+                <button onclick="toggleTheme()" id="theme-toggle" class="p-3 hover:bg-zinc-800 rounded-2xl transition-colors">
+                    <i class="fa-solid fa-moon text-xl"></i>
+                </button>
+                <div class="bg-zinc-900 px-5 py-2 rounded-3xl flex items-center gap-x-2 text-sm">
+                    <i class="fa-solid fa-fire text-orange-400"></i>
+                    <span id="streak-display" class="font-semibold">7</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div id="markdown-modal" class="fixed inset-0 z-[100] hidden bg-black/85 backdrop-blur-sm">
+            <div class="max-w-5xl mx-auto mt-8 h-[88vh] rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl overflow-hidden">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+                    <div>
+                        <h3 id="markdown-modal-title" class="text-lg font-semibold">Study content</h3>
+                        <p class="text-sm text-zinc-400">Rendered markdown preview</p>
+                    </div>
+                    <button onclick="closeMarkdownModal()" class="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800">Close</button>
+                </div>
+                <div id="markdown-modal-body" class="markdown-preview p-6 text-zinc-300"></div>
+            </div>
+        </div>
+        <!-- HOME -->
+        <section id="home-section" class="section">
+            <div class="text-center py-16">
+                <h2 class="title text-6xl font-bold mb-4">Ready to Ace ISTQB CTFL?</h2>
+                <p class="text-xl text-zinc-400 max-w-2xl mx-auto">Gamified learning with real questions, diagrams, videos, and mock exams. 3-month challenge starts now!</p>
+                <div class="flex justify-center gap-4 mt-10">
+                    <button onclick="showSection('study')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-3xl font-semibold text-lg flex items-center gap-x-3">
+                        <i class="fa-solid fa-book"></i> Start Learning
+                    </button>
+                    <button onclick="showSection('mock')" class="border border-zinc-700 hover:bg-zinc-900 px-8 py-4 rounded-3xl font-semibold text-lg">Take Mock Exam</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDY -->
+        <section id="study-section" class="section hidden">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
+                <div>
+                    <h2 id="study-title" class="title text-4xl font-bold">Study Path from Chapter 1 to Chapter 6</h2>
+                    <p id="study-subtitle" class="text-zinc-400 mt-2">A local-friendly learning page with summaries, glossary links, and study checkpoints.</p>
+                </div>
+                <div class="flex gap-3">
+                    <a href="doc/one_page_summary.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-2xl text-sm font-semibold">Open One-Page Summary</a>
+                    <button type="button" onclick="openMarkdownPreview('doc/study_plan_19Jul_to_30Sep_2026.md', 'Study Plan')" class="border border-zinc-700 hover:bg-zinc-900 px-4 py-2 rounded-2xl text-sm">Open Study Plan</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
+                    <h3 id="usage-title" class="text-xl font-semibold mb-3">How to use this page</h3>
+                    <ul id="usage-list" class="text-sm text-zinc-300 space-y-2">
+                        <li>• Start with Chapter 1 and move in order.</li>
+                        <li>• Read the summary, then open the glossary and mind map.</li>
+                        <li>• Use flashcards and quizzes to check understanding.</li>
+                        <li>• Review the mock exam before your final revision.</li>
+                    </ul>
+                </div>
+                <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
+                    <h3 id="progress-title" class="text-xl font-semibold mb-3">Study progress</h3>
+                    <div id="study-progress-summary" class="text-sm text-zinc-300"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 1</span>
+                    <h3 id="chapter1-title" class="text-2xl font-semibold mt-1 mb-3">Fundamentals of Testing</h3>
+                    <p id="chapter1-desc" class="text-zinc-400 mb-4 text-sm">Testing principles, test objectives, defects, failures, debugging, verification, validation.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter1-keyideas"><strong>Key ideas:</strong> quality, defects, root cause, test process, traceability.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(1, 'glossary')" id="chapter1-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(1, 'mindmap')" id="chapter1-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(1)" id="chapter1-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 2</span>
+                    <h3 id="chapter2-title" class="text-2xl font-semibold mt-1 mb-3">Testing Throughout SDLC</h3>
+                    <p id="chapter2-desc" class="text-zinc-400 mb-4 text-sm">Test levels, test types, maintenance testing, shift left, DevOps, confirmation and regression.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter2-keyideas"><strong>Key ideas:</strong> component, integration, system, acceptance testing.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(2, 'glossary')" id="chapter2-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(2, 'mindmap')" id="chapter2-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(2)" id="chapter2-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 3</span>
+                    <h3 id="chapter3-title" class="text-2xl font-semibold mt-1 mb-3">Static Testing</h3>
+                    <p id="chapter3-desc" class="text-zinc-400 mb-4 text-sm">Reviews, walkthroughs, inspections, informal and formal review processes.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter3-keyideas"><strong>Key ideas:</strong> static vs dynamic testing, review roles, review success factors.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(3, 'glossary')" id="chapter3-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(3, 'mindmap')" id="chapter3-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(3)" id="chapter3-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 4</span>
+                    <h3 id="chapter4-title" class="text-2xl font-semibold mt-1 mb-3">Test Analysis and Design</h3>
+                    <p id="chapter4-desc" class="text-zinc-400 mb-4 text-sm">Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter4-keyideas"><strong>Key ideas:</strong> black-box, white-box, experience-based, and collaboration-based techniques.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(4, 'glossary')" id="chapter4-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(4, 'mindmap')" id="chapter4-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(4)" id="chapter4-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 5</span>
+                    <h3 id="chapter5-title" class="text-2xl font-semibold mt-1 mb-3">Managing the Test Activities</h3>
+                    <p id="chapter5-desc" class="text-zinc-400 mb-4 text-sm">Planning, estimation, risk management, monitoring, defects, configuration management.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter5-keyideas"><strong>Key ideas:</strong> entry/exit criteria, risk-based testing, defect reporting.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(5, 'glossary')" id="chapter5-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(5, 'mindmap')" id="chapter5-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(5)" id="chapter5-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+
+                <div class="lesson-card bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
+                    <span class="text-emerald-400 text-sm font-medium">Chapter 6</span>
+                    <h3 id="chapter6-title" class="text-2xl font-semibold mt-1 mb-3">Test Tools and Automation</h3>
+                    <p id="chapter6-desc" class="text-zinc-400 mb-4 text-sm">Test management tools, automation, benefits, risks, continuous testing.</p>
+                    <div class="text-sm text-zinc-300 space-y-2 mb-4">
+                        <p id="chapter6-keyideas"><strong>Key ideas:</strong> tools support testing but do not replace human judgement.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button onclick="openChapterContent(6, 'glossary')" id="chapter6-glossary" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Glossary</button>
+                        <button onclick="openChapterContent(6, 'mindmap')" id="chapter6-mindmap" class="text-xs bg-zinc-800 px-3 py-1 rounded-full">Mind Map</button>
+                    </div>
+                    <button onclick="toggleChapterComplete(6)" id="chapter6-done" class="text-emerald-400 hover:underline text-sm">Mark as done</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLASHCARDS -->
+        
+        <section id="coach-section" class="section hidden max-w-7xl mx-auto px-6 py-12">
+            <div class="mb-10">
+                <span class="text-emerald-400 text-sm font-semibold uppercase tracking-wider">75-Day CTFL Challenge</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-3">Your ISTQB Personal Coach</h2>
+                <p class="text-zinc-400 max-w-3xl">Use your quiz and mock-exam history to find weak areas, choose today's mission, and track exam readiness.</p>
+            </div>
+
+            <div id="coach-dashboard" class="space-y-8"></div>
+        </section>
+
+<section id="flashcards-section" class="section hidden">
+            <h2 class="title text-4xl font-bold mb-6">Flashcards • 50+ Terms</h2>
+            <div class="flex justify-between mb-6">
+                <div id="card-counter" class="text-zinc-400">1 / 25</div>
+                <button onclick="nextFlashcard()" class="text-emerald-400 hover:text-white">Next Card →</button>
+            </div>
+            <div id="flashcard" class="flashcard w-full max-w-2xl mx-auto h-80 bg-zinc-900 rounded-3xl shadow-2xl" onclick="flipCard()">
+                <div class="flashcard-inner relative w-full h-full">
+                    <div id="front" class="flashcard-front flex items-center justify-center p-12 text-center text-2xl font-medium rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 border border-zinc-700">Click to flip</div>
+                    <div id="back" class="flashcard-back flex items-center justify-center p-12 text-center text-xl rounded-3xl bg-gradient-to-br from-emerald-900 to-zinc-900 border border-emerald-700">Answer appears here</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZZES -->
+        <section id="quizzes-section" class="section hidden">
+            <h2 class="title text-4xl font-bold mb-8">Practice Quizzes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <button onclick="startCategoryQuiz(0)" class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl text-left border border-zinc-700 transition-colors">
+                    <span class="block text-emerald-400 text-sm font-medium">FUNDAMENTALS</span>
+                    <span class="text-2xl font-semibold mt-2 block">Chapter 1-2</span>
+                    <span class="text-xs text-zinc-500 mt-2">10 Questions</span>
+                </button>
+                <button onclick="startCategoryQuiz(1)" class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl text-left border border-zinc-700 transition-colors">
+                    <span class="block text-emerald-400 text-sm font-medium">ANALYSIS & DESIGN</span>
+                    <span class="text-2xl font-semibold mt-2 block">Chapter 3-4</span>
+                    <span class="text-xs text-zinc-500 mt-2">10 Questions</span>
+                </button>
+                <button onclick="startCategoryQuiz(2)" class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl text-left border border-zinc-700 transition-colors">
+                    <span class="block text-emerald-400 text-sm font-medium">MANAGEMENT & TOOLS</span>
+                    <span class="text-2xl font-semibold mt-2 block">Chapter 5-6</span>
+                    <span class="text-xs text-zinc-500 mt-2">10 Questions</span>
+                </button>
+            </div>
+            <div id="quiz-area" class="mt-12 hidden">
+                <!-- Dynamic quiz content loaded by JS -->
+            </div>
+        </section>
+
+        <!-- MOCK EXAM -->
+        <section id="mock-section" class="section hidden">
+            <div class="text-center py-16">
+                <h2 class="title text-4xl font-bold mb-2">Full Mock Exam</h2>
+                <p class="text-zinc-400 mb-8">40 questions • 60 minutes • 65% pass mark</p>
+                <button onclick="startMockExam()" class="bg-red-600 hover:bg-red-500 px-10 py-4 rounded-3xl text-lg font-semibold flex items-center gap-x-3 mx-auto">
+                    <i class="fa-solid fa-play"></i> Start Timed Mock Exam
+                </button>
+            </div>
+        </section>
+
+        <!-- PROGRESS -->
+        <section id="progress-section" class="section hidden">
+            <h2 class="title text-4xl font-bold mb-8">Your Progress</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-zinc-900 p-8 rounded-3xl">
+                    <div class="text-emerald-400 text-sm">CURRENT LEVEL</div>
+                    <div id="level-display" class="text-7xl font-bold title">12</div>
+                    <div class="h-3 bg-zinc-800 rounded-full mt-6 overflow-hidden">
+                        <div class="h-3 bg-emerald-500 w-3/4 rounded-full"></div>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 p-8 rounded-3xl">
+                    <div class="text-emerald-400 text-sm">ACCURACY</div>
+                    <div id="accuracy-display" class="text-7xl font-bold title">84%</div>
+                </div>
+                <div class="bg-zinc-900 p-8 rounded-3xl">
+                    <button onclick="exportPDF()" class="w-full bg-white text-black py-6 rounded-3xl font-semibold flex items-center justify-center gap-x-3">
+                        <i class="fa-solid fa-download"></i> Download Progress PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        let currentLanguage = localStorage.getItem('istqb-study-language') || 'en';
+
+        const languageContent = {
+            en: {
+                studyTitle: 'Study Path from Chapter 1 to Chapter 6',
+                studySubtitle: 'A local-friendly learning page with summaries, glossary links, and study checkpoints.',
+                usageTitle: 'How to use this page',
+                usageItems: [
+                    'Start with Chapter 1 and move in order.',
+                    'Read the summary, then open the glossary and mind map.',
+                    'Use flashcards and quizzes to check understanding.',
+                    'Review the mock exam before your final revision.'
+                ],
+                progressTitle: 'Study progress',
+                progressLabel: 'Completed chapters',
+                glossaryLabel: 'Glossary',
+                mindmapLabel: 'Mind Map',
+                markDone: 'Mark as done',
+                chapterCards: [
+                    { title: 'Fundamentals of Testing', desc: 'Testing principles, test objectives, defects, failures, debugging, verification, validation.', keyIdeas: 'quality, defects, root cause, test process, traceability' },
+                    { title: 'Testing Throughout SDLC', desc: 'Test levels, test types, maintenance testing, shift left, DevOps, confirmation and regression.', keyIdeas: 'component, integration, system, acceptance testing' },
+                    { title: 'Static Testing', desc: 'Reviews, walkthroughs, inspections, informal and formal review processes.', keyIdeas: 'static vs dynamic testing, review roles, review success factors' },
+                    { title: 'Test Analysis and Design', desc: 'Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.', keyIdeas: 'black-box, white-box, experience-based, and collaboration-based techniques' },
+                    { title: 'Managing the Test Activities', desc: 'Planning, estimation, risk management, monitoring, defects, configuration management.', keyIdeas: 'entry/exit criteria, risk-based testing, defect reporting' },
+                    { title: 'Test Tools and Automation', desc: 'Test management tools, automation, benefits, risks, continuous testing.', keyIdeas: 'tools support testing but do not replace human judgement' }
+                ]
+            },
+            vi: {
+                studyTitle: 'Lộ trình học từ Chương 1 đến Chương 6',
+                studySubtitle: 'Trang học thân thiện để đọc tóm tắt, mở từ vựng và sơ đồ tư duy theo từng chương.',
+                usageTitle: 'Cách dùng trang này',
+                usageItems: [
+                    'Bắt đầu từ Chương 1 và học theo thứ tự.',
+                    'Đọc tóm tắt trước rồi mở từ vựng và sơ đồ tư duy.',
+                    'Dùng flashcards và quiz để kiểm tra hiểu biết.',
+                    'Ôn lại mock exam trước khi kết thúc.'
+                ],
+                progressTitle: 'Tiến độ học',
+                progressLabel: 'Chương đã hoàn thành',
+                glossaryLabel: 'Từ vựng',
+                mindmapLabel: 'Sơ đồ tư duy',
+                markDone: 'Đánh dấu xong',
+                chapterCards: [
+                    { title: 'Cơ bản về kiểm thử', desc: 'Nguyên tắc kiểm thử, mục tiêu kiểm thử, lỗi, thất bại, gỡ lỗi, xác thực và xác nhận.', keyIdeas: 'chất lượng, lỗi, nguyên nhân gốc, quy trình kiểm thử, traceability' },
+                    { title: 'Kiểm thử trong vòng đời phát triển phần mềm', desc: 'Các mức kiểm thử, loại kiểm thử, kiểm thử bảo trì, shift left, DevOps, confirmation và regression.', keyIdeas: 'component, integration, system, acceptance testing' },
+                    { title: 'Kiểm thử tĩnh', desc: 'Review, walkthrough, inspection, quy trình review hình thức và bán hình thức.', keyIdeas: 'kiểm thử tĩnh so với động, vai trò review, yếu tố thành công' },
+                    { title: 'Phân tích và thiết kế kiểm thử', desc: 'Phân vùng tương đương, phân tích giá trị biên, decision table, state transition, ATDD.', keyIdeas: 'black-box, white-box, experience-based, collaboration-based' },
+                    { title: 'Quản lý hoạt động kiểm thử', desc: 'Kế hoạch kiểm thử, ước lượng, quản trị rủi ro, giám sát, quản lý defect, cấu hình.', keyIdeas: 'entry/exit criteria, risk-based testing, defect reporting' },
+                    { title: 'Công cụ kiểm thử và tự động hóa', desc: 'Công cụ quản lý kiểm thử, tự động hóa, lợi ích, rủi ro, continuous testing.', keyIdeas: 'công cụ hỗ trợ kiểm thử nhưng không thay thế con người' }
+                ]
+            }
+        };
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function renderMarkdownToHtml(markdownText) {
+            const withMermaid = markdownText.replace(/```mermaid\s*([\s\S]*?)```/g, (_match, code) => {
+                return `<div class="mermaid">${escapeHtml(code.trim())}</div>`;
+            });
+            return marked.parse(withMermaid);
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'vi' : 'en';
+            localStorage.setItem('istqb-study-language', currentLanguage);
+            applyLanguage();
+        }
+
+        function getChapterPreviewPath(chapterNumber, type) {
+            if (type === 'glossary') {
+                return currentLanguage === 'vi'
+                    ? `doc/chapter${chapterNumber}/glossary_chapter${chapterNumber}_vi.md`
+                    : `doc/chapter${chapterNumber}/glossary_chapter${chapterNumber}.md`;
+            }
+
+            if (currentLanguage === 'vi') {
+                return `doc/chapter${chapterNumber}/mind_map_chapter${chapterNumber}_vi.md`;
+            }
+
+            if (chapterNumber === 1) {
+                return 'doc/ISTQB_mind_map.md';
+            }
+            return `doc/chapter${chapterNumber}/mind_map_chapter${chapterNumber}.md`;
+        }
+
+        function openChapterContent(chapterNumber, type) {
+            const content = languageContent[currentLanguage];
+            const filePath = getChapterPreviewPath(chapterNumber, type);
+            const title = `${content.chapterCards[chapterNumber - 1].title} - ${type === 'glossary' ? content.glossaryLabel : content.mindmapLabel}`;
+            openMarkdownPreview(filePath, title);
+        }
+
+        function applyLanguage() {
+            const content = languageContent[currentLanguage];
+            document.getElementById('study-title').textContent = content.studyTitle;
+            document.getElementById('study-subtitle').textContent = content.studySubtitle;
+            document.getElementById('usage-title').textContent = content.usageTitle;
+            document.getElementById('usage-list').innerHTML = content.usageItems.map(item => `<li>• ${item}</li>`).join('');
+            document.getElementById('progress-title').textContent = content.progressTitle;
+            document.getElementById('lang-toggle').textContent = currentLanguage === 'en' ? 'EN / VI' : 'VI / EN';
+
+            for (let i = 0; i < 6; i++) {
+                const card = content.chapterCards[i];
+                document.getElementById(`chapter${i + 1}-title`).textContent = card.title;
+                document.getElementById(`chapter${i + 1}-desc`).textContent = card.desc;
+                document.getElementById(`chapter${i + 1}-keyideas`).innerHTML = `<strong>Key ideas:</strong> ${card.keyIdeas}`;
+                document.getElementById(`chapter${i + 1}-glossary`).textContent = content.glossaryLabel;
+                document.getElementById(`chapter${i + 1}-mindmap`).textContent = content.mindmapLabel;
+                document.getElementById(`chapter${i + 1}-done`).textContent = content.markDone;
+            }
+
+            document.getElementById('study-progress-summary').innerHTML = `
+                <p class="mb-2">${content.progressLabel}: <span class="text-emerald-400 font-semibold">${Object.values(chapterProgress).filter(Boolean).length}/6</span></p>
+                <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-2 bg-emerald-500 rounded-full" style="width:${(Object.values(chapterProgress).filter(Boolean).length / 6) * 100}%"></div>
+                </div>
+            `;
+        }
+
+        function openMarkdownPreview(path, title) {
+            const modal = document.getElementById('markdown-modal');
+            const body = document.getElementById('markdown-modal-body');
+            const titleEl = document.getElementById('markdown-modal-title');
+            titleEl.textContent = title;
+            body.innerHTML = '<div class="text-zinc-400">Loading preview...</div>';
+            modal.classList.remove('hidden');
+
+            fetch(path, { cache: 'no-store' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Unable to load file');
+                    return response.text();
+                })
+                .then(text => {
+                    const html = renderMarkdownToHtml(text);
+                    body.innerHTML = DOMPurify.sanitize(html, {
+                        USE_PROFILES: { html: true },
+                        ADD_TAGS: ['svg', 'path', 'circle', 'rect', 'g', 'text', 'tspan', 'foreignObject', 'defs', 'marker', 'polyline', 'line', 'ellipse', 'style'],
+                        ADD_ATTR: ['class', 'd', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'viewBox', 'xmlns', 'width', 'height', 'x', 'y', 'rx', 'ry', 'transform', 'preserveAspectRatio', 'id', 'marker-start', 'marker-end', 'points', 'cx', 'cy', 'r']
+                    });
+                    if (window.mermaid) {
+                        mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+                        mermaid.run({ nodes: body.querySelectorAll('.mermaid') });
+                    }
+                })
+                .catch(() => {
+                    body.innerHTML = `
+                        <div class="space-y-3">
+                            <p class="text-amber-400">Preview could not be loaded directly from disk.</p>
+                            <p>Open the page through a local web server for markdown rendering:</p>
+                            <code class="block bg-zinc-900 p-3 rounded-xl">python -m http.server 8000</code>
+                            <p>Then visit <strong>http://localhost:8000/istqb-quest-v4.html</strong>.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function closeMarkdownModal() {
+            document.getElementById('markdown-modal').classList.add('hidden');
+        }
+
+        // Theme
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('light')) {
+                document.documentElement.classList.remove('light');
+                localStorage.theme = 'dark';
+            } else {
+                document.documentElement.classList.add('light');
+                localStorage.theme = 'light';
+            }
+        }
+
+        // Simple localStorage based state
+        let currentFlashcardIndex = 0;
+        let currentQuiz = null;
+        let chapterProgress = JSON.parse(localStorage.getItem('istqb-chapter-progress') || '{}');
+        let flashcards = [
+            // CHAPTER 1: FUNDAMENTALS OF TESTING
+            {front: "What is the ISTQB definition of testing?", back: "The process of all lifecycle activities concerned with planning, preparation, and evaluation of software products to determine they satisfy requirements, are fit for purpose, and detect defects."},
+            {front: "Principle 1 of Testing", back: "Testing shows the presence of defects, not their absence. It can reduce the number of defects but cannot guarantee none remain."},
+            {front: "Principle 2 of Testing", back: "Exhaustive testing is impossible. Testing all combinations of inputs and preconditions is not practical, so risk and priorities are used."},
+            {front: "Principle 3 of Testing", back: "Early testing saves time and money. Testing should start as early as possible in the development cycle."},
+            {front: "Principle 4 of Testing", back: "Defects cluster together (80/20 rule). Most defects are concentrated in a small number of modules."},
+            {front: "Principle 5 of Testing", back: "Pesticide paradox. Tests need to be regularly reviewed and revised; otherwise, they won't find new defects."},
+            {front: "Principle 6 of Testing", back: "Testing is context dependent. Testing varies depending on the software context (e.g., safety-critical vs. web app)."},
+            {front: "Principle 7 of Testing", back: "Absence-of-errors fallacy. Finding and fixing defects doesn't help if the software doesn't meet user needs and expectations."},
+            {front: "What is an ERROR?", back: "A human action that produces an incorrect result (e.g., programmer mistake, typo)."},
+            {front: "What is a DEFECT (BUG)?", back: "A flaw in code or a component that causes it to fail to perform its intended function."},
+            {front: "What is a FAILURE?", back: "Deviation from expected behavior when software is executed (result of a defect)."},
+            {front: "Define debugging", back: "The process of finding, analyzing, and fixing the causes of failures in software."},
+            {front: "What are the main test objectives?", back: "Finding defects, gaining confidence in quality, proving software meets requirements, detecting security vulnerabilities."},
+            {front: "What is test scope?", back: "The extent of testing - what is included and excluded from testing activities."},
+            {front: "Define test coverage", back: "The degree to which a software product has been tested, measured as a percentage of requirements/code/functionality tested."},
+            {front: "What does Quality mean in ISTQB?", back: "Quality is the degree to which a software product satisfies stated and implied user needs."},
+            {front: "Difference between Quality Assurance (QA) and Quality Control (QC)", back: "QA: process-oriented, preventive (building quality in). QC: product-oriented, detective (finding defects)."},
+            {front: "What is a test basis?", back: "All documents used to derive test cases (requirements, specifications, design documents, user stories)."},
+            {front: "Define test condition", back: "Testable aspect of a system; an item or event that can be verified by one or more test cases."},
+            {front: "What is a test case?", back: "Set of input values, execution conditions, and expected results for a specific test objective."},
+            {front: "Define test oracle", back: "A source (mechanism, person, document) used to determine expected results of tests."},
+            {front: "What is a test script?", back: "Detailed step-by-step instructions for executing a test, often with exact commands or inputs."},
+            {front: "What is a test suite?", back: "A collection of test cases, often with shared preconditions or environment setup."},
+            {front: "Define test procedure", back: "Sequence of test cases in execution order, or step-by-step instructions to execute a test."},
+            {front: "What is traceability?", back: "The linking of test cases to requirements to ensure all requirements are covered."},
+            {front: "What is Test Independence?", back: "Tests should be designed by someone other than the developer who wrote the code."},
+            
+            // CHAPTER 2: TESTING THROUGHOUT SDLC
+            {front: "What are the main test levels?", back: "Component Testing, Component Integration Testing, System Testing, System Integration Testing, Acceptance Testing."},
+            {front: "Define Component Testing (Unit Testing)", back: "Testing of individual software components, typically done by developers in isolation."},
+            {front: "What is Component Integration Testing?", back: "Testing where software components are combined and tested together to verify interactions."},
+            {front: "Define System Testing", back: "Testing of the complete integrated system against system requirements."},
+            {front: "What is System Integration Testing?", back: "Testing of the system's integration with external systems and third-party components."},
+            {front: "Define Acceptance Testing", back: "Testing to determine if a system meets business requirements and is acceptable for deployment (UAT)."},
+            {front: "What are the main test types?", back: "Functional testing, Non-functional testing, White-box testing, Change-related testing."},
+            {front: "Define Functional Testing", back: "Testing what the system does (its functions) against requirements."},
+            {front: "Examples of Non-functional testing", back: "Performance, load, stress, usability, security, compatibility, reliability, maintainability testing."},
+            {front: "What is Regression Testing?", back: "Testing to ensure recent changes (fixes, updates) haven't adversely affected existing functionality."},
+            {front: "Define Confirmation Testing", back: "Re-testing a specific fix for a defect to verify it has been resolved correctly."},
+            {front: "What is the V-Model?", back: "Testing approach where test activities are aligned with development phases; higher levels test lower levels."},
+            {front: "Explain Iterative/Agile Testing", back: "In Agile, testing is continuous and concurrent with development; test planning and execution happen in short cycles."},
+            {front: "What is Shift-Left Testing?", back: "Moving testing activities earlier in the development lifecycle to catch defects sooner."},
+            {front: "Define Maintenance Testing triggers", back: "Corrective maintenance (fixes), adaptive (new environment), perfective (enhancements), preventive (future changes)."},
+            {front: "What is Smoke Testing?", back: "Quick, shallow testing of main functionality to ensure the build is stable enough for detailed testing."},
+            {front: "Define Sanity Testing", back: "Testing to verify that a specific bug fix or feature works without breaking other parts."},
+            {front: "What is Production Testing/Acceptance in Production?", back: "Testing performed in the live production environment after deployment."},
+            
+            // CHAPTER 3: STATIC TESTING
+            {front: "Define Static Testing", back: "Testing performed without executing the code (reviews, inspections, static analysis)."},
+            {front: "What are the types of static testing?", back: "Reviews and Static Analysis (tools that examine code without running it)."},
+            {front: "What are the main benefits of static testing?", back: "Early defect detection, finding defects before execution, identifying architectural issues, cost-effective."},
+            {front: "Define a Review", back: "A manual examination of a work product (code, design, requirements) to find defects."},
+            {front: "What are the types of reviews by formality?", back: "Informal review, Walkthrough, Technical review, Inspection."},
+            {front: "Describe an Informal Review", back: "No documented process, ad-hoc, with or without meeting; minimal documentation."},
+            {front: "What is a Walkthrough?", back: "Author leads the review; step-by-step presentation of the work product to find defects."},
+            {front: "Define Technical Review", back: "Peers examine the work product for technical correctness; managed by a technical lead."},
+            {front: "What is an Inspection?", back: "Most formal review type; documented process, roles assigned, metrics collected, defects identified and documented."},
+            {front: "What are the roles in a formal review?", back: "Manager, Moderator, Author, Reviewer, Scribe (and sometimes additional reviewers)."},
+            {front: "What does the Moderator do in a review?", back: "Leads the review, manages process, ensures participants follow guidelines, collects data."},
+            {front: "What is the Scribe's role?", back: "Records defects and issues found during the review, documents decisions."},
+            {front: "Define Static Analysis", back: "Automated tool-based examination of code to find defects without execution (e.g., linters, SonarQube)."},
+            {front: "Examples of Static Analysis Tools", back: "SonarQube, ESLint, Checkstyle, Pylint, FindBugs, Code smell detectors."},
+            {front: "What can Static Analysis detect?", back: "Syntax errors, coding standards violations, potential bugs, security vulnerabilities, dead code."},
+            {front: "Difference between Review and Static Analysis", back: "Review: manual, human judgment. Static Analysis: automated tool-based."},
+            
+            // CHAPTER 4: TEST ANALYSIS AND DESIGN
+            {front: "What is test analysis?", back: "Process of examining requirements and system to understand what should be tested."},
+            {front: "What is test design?", back: "Process of creating test cases from test basis (requirements, specs)."},
+            {front: "What are the main black-box test techniques?", back: "Equivalence Partitioning, Boundary Value Analysis, Decision Table, State Transition, Use Case testing."},
+            {front: "Define Equivalence Partitioning (EP)", back: "Dividing input data into partitions (equivalence classes) where all values are expected to be treated the same."},
+            {front: "How many test cases per equivalence partition?", back: "At least one; you test one value from each partition assuming all values behave the same."},
+            {front: "Define Boundary Value Analysis (BVA)", back: "Testing values at the boundaries of equivalence partitions (min, max, just below, just above)."},
+            {front: "Why is BVA important?", back: "Most defects occur at boundaries; it's more effective than testing random values in the middle."},
+            {front: "What is a Decision Table?", back: "Table that combines conditions and actions to test complex business logic with multiple inputs."},
+            {front: "What is State Transition Testing?", back: "Testing systems with different states; test transitions between states and valid/invalid state changes."},
+            {front: "Define Use Case Testing", back: "Tests based on user interactions described in use cases; follows user workflows."},
+            {front: "What are white-box test techniques?", back: "Statement coverage, Branch/Decision coverage, Condition coverage, Basis path testing, Path coverage."},
+            {front: "Define Statement Coverage", back: "Percentage of executable statements executed by tests; aim for 100% for critical code."},
+            {front: "Define Branch/Decision Coverage", back: "Percentage of decision outcomes (true/false) executed; tests all branches of if/else statements."},
+            {front: "What is Condition Coverage?", back: "Percentage of individual boolean conditions evaluated to both true and false."},
+            {front: "Define Basis Path Testing", back: "Tests the independent paths through a program; based on cyclomatic complexity."},
+            {front: "What is Path Coverage?", back: "Testing all possible paths through a program; most thorough but often impractical."},
+            {front: "Define Cyclomatic Complexity", back: "Measure of code complexity; number of independent paths through a program."},
+            {front: "What are experience-based techniques?", back: "Error guessing, Checklist-based testing, Exploratory testing; based on tester expertise."},
+            {front: "Define Error Guessing", back: "Tester's intuition and experience to guess common errors and design tests for them."},
+            {front: "What is Exploratory Testing?", back: "Simultaneous test design and execution; tester learns about the system while testing."},
+            {front: "What is Checklist-based Testing?", back: "Using pre-defined checklists of items to test based on past experience and known issues."},
+            {front: "What does test case specification include?", back: "Test case ID, description, preconditions, test data, steps, expected results, postconditions."},
+            {front: "What is the purpose of test data?", back: "Provides inputs for tests to check if the system behaves as expected."},
+            {front: "Define realistic test data", back: "Test data that represents actual production data as closely as possible."},
+            
+            // CHAPTER 5: TEST MANAGEMENT
+            {front: "What is a Test Plan?", back: "Document describing scope, objectives, resources, schedule, risks, and approach for testing activities."},
+            {front: "What should a Test Plan include?", back: "Scope, objectives, test approach, resources, schedule, risks, entry/exit criteria, deliverables."},
+            {front: "Define Entry Criteria", back: "Conditions that must be met before testing can start (e.g., environment ready, test data available)."},
+            {front: "Define Exit Criteria", back: "Conditions to stop testing (e.g., all test cases executed, pass rate above threshold)."},
+            {front: "What is Risk-Based Testing?", back: "Prioritizing tests based on risk level (probability × impact); test high-risk areas thoroughly."},
+            {front: "How do you calculate risk?", back: "Risk = Likelihood of defect × Impact if defect occurs."},
+            {front: "What is Test Monitoring?", back: "Ongoing comparison of actual test progress against planned progress; collecting metrics."},
+            {front: "Define Test Control", back: "Taking corrective actions when test progress deviates from the plan."},
+            {front: "What are key test metrics?", back: "Test execution percentage, pass/fail ratio, defect density, coverage percentage."},
+            {front: "What should a Defect Report include?", back: "ID, summary, description, steps to reproduce, severity, priority, status, assigned to, attachments."},
+            {front: "Define Defect Severity", back: "Impact of a defect (Critical, Major, Minor, Trivial); how badly it affects functionality."},
+            {front: "Define Defect Priority", back: "Urgency of fixing a defect (High, Medium, Low); based on business importance."},
+            {front: "What are possible defect statuses?", back: "Open/New, Assigned, In Progress, Fixed, Closed, Reopened, Deferred."},
+            {front: "What is Change Control?", back: "Formal process for approving and managing changes to requirements, design, or code."},
+            {front: "What is Impact Analysis?", back: "Assessing the effect of a proposed change on existing functionality and tests."},
+            {front: "What is Test Estimation?", back: "Predicting effort, resources, and time needed for testing activities."},
+            {front: "Name test estimation techniques", back: "Three-Point Estimation, Analogous estimation, Parametric estimation, Planning poker."},
+            {front: "What is Three-Point Estimation?", back: "Using optimistic, most likely, and pessimistic estimates to calculate expected effort."},
+            {front: "What is a Test Summary Report?", back: "Report summarizing test activities, results, metrics, defects, and recommendations."},
+            {front: "Who are test stakeholders?", back: "Management, developers, business analysts, product owners, end users, customers."},
+            
+            // CHAPTER 6: TEST TOOLS & AUTOMATION
+            {front: "What are the main categories of test tools?", back: "Management, Execution, Performance, Security, DevOps/CI tools, Coverage measurement tools."},
+            {front: "Examples of Test Management Tools", back: "Jira, TestRail, Azure Test Plans, qTest, TestLodge."},
+            {front: "Examples of Test Execution Automation Tools", back: "Selenium, Cypress, UFT (QTP), Appium, Robot Framework."},
+            {front: "Examples of Performance Testing Tools", back: "JMeter, LoadRunner, Gatling, Locust, NeoLoad."},
+            {front: "Examples of Security Testing Tools", back: "OWASP ZAP, Burp Suite, Fortify, Checkmarx."},
+            {front: "Examples of CI/CD Integration Tools", back: "Jenkins, GitLab CI, Azure Pipelines, GitHub Actions."},
+            {front: "What are benefits of test tools?", back: "Increased efficiency, repeatability, coverage measurement, reduced human error, faster feedback."},
+            {front: "What are risks of test automation?", back: "High upfront cost, maintenance effort, false sense of security, unreliable tests, tool limitations."},
+            {front: "When should automation be used?", back: "Repetitive tests, regression tests, performance tests, high-volume data tests, CI/CD pipelines."},
+            {front: "When should manual testing be preferred?", back: "Exploratory testing, usability testing, first-time execution, complex scenarios, visual checks."},
+            {front: "What is automation test framework?", back: "Reusable code libraries and standards for writing automated tests efficiently."},
+            {front: "Examples of test frameworks", back: "JUnit, TestNG, NUnit, Pytest, Mocha, Jest, Jasmine."},
+            {front: "What is Page Object Model?", back: "Design pattern where web pages are represented as objects; improves maintainability of automation."},
+            {front: "What is Data-Driven Testing?", back: "Running same test with multiple sets of input data; parameterized testing."},
+            {front: "What is Keyword-Driven Testing?", back: "Tests created using keywords/functions; non-technical people can create tests."},
+            {front: "What is Hybrid Testing Framework?", back: "Combines benefits of multiple frameworks (data-driven, keyword-driven, modular)."},
+            {front: "How do you select a test tool?", back: "Evaluate based on requirements, budget, team expertise, integration with existing tools, vendor support."},
+            {front: "What is Continuous Testing?", back: "Automated testing integrated into CI/CD pipeline; tests run continuously with code changes."},
+            {front: "What is Test Infrastructure?", back: "Hardware, software, networks, and services needed to execute tests (test environment)."},
+            {front: "Define Test Environment", back: "Hardware, software, network configuration needed for testing; should mirror production."},
+            
+            // ADDITIONAL MIXED CONTENT
+            {front: "What does ISTQB stand for?", back: "International Software Testing Qualifications Board."},
+            {front: "What is CTFL certification?", back: "Certified Tester Foundation Level; entry-level ISTQB certification covering testing fundamentals."},
+            {front: "What does K-level mean in ISTQB?", back: "Knowledge level - K1 (Remember), K2 (Understand), K3 (Apply), K4 (Analyze)."},
+            {front: "What is the Software Development Lifecycle (SDLC)?", back: "The process of planning, designing, developing, testing, and deploying software."},
+            {front: "What are SDLC models?", back: "Waterfall, V-Model, Iterative, Agile, DevOps; each has different testing approaches."},
+            {front: "What is Waterfall Model?", back: "Sequential model where each phase completes before the next starts; testing happens after development."},
+            {front: "What is Agile Model?", back: "Iterative model with short cycles (sprints); continuous testing integrated with development."},
+            {front: "What is DevOps?", back: "Combining development and operations; automation, continuous integration, continuous deployment."},
+            {front: "What is Continuous Integration (CI)?", back: "Frequently integrating code changes and running automated tests; quick feedback."},
+            {front: "What is Continuous Deployment (CD)?", back: "Automatically deploying code to production when tests pass."},
+            {front: "What is Test Driven Development (TDD)?", back: "Write tests first, then write code to pass those tests; ensures code quality."},
+            {front: "What is Behavior Driven Development (BDD)?", back: "Tests written in business language (Gherkin); bridges communication between developers and business."},
+            {front: "What is Negative Testing?", back: "Testing with invalid inputs or conditions to verify system handles errors gracefully."},
+            {front: "What is Positive Testing?", back: "Testing with valid inputs and conditions to verify system behaves as expected."},
+            {front: "What is Ad-hoc Testing?", back: "Unplanned, informal testing; tester explores system without predetermined test cases."},
+            {front: "Define Compatibility Testing", back: "Testing software on different platforms, browsers, OS versions, devices."},
+            {front: "What is Localization Testing?", back: "Testing software adapted for specific languages, regions, or cultures."},
+            {front: "What is Accessibility Testing?", back: "Ensuring software is usable by people with disabilities (WCAG standards)."},
+            {front: "What is Usability Testing?", back: "Evaluating how user-friendly and intuitive the software is; often with end users."},
+            {front: "What is Disaster Recovery Testing?", back: "Testing system's ability to recover from failures (backups, failovers)."},
+            {front: "What is Volume Testing?", back: "Testing system with large amounts of data to check performance and stability."},
+            {front: "What is Stress Testing?", back: "Testing system beyond normal capacity to find breaking point."},
+            {front: "What is Load Testing?", back: "Testing system under expected user load to verify performance."},
+            {front: "What is Penetration Testing?", back: "Security testing where testers attempt to exploit vulnerabilities."},
+        ];
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
+            loadFlashcard();
+        }
+
+        function loadFlashcard() {
+            document.getElementById('front').innerHTML = flashcards[currentFlashcardIndex].front;
+            document.getElementById('back').innerHTML = flashcards[currentFlashcardIndex].back;
+            document.getElementById('flashcard').classList.remove('flipped');
+            document.getElementById('card-counter').textContent = `${currentFlashcardIndex + 1} / ${flashcards.length}`;
+        }
+
+        // Show section helper
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section + '-section').classList.remove('hidden');
+        }
+
+        // Quiz Data
+        let quizzes = [
+            {
+                name: "Fundamentals",
+                questions: [
+                    {q: "Which principle states 'Testing shows the presence of defects, not their absence'?", opts: ["Principle 1", "Principle 2", "Principle 3", "Principle 4"], ans: 0},
+                    {q: "What is the difference between a defect and a failure?", opts: ["None", "Defect is in code; failure is the result", "Failure is in code; defect is the result", "They are synonymous"], ans: 1},
+                    {q: "Early testing saves money. This is?", opts: ["Principle 2", "Principle 3", "Principle 5", "Principle 7"], ans: 1},
+                    {q: "What does ISTQB stand for?", opts: ["International Software Test Quality Board", "International Software Testing Qualifications Board", "International System Testing Quality Board", "Internal Software Testing Qualified Board"], ans: 1},
+                    {q: "Which of these is NOT a test objective?", opts: ["Finding defects", "Gaining confidence", "Reporting to customers", "Preventing defects"], ans: 2},
+                    {q: "What are the main test levels?", opts: ["Manual and Automated", "Component, Integration, System, Acceptance", "Unit and System", "Development and Production"], ans: 1},
+                    {q: "In the V-Model, which test level corresponds to requirements?", opts: ["System Testing", "Component Testing", "Acceptance Testing", "Integration Testing"], ans: 2},
+                    {q: "What is regression testing?", opts: ["Testing the first time", "Testing after changes", "Testing in reverse order", "Testing without planning"], ans: 1},
+                    {q: "Which test type focuses on 'what' the system does?", opts: ["Non-functional", "Functional", "Structural", "Integration"], ans: 1},
+                    {q: "Who should perform independent testing?", opts: ["The developer", "Someone other than the developer", "The manager", "The customer"], ans: 1},
+                ]
+            },
+            {
+                name: "Analysis & Design",
+                questions: [
+                    {q: "Which technique divides input into partitions?", opts: ["BVA", "Equivalence Partitioning", "Decision Table", "State Transition"], ans: 1},
+                    {q: "Boundary Value Analysis tests values at?", opts: ["Any place", "Edges of partitions", "Middle of partitions", "Random places"], ans: 1},
+                    {q: "What does 'Decision Table Testing' help test?", opts: ["Performance", "Complex business rules", "User interfaces", "Security"], ans: 1},
+                    {q: "State Transition Testing is used for systems with?", opts: ["No states", "Multiple states and transitions", "Only output states", "Constant states"], ans: 1},
+                    {q: "Which is a white-box technique?", opts: ["Equivalence Partitioning", "Use Case Testing", "Statement Coverage", "Decision Table"], ans: 2},
+                    {q: "Statement coverage means?", opts: ["All statements executed", "All statements reviewed", "Some statements tested", "Critical statements tested"], ans: 0},
+                    {q: "What is branch coverage?", opts: ["All branches mentioned", "Both true and false paths tested", "Main branch tested", "Sequential testing"], ans: 1},
+                    {q: "Use Case Testing focuses on?", opts: ["Code structure", "User interactions", "Performance", "Security"], ans: 1},
+                    {q: "Exploratory testing involves?", opts: ["Planning extensively", "Simultaneous design and execution", "Automated testing only", "Formal documentation"], ans: 1},
+                    {q: "Error guessing is part of which technique type?", opts: ["Black-box", "White-box", "Experience-based", "Formal"], ans: 2},
+                ]
+            },
+            {
+                name: "Management & Tools",
+                questions: [
+                    {q: "What is in a Test Plan?", opts: ["Only dates", "Scope, resources, schedule, risks", "Only requirements", "Names of testers"], ans: 1},
+                    {q: "Entry criteria are?", opts: ["Conditions to stop testing", "Conditions to start testing", "Always the same", "Defined by testers"], ans: 1},
+                    {q: "Risk-based testing prioritizes based on?", opts: ["Availability", "Complexity", "Risk level", "Random selection"], ans: 2},
+                    {q: "What does a Defect Report include?", opts: ["Only ID", "ID, summary, steps, severity", "Only description", "Time spent"], ans: 1},
+                    {q: "Which is a benefit of test automation?", opts: ["Requires no maintenance", "Repeatability", "Finds all defects", "No initial cost"], ans: 1},
+                    {q: "Which is a risk of test automation?", opts: ["Faster execution", "High maintenance cost", "Easy to implement", "No failures"], ans: 1},
+                    {q: "Example of Test Management Tool?", opts: ["Selenium", "JMeter", "Jira", "Compiler"], ans: 2},
+                    {q: "Performance Testing Tools include?", opts: ["Selenium", "JMeter", "Inspection", "Code review"], ans: 1},
+                    {q: "Test Impact Analysis assesses?", opts: ["Time spent", "Effect of changes", "Defect severity", "Team morale"], ans: 1},
+                    {q: "Cyclomatic Complexity measures?", opts: ["Performance", "Code pathways", "Defect count", "Team size"], ans: 1},
+                ]
+            }
+        ];
+
+        // Mock Exam (40 questions)
+        let mockExamQuestions = [
+            {q: "What is the PRIMARY purpose of testing?", opts: ["To prove the software is correct", "To find defects and gain confidence", "To satisfy the QA department", "To delay release"], ans: 1},
+            {q: "Which principle suggests defects are not randomly distributed?", opts: ["Principle 3", "Principle 4 - Defect Clustering", "Principle 5", "Principle 6"], ans: 1},
+            {q: "Exhaustive testing is impossible because:", opts: ["Testers are not skilled", "Time and resources are limited", "Of infinite combinations", "The code is too complex"], ans: 2},
+            {q: "A 'failure' occurs when:", opts: ["Code has a mistake", "Test execution shows unexpected behavior", "Someone reports an issue", "Requirements change"], ans: 1},
+            {q: "Which test level is performed first?", opts: ["System", "Acceptance", "Component/Unit", "Integration"], ans: 2},
+            {q: "Integration testing specifically tests:", opts: ["Individual functions", "Component interactions", "End-user requirements", "Performance"], ans: 1},
+            {q: "Acceptance testing is performed by:", opts: ["Developers", "QA team", "Business/End users", "IT operations"], ans: 2},
+            {q: "In the V-Model, System Testing corresponds to:", opts: ["Unit Design", "System Design", "Requirements", "Integration Design"], ans: 2},
+            {q: "Static testing includes:", opts: ["Running code", "Reviews and inspections", "Performance testing", "Load testing"], ans: 1},
+            {q: "Formal inspection is characterized by:", opts: ["Informal discussion", "Documented process with metrics", "Ad-hoc review", "No records kept"], ans: 1},
+            {q: "Equivalence Partitioning divides input into:", opts: ["Random groups", "Classes with similar behavior", "Size-based groups", "Sequential ranges"], ans: 1},
+            {q: "Boundary Value Analysis tests:", opts: ["Center values", "Edge and boundary values", "All possible values", "Random values"], ans: 1},
+            {q: "Decision Table Testing is best for:", opts: ["Sequential logic", "Complex conditions and combinations", "Simple calculations", "User interface"], ans: 1},
+            {q: "Which statement coverage percentage is typically required?", opts: ["25%", "50%", "75%", "100% for critical code"], ans: 3},
+            {q: "Branch coverage means testing:", opts: ["Each branch statement", "Both true and false outcomes", "Main branch only", "Optional branches"], ans: 1},
+            {q: "Exploratory testing is characterized by:", opts: ["Detailed documentation", "Simultaneous design and execution", "Fully planned approach", "Only manual testing"], ans: 1},
+            {q: "Which is a black-box technique?", opts: ["Statement coverage", "Path testing", "Use Case Testing", "Branch coverage"], ans: 2},
+            {q: "Which is a white-box technique?", opts: ["Equivalence Partitioning", "State Transition", "Decision Table", "Cyclomatic Complexity"], ans: 3},
+            {q: "Test Plan should include:", opts: ["Only test cases", "Scope, resources, schedule, risks", "Only entry criteria", "Team member names"], ans: 1},
+            {q: "Exit criteria specify when:", opts: ["To start testing", "To stop testing", "To hire testers", "To buy tools"], ans: 1},
+            {q: "Risk-based testing prioritizes based on:", opts: ["Alphabetical order", "Likelihood and Impact", "Developer preference", "Ease of testing"], ans: 1},
+            {q: "A critical defect is best described as:", opts: ["Easy to fix", "Causes system failure or data loss", "Minor UI issue", "Cosmetic"], ans: 1},
+            {q: "Defect Priority differs from Severity in:", opts: ["They are the same", "Priority is business urgency", "Severity is business urgency", "Priority is technical"], ans: 1},
+            {q: "Change Control Process includes:", opts: ["Ignoring changes", "Approving and managing changes formally", "Only documentation", "Only testing"], ans: 1},
+            {q: "Test Monitoring involves:", opts: ["Executing all tests", "Comparing actual vs planned progress", "Fixing all defects", "Writing reports only"], ans: 1},
+            {q: "Which is a benefit of test tools?", opts: ["Eliminates manual testing", "Increases efficiency and repeatability", "Always finds all defects", "No maintenance needed"], ans: 1},
+            {q: "Which is NOT a good reason for automation?", opts: ["Regression testing", "High-volume testing", "Exploratory testing", "CI/CD integration"], ans: 2},
+            {q: "Page Object Model is used in:", opts: ["Performance testing", "Test automation for UI", "Static analysis", "Penetration testing"], ans: 1},
+            {q: "Data-Driven Testing means:", opts: ["Guessing test data", "Running tests with multiple data sets", "Collecting data only", "Manual data entry"], ans: 1},
+            {q: "Smoke Testing is?", opts: ["Comprehensive testing", "Quick check of main functionality", "Performance testing", "Security testing"], ans: 1},
+            {q: "Sanity Testing verifies that:", opts: ["All requirements are met", "A specific fix works without breaking others", "The system is in production", "Code is optimized"], ans: 1},
+            {q: "Regression Testing is triggered by:", opts: ["Starting the project", "Any code change", "End of day", "Manager request"], ans: 1},
+            {q: "Confirmation Testing is performed:", opts: ["Before defects occur", "After a defect fix to verify resolution", "At project start", "Randomly"], ans: 1},
+            {q: "Load Testing measures:", opts: ["Defect count", "System behavior under expected load", "Security vulnerabilities", "Code quality"], ans: 1},
+            {q: "Stress Testing checks:", opts: ["Normal conditions", "System breaking point", "User satisfaction", "Documentation"], ans: 1},
+            {q: "Penetration Testing is related to:", opts: ["Performance", "Security - attempting to exploit", "Usability", "Compatibility"], ans: 1},
+            {q: "Traceability Matrix links:", opts: ["Test cases to requirements", "Code lines", "Tester names", "Defect severity"], ans: 0},
+            {q: "Test Independence is important because:", opts: ["Saves money", "Reduces bias in testing", "Testers have more authority", "Easier to manage"], ans: 1},
+            {q: "Test Basis refers to:", opts: ["Test management tools", "Documents from which tests are derived", "Test execution order", "Tester experience"], ans: 1},
+        ];
+
+        let currentQuizIndex = 0;
+        let currentQuizAnswers = [];
+
+        function startCategoryQuiz(category) {
+            currentQuizIndex = 0;
+            currentQuizAnswers = [];
+            currentQuiz = quizzes[category];
+            showQuiz(currentQuiz);
+        }
+
+        function showQuiz(quiz) {
+            let quizHTML = `<h3 class="text-2xl font-semibold mb-4">${quiz.name} Quiz</h3>`;
+            quiz.questions.forEach((q, i) => {
+                quizHTML += `
+                    <div class="bg-zinc-900 p-6 rounded-2xl mb-6 border border-zinc-800">
+                        <p class="font-semibold mb-4">${i+1}. ${q.q}</p>
+                        <div class="space-y-2">
+                `;
+                q.opts.forEach((opt, j) => {
+                    quizHTML += `
+                        <label class="flex items-center p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 cursor-pointer">
+                            <input type="radio" name="q${i}" value="${j}" class="quiz-option mr-3">
+                            <span>${opt}</span>
+                        </label>
+                    `;
+                });
+                quizHTML += `</div></div>`;
+            });
+            quizHTML += `<button onclick="submitQuiz(${quiz.questions.length})" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-3xl font-semibold">Submit Quiz</button>`;
+            document.getElementById('quiz-area').innerHTML = quizHTML;
+            document.getElementById('quiz-area').classList.remove('hidden');
+        }
+
+        function submitQuiz(totalQuestions) {
+            if (!currentQuiz) return;
+            let score = 0;
+            for (let i = 0; i < totalQuestions; i++) {
+                let selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && parseInt(selected.value) === currentQuiz.questions[i].ans) {
+                    score++;
+                }
+            }
+            let percent = Math.round(score / totalQuestions * 100);
+            alert(`Quiz Complete! Score: ${score}/${totalQuestions} (${percent}%)`);
+        }
+
+        function toggleChapterComplete(chapterId) {
+            chapterProgress[chapterId] = !chapterProgress[chapterId];
+            localStorage.setItem('istqb-chapter-progress', JSON.stringify(chapterProgress));
+            updateStudyProgress();
+        }
+
+        function updateStudyProgress() {
+            const completed = Object.values(chapterProgress).filter(Boolean).length;
+            const total = 6;
+            if (document.getElementById('study-progress-summary')) {
+                document.getElementById('study-progress-summary').innerHTML = `
+                    <p class="mb-2">${languageContent[currentLanguage].progressLabel}: <span class="text-emerald-400 font-semibold">${completed}/${total}</span></p>
+                    <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                        <div class="h-2 bg-emerald-500 rounded-full" style="width:${(completed / total) * 100}%"></div>
+                    </div>
+                `;
+            }
+        }
+
+        function startMockExam() {
+            currentQuizIndex = 0;
+            currentQuizAnswers = [];
+            let mockHTML = `<h3 class="text-2xl font-semibold mb-6">Full Mock Exam - 40 Questions • 60 Minutes</h3>`;
+            mockHTML += `<div id="mock-timer" class="text-2xl font-mono mb-6 text-orange-400">Time: <span id="timer-display">60:00</span></div>`;
+            mockExamQuestions.forEach((q, i) => {
+                mockHTML += `
+                    <div class="bg-zinc-900 p-6 rounded-2xl mb-6 border border-zinc-800">
+                        <p class="font-semibold mb-4 text-emerald-400">${i+1}/40 - ${q.q}</p>
+                        <div class="space-y-2">
+                `;
+                q.opts.forEach((opt, j) => {
+                    mockHTML += `
+                        <label class="flex items-center p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 cursor-pointer">
+                            <input type="radio" name="mock${i}" value="${j}" class="mock-option mr-3">
+                            <span>${opt}</span>
+                        </label>
+                    `;
+                });
+                mockHTML += `</div></div>`;
+            });
+            mockHTML += `<button onclick="submitMockExam()" class="bg-red-600 hover:bg-red-500 px-10 py-4 rounded-3xl font-semibold text-lg">Submit Mock Exam</button>`;
+            document.getElementById('quiz-area').innerHTML = mockHTML;
+            document.getElementById('quiz-area').classList.remove('hidden');
+            showSection('quizzes');
+            startMockTimer();
+        }
+
+        let mockTimerInterval;
+        function startMockTimer() {
+            let timeLeft = 3600; // 60 minutes in seconds
+            mockTimerInterval = setInterval(() => {
+                let mins = Math.floor(timeLeft / 60);
+                let secs = timeLeft % 60;
+                document.getElementById('timer-display').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                if (timeLeft <= 0) {
+                    clearInterval(mockTimerInterval);
+                    submitMockExam();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function submitMockExam() {
+            clearInterval(mockTimerInterval);
+            let score = 0;
+            mockExamQuestions.forEach((q, i) => {
+                let selected = document.querySelector(`input[name="mock${i}"]:checked`);
+                if (selected && parseInt(selected.value) === q.ans) {
+                    score++;
+                }
+            });
+            let percentage = Math.round(score/mockExamQuestions.length*100);
+            let result = percentage >= 65 ? "✅ PASS!" : "❌ Needs improvement";
+            alert(`Mock Exam Complete!\n\nScore: ${score}/40 (${percentage}%)\n${result}\n\nPassing score: 65%`);
+        }
+
+        function exportPDF() {
+            alert("Progress summary would be generated as PDF here (using jsPDF in full production version). Current stats exported.");
+        }
+
+
+        /* ============================================================
+           ISTQB Quest v5.0 — Personal Coach layer
+           - Tracks quiz and mock attempts in localStorage
+           - Maps questions to CTFL chapters/topics
+           - Calculates topic accuracy and weak areas
+           - Provides "Practice My Weak Areas"
+           - Adds a 75-day study mission and readiness indicator
+           ============================================================ */
+
+        const V5_STORAGE = {
+            attempts: 'istqb-v5-question-attempts',
+            mocks: 'istqb-v5-mock-history',
+            startDate: 'istqb-v5-start-date'
+        };
+
+        const v5TopicMap = {
+            1: { name: 'Fundamentals of Testing', topics: ['Testing Principles', 'Test Objectives', 'Test Process', 'Psychology of Testing'] },
+            2: { name: 'Testing Throughout SDLC', topics: ['Test Levels', 'Test Types', 'Maintenance Testing', 'Confirmation and Regression'] },
+            3: { name: 'Static Testing', topics: ['Static Testing', 'Reviews', 'Review Roles and Activities'] },
+            4: { name: 'Test Analysis and Design', topics: ['Equivalence Partitioning', 'Boundary Value Analysis', 'Decision Table Testing', 'State Transition Testing', 'White-box Testing', 'Experience-based Testing'] },
+            5: { name: 'Managing Test Activities', topics: ['Test Planning', 'Risk-based Testing', 'Test Monitoring', 'Defect Management', 'Configuration Management'] },
+            6: { name: 'Test Tools', topics: ['Test Tool Benefits and Risks', 'Automation', 'Tool Categories', 'CI/CD and Testing'] }
+        };
+
+        function v5Load(key, fallback) {
+            try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+            catch (e) { return fallback; }
+        }
+
+        function v5Save(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function v5GetStartDate() {
+            let d = localStorage.getItem(V5_STORAGE.startDate);
+            if (!d) {
+                d = new Date().toISOString().slice(0,10);
+                localStorage.setItem(V5_STORAGE.startDate, d);
+            }
+            return new Date(d + 'T00:00:00');
+        }
+
+        function v5DayNumber() {
+            const start = v5GetStartDate();
+            const now = new Date();
+            const diff = Math.floor((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 86400000);
+            return Math.max(1, Math.min(75, diff + 1));
+        }
+
+        function v5QuestionTopic(question, chapter) {
+            const text = (question.q || '').toLowerCase();
+            if (chapter === 1) {
+                if (text.includes('principle')) return 'Testing Principles';
+                if (text.includes('objective')) return 'Test Objectives';
+                if (text.includes('process')) return 'Test Process';
+                return 'Psychology of Testing';
+            }
+            if (chapter === 2) {
+                if (text.includes('regression') || text.includes('confirmation')) return 'Confirmation and Regression';
+                if (text.includes('level') || text.includes('component') || text.includes('system') || text.includes('acceptance')) return 'Test Levels';
+                if (text.includes('maintenance')) return 'Maintenance Testing';
+                return 'Test Types';
+            }
+            if (chapter === 3) {
+                if (text.includes('review') || text.includes('inspection') || text.includes('walkthrough')) return 'Reviews';
+                return 'Static Testing';
+            }
+            if (chapter === 4) {
+                if (text.includes('equivalence') || text.includes('partition')) return 'Equivalence Partitioning';
+                if (text.includes('boundary')) return 'Boundary Value Analysis';
+                if (text.includes('decision table')) return 'Decision Table Testing';
+                if (text.includes('state transition') || text.includes('state')) return 'State Transition Testing';
+                if (text.includes('statement') || text.includes('branch') || text.includes('white-box') || text.includes('cyclomatic')) return 'White-box Testing';
+                return 'Experience-based Testing';
+            }
+            if (chapter === 5) {
+                if (text.includes('risk')) return 'Risk-based Testing';
+                if (text.includes('defect')) return 'Defect Management';
+                if (text.includes('monitor')) return 'Test Monitoring';
+                if (text.includes('plan') || text.includes('entry') || text.includes('exit')) return 'Test Planning';
+                return 'Configuration Management';
+            }
+            if (chapter === 6) {
+                if (text.includes('automation') || text.includes('automated')) return 'Automation';
+                if (text.includes('benefit') || text.includes('risk')) return 'Test Tool Benefits and Risks';
+                if (text.includes('performance') || text.includes('management') || text.includes('selenium') || text.includes('jmeter') || text.includes('jira')) return 'Tool Categories';
+                return 'CI/CD and Testing';
+            }
+            return 'General';
+        }
+
+        function v5RecordAttempts(questions, answers, source) {
+            const attempts = v5Load(V5_STORAGE.attempts, []);
+            const now = new Date().toISOString();
+            questions.forEach((q, i) => {
+                const selected = answers[i];
+                const chapter = q.chapter || 1;
+                const topic = q.topic || v5QuestionTopic(q, chapter);
+                attempts.push({
+                    id: q.id || `${source}-${Date.now()}-${i}`,
+                    chapter,
+                    topic,
+                    correct: selected !== undefined && selected !== null && Number(selected) === Number(q.ans),
+                    source,
+                    timestamp: now
+                });
+            });
+            // Keep the latest 1000 answers to keep localStorage small.
+            v5Save(V5_STORAGE.attempts, attempts.slice(-1000));
+        }
+
+        function v5Stats() {
+            const attempts = v5Load(V5_STORAGE.attempts, []);
+            const byTopic = {};
+            const byChapter = {};
+            attempts.forEach(a => {
+                if (!byTopic[a.topic]) byTopic[a.topic] = { correct: 0, total: 0 };
+                byTopic[a.topic].total++;
+                if (a.correct) byTopic[a.topic].correct++;
+
+                if (!byChapter[a.chapter]) byChapter[a.chapter] = { correct: 0, total: 0 };
+                byChapter[a.chapter].total++;
+                if (a.correct) byChapter[a.chapter].correct++;
+            });
+            Object.values(byTopic).forEach(x => x.pct = Math.round(x.correct / x.total * 100));
+            Object.values(byChapter).forEach(x => x.pct = Math.round(x.correct / x.total * 100));
+            return { attempts, byTopic, byChapter };
+        }
+
+        function v5Readiness() {
+            const stats = v5Stats();
+            const all = stats.attempts;
+            const accuracy = all.length ? Math.round(all.filter(a => a.correct).length / all.length * 100) : 0;
+            const mocks = v5Load(V5_STORAGE.mocks, []);
+            const recentMocks = mocks.slice(-3);
+            const mockAvg = recentMocks.length ? Math.round(recentMocks.reduce((a,b) => a+b.percentage,0) / recentMocks.length) : 0;
+            const chapterCoverage = Object.keys(stats.byChapter).length / 6 * 100;
+            const coverageScore = Math.round(Math.min(100, chapterCoverage));
+            let readiness = all.length
+                ? Math.round(accuracy * 0.55 + (recentMocks.length ? mockAvg * 0.35 : accuracy * 0.35) + coverageScore * 0.10)
+                : 0;
+            return { accuracy, mockAvg, coverageScore, readiness, mocks };
+        }
+
+        function v5Level(pct) {
+            if (pct >= 80) return 'strong';
+            if (pct >= 65) return 'warn';
+            return 'danger';
+        }
+
+        function v5TopicRows() {
+            const stats = v5Stats();
+            const rows = [];
+            Object.entries(v5TopicMap).forEach(([chapter, info]) => {
+                info.topics.forEach(topic => {
+                    const x = stats.byTopic[topic];
+                    if (x) rows.push({ chapter: Number(chapter), topic, ...x });
+                });
+            });
+            return rows.sort((a,b) => a.pct - b.pct);
+        }
+
+        function renderCoachDashboard() {
+            const el = document.getElementById('coach-dashboard');
+            if (!el) return;
+
+            const r = v5Readiness();
+            const stats = v5Stats();
+            const day = v5DayNumber();
+            const weak = v5TopicRows().filter(x => x.total >= 2).slice(0, 4);
+            const weakest = weak[0];
+            const chapters = Object.entries(v5TopicMap).map(([id, info]) => {
+                const x = stats.byChapter[id];
+                const pct = x ? x.pct : 0;
+                return { id, name: info.name, pct, total: x ? x.total : 0 };
+            });
+
+            const missionTopic = weakest ? weakest.topic : 'Fundamentals of Testing';
+            const missionText = weakest
+                ? `Focus on ${missionTopic}: review the concept, then answer 10 targeted questions.`
+                : 'Start with a chapter quiz to build your first learning profile.';
+
+            el.innerHTML = `
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="coach-card p-6">
+                        <div class="text-zinc-400 text-sm">Challenge</div>
+                        <div class="text-3xl font-bold mt-2">Day ${day} / 75</div>
+                        <div class="coach-bar mt-4"><div class="coach-fill" style="width:${Math.round(day/75*100)}%"></div></div>
+                    </div>
+                    <div class="coach-card p-6">
+                        <div class="text-zinc-400 text-sm">Exam readiness</div>
+                        <div class="text-3xl font-bold mt-2">${r.readiness}%</div>
+                        <div class="text-sm text-zinc-500 mt-2">${r.readiness >= 80 ? 'Strong preparation' : r.readiness >= 65 ? 'Almost ready — keep practicing' : 'Keep building your knowledge'}</div>
+                    </div>
+                    <div class="coach-card p-6">
+                        <div class="text-zinc-400 text-sm">Question accuracy</div>
+                        <div class="text-3xl font-bold mt-2">${r.accuracy}%</div>
+                        <div class="text-sm text-zinc-500 mt-2">${r.accuracy ? stats.attempts.length + ' tracked answers' : 'No attempts tracked yet'}</div>
+                    </div>
+                    <div class="coach-card p-6">
+                        <div class="text-zinc-400 text-sm">Mock average</div>
+                        <div class="text-3xl font-bold mt-2">${r.mocks.length ? r.mockAvg + '%' : '—'}</div>
+                        <div class="text-sm text-zinc-500 mt-2">${r.mocks.length} mock exam${r.mocks.length === 1 ? '' : 's'} recorded</div>
+                    </div>
+                </div>
+
+                <div class="coach-card p-7">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <div class="text-emerald-400 text-sm font-semibold uppercase">Today's mission</div>
+                            <h3 class="text-2xl font-bold mt-1">${missionTopic}</h3>
+                            <p class="text-zinc-400 mt-2">${missionText}</p>
+                        </div>
+                        <button onclick="practiceWeakAreas()" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-semibold">Practice My Weak Areas</button>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="coach-card p-7">
+                        <h3 class="text-xl font-bold mb-5">Chapter mastery</h3>
+                        <div class="space-y-5">
+                            ${chapters.map(c => `
+                                <div>
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span>${c.name}</span>
+                                        <span class="text-zinc-400">${c.total ? c.pct + '%' : 'Not tested'}</span>
+                                    </div>
+                                    <div class="coach-bar"><div class="coach-fill ${v5Level(c.pct)}" style="width:${c.total ? c.pct : 0}%"></div></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="coach-card p-7">
+                        <h3 class="text-xl font-bold mb-5">Weak topics</h3>
+                        ${weak.length ? weak.map(x => `
+                            <div class="flex items-center justify-between py-3 border-b border-zinc-800 last:border-0">
+                                <div>
+                                    <div class="font-medium">${x.topic}</div>
+                                    <div class="text-xs text-zinc-500">Chapter ${x.chapter} · ${x.total} attempts</div>
+                                </div>
+                                <span class="coach-chip ${x.pct < 65 ? 'text-red-400' : 'text-orange-400'}">${x.pct}%</span>
+                            </div>
+                        `).join('') : '<p class="text-zinc-400">Complete a quiz to start detecting weak topics.</p>'}
+                    </div>
+                </div>
+
+                <div class="coach-card p-7">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-xl font-bold">Recent mock exams</h3>
+                        <button onclick="showSection('mock')" class="text-emerald-400 hover:underline">Take a mock exam →</button>
+                    </div>
+                    ${r.mocks.length ? `
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            ${r.mocks.slice(-3).reverse().map((m,i) => `
+                                <div class="bg-zinc-900 rounded-2xl p-5">
+                                    <div class="text-zinc-500 text-sm">Mock #${r.mocks.length-i}</div>
+                                    <div class="text-3xl font-bold mt-1">${m.percentage}%</div>
+                                    <div class="text-zinc-500 text-sm mt-2">${m.score}/${m.total} correct</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : '<p class="text-zinc-400">Your mock-exam history will appear here after your first submission.</p>'}
+                </div>
+            `;
+        }
+
+        function practiceWeakAreas() {
+            const weak = v5TopicRows().filter(x => x.total >= 2).slice(0, 3);
+            if (!weak.length) {
+                alert('Complete at least one chapter quiz first. The Coach will then identify your weak areas.');
+                showSection('quizzes');
+                return;
+            }
+            const weakNames = new Set(weak.map(x => x.topic));
+            const pool = [];
+            quizzes.forEach((quiz, chapterIndex) => {
+                quiz.questions.forEach(q => {
+                    const topic = v5QuestionTopic(q, chapterIndex + 1);
+                    if (weakNames.has(topic)) pool.push({...q, chapter: chapterIndex + 1, topic});
+                });
+            });
+            if (!pool.length) {
+                alert('No targeted questions are currently mapped to your weakest topics. Review the recommended topics in Coach.');
+                return;
+            }
+            currentQuiz = {
+                name: 'Weak Areas Practice',
+                questions: pool.slice(0, 15)
+            };
+            currentQuizIndex = 0;
+            currentQuizAnswers = [];
+            showSection('quizzes');
+            showQuiz(currentQuiz);
+        }
+
+        // Override quiz submission to record attempts.
+        const v5OriginalSubmitQuiz = submitQuiz;
+        submitQuiz = function(totalQuestions) {
+            if (!currentQuiz) return;
+            const answers = [];
+            let score = 0;
+            for (let i = 0; i < totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const value = selected ? Number(selected.value) : null;
+                answers.push(value);
+                if (value !== null && value === currentQuiz.questions[i].ans) score++;
+            }
+            v5RecordAttempts(currentQuiz.questions, answers, 'quiz');
+            const percent = Math.round(score / totalQuestions * 100);
+            alert(`Quiz Complete! Score: ${score}/${totalQuestions} (${percent}%)\n\nYour Coach has updated your weak-topic analysis.`);
+            renderCoachDashboard();
+        };
+
+        // Override mock submission to record history and question-level performance.
+        const v5OriginalSubmitMockExam = submitMockExam;
+        submitMockExam = function() {
+            clearInterval(mockTimerInterval);
+            let score = 0;
+            const answers = [];
+            mockExamQuestions.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="mock${i}"]:checked`);
+                const value = selected ? Number(selected.value) : null;
+                answers.push(value);
+                if (value !== null && value === q.ans) score++;
+            });
+            const percentage = Math.round(score / mockExamQuestions.length * 100);
+            v5RecordAttempts(mockExamQuestions, answers, 'mock');
+            const mocks = v5Load(V5_STORAGE.mocks, []);
+            mocks.push({
+                date: new Date().toISOString(),
+                score,
+                total: mockExamQuestions.length,
+                percentage
+            });
+            v5Save(V5_STORAGE.mocks, mocks.slice(-20));
+            const result = percentage >= 65 ? "PASS — keep building consistency." : "Not ready yet — review your weak areas.";
+            alert(`Mock Exam Complete!\n\nScore: ${score}/${mockExamQuestions.length} (${percentage}%)\n${result}\n\nOpen Coach to see your topic analysis.`);
+            renderCoachDashboard();
+        };
+
+        // Add a simple Coach-aware showSection wrapper.
+        const v5OriginalShowSection = showSection;
+        showSection = function(section) {
+            v5OriginalShowSection(section);
+            if (section === 'coach') renderCoachDashboard();
+        };
+
+        // Seed a 75-day start date from the user's existing study-plan start date if none exists.
+        if (!localStorage.getItem(V5_STORAGE.startDate)) {
+            localStorage.setItem(V5_STORAGE.startDate, '2026-07-19');
+        }
+
+        // Init
+        window.onload = function() {
+            // Default to home
+            showSection('home');
+            loadFlashcard();
+            applyLanguage();
+            updateStudyProgress();
+            renderCoachDashboard();
+            
+            // Theme persistence
+            if (localStorage.theme === 'light') document.documentElement.classList.add('light');
+            
+            // Fake streak
+            document.getElementById('streak-display').textContent = "12";
+        };
+    </script>
+</body>
+</html>
