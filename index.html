@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISTQB App</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07111f;
+        --panel: #0f172a;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #22c55e;
+        --accent-2: #38bdf8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #111827);
+        color: var(--text);
+      }
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      .hero, .panel {
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+      }
+      .hero {
+        padding: 36px;
+        margin-bottom: 24px;
+      }
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: 2rem;
+      }
+      .hero p {
+        color: var(--muted);
+        font-size: 1rem;
+        margin: 0 0 22px;
+      }
+      .actions a {
+        display: inline-block;
+        text-decoration: none;
+        color: #fff;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 600;
+      }
+      .panel {
+        padding: 24px;
+      }
+      .panel h2 {
+        margin-top: 0;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      .card {
+        background: rgba(30, 41, 59, 0.95);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 18px;
+        padding: 18px;
+      }
+      .card h3 { margin-top: 0; }
+      .card p { color: var(--muted); }
+      .card a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <h1>ISTQB App</h1>
+        <p>Start your Chapter 1 study journey with structured notes, quiz material, and a simple learning interface.</p>
+        <div class="actions">
+          <a href="src/page/chapter1/index.html">Open Chapter 1</a>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Available study modules</h2>
+        <div id="chapters-grid" class="cards"></div>
+      </section>
+    </main>
+
+    <script src="./top_page.js"></script>
+  </body>
+</html>

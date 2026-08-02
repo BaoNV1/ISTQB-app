@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter 1 - ISTQB App</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07111f;
+        --panel: #0f172a;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #22c55e;
+        --accent-2: #38bdf8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #111827);
+        color: var(--text);
+      }
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 20px 60px;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .topbar a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .hero, .panel {
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 24px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+      }
+      .hero {
+        padding: 28px;
+        margin-bottom: 18px;
+      }
+      .hero h1 { margin: 0 0 10px; }
+      .hero p { color: var(--muted); margin: 0 0 16px; }
+      .pill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pill {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(34, 197, 94, 0.16);
+        color: #dcfce7;
+        font-size: 0.9rem;
+      }
+      .panel {
+        padding: 20px;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .tabs button {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 14px;
+        background: #1e293b;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .tabs button.active {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: white;
+      }
+      .content-area {
+        line-height: 1.7;
+        color: var(--text);
+      }
+      .content-area h1, .content-area h2, .content-area h3 {
+        color: #f8fafc;
+      }
+      .content-area ul, .content-area ol {
+        padding-left: 1.2rem;
+      }
+      .content-area code {
+        background: rgba(255,255,255,0.08);
+        padding: 0.15rem 0.35rem;
+        border-radius: 0.35rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="topbar">
+        <a href="../../../index.html">← Back to Home</a>
+        <span>Chapter 1</span>
+      </div>
+
+      <section class="hero">
+        <h1>Chapter 1: Fundamentals of Testing</h1>
+        <p>Explore the main ideas of testing, quality, principles, and the role of testing in software development.</p>
+        <div class="pill-list">
+          <span class="pill">Testing principles</span>
+          <span class="pill">Quality control</span>
+          <span class="pill">Defect lifecycle</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="tabs">
+          <button type="button" data-lang="en" class="active">English</button>
+          <button type="button" data-lang="vi">Tiếng Việt</button>
+          <button type="button" data-lang="quiz">Quiz</button>
+        </div>
+        <div id="content-area" class="content-area">Loading chapter content...</div>
+      </section>
+    </main>
+
+    <script src="./chapter1.js"></script>
+  </body>
+</html>
