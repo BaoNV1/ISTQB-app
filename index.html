@@ -3,99 +3,301 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISTQB App</title>
+    <title>ISTQB Quest v5.0 - CTFL Personal Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-      :root {
-        color-scheme: dark;
-        --bg: #07111f;
-        --panel: #0f172a;
-        --text: #e2e8f0;
-        --muted: #94a3b8;
-        --accent: #22c55e;
-        --accent-2: #38bdf8;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, var(--bg), #111827);
-        color: var(--text);
-      }
-      .page {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 32px 20px 60px;
-      }
-      .hero, .panel {
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: 24px;
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-      }
-      .hero {
-        padding: 36px;
-        margin-bottom: 24px;
-      }
-      .hero h1 {
-        margin: 0 0 10px;
-        font-size: 2rem;
-      }
-      .hero p {
-        color: var(--muted);
-        font-size: 1rem;
-        margin: 0 0 22px;
-      }
-      .actions a {
-        display: inline-block;
-        text-decoration: none;
-        color: #fff;
-        background: linear-gradient(90deg, var(--accent), var(--accent-2));
-        padding: 12px 18px;
-        border-radius: 999px;
-        font-weight: 600;
-      }
-      .panel {
-        padding: 24px;
-      }
-      .panel h2 {
-        margin-top: 0;
-      }
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-      }
-      .card {
-        background: rgba(30, 41, 59, 0.95);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: 18px;
-        padding: 18px;
-      }
-      .card h3 { margin-top: 0; }
-      .card p { color: var(--muted); }
-      .card a {
-        color: var(--accent);
-        font-weight: 600;
-        text-decoration: none;
-      }
+      body { font-family: 'Poppins', system-ui, sans-serif; }
+      .title { font-family: 'Space Grotesk', sans-serif; }
+      .glass-card { background: rgba(24, 24, 27, 0.85); border: 1px solid rgba(63, 63, 70, 0.9); border-radius: 1.5rem; }
+      .markdown-preview { max-height: 70vh; overflow: auto; line-height: 1.7; }
+      .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 { margin-top: 1rem; margin-bottom: 0.5rem; color: #f5f5f5; }
+      .markdown-preview ul, .markdown-preview ol { padding-left: 1.2rem; margin: 0.5rem 0 0.75rem; }
+      .markdown-preview p { margin: 0.5rem 0; }
+      .markdown-preview code { background: rgba(255,255,255,0.08); padding: 0.15rem 0.35rem; border-radius: 0.35rem; }
     </style>
   </head>
-  <body>
-    <main class="page">
-      <section class="hero">
-        <h1>ISTQB App</h1>
-        <p>Start your Chapter 1 study journey with structured notes, quiz material, and a simple learning interface.</p>
-        <div class="actions">
-          <a href="src/page/chapter1/index.html">Open Chapter 1</a>
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen">
+    <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+            <i class="fa-solid fa-bug text-emerald-400"></i>
+          </div>
+          <div>
+            <div class="font-semibold">ISTQB Quest</div>
+            <div class="text-xs text-zinc-400">CTFL Personal Coach</div>
+          </div>
+        </div>
+        <nav class="flex gap-x-6 text-sm font-medium">
+          <a href="#home" class="text-zinc-300 hover:text-emerald-400">Home</a>
+          <a href="src/page/chapter1/index.html" class="text-zinc-300 hover:text-emerald-400">Chapter 1</a>
+          <a href="#study" class="text-zinc-300 hover:text-emerald-400">Study</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+      <section id="home" class="grid lg:grid-cols-[1.2fr_0.8fr] gap-6 mb-8">
+        <div class="glass-card p-8 lg:p-10">
+          <p class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
+            <i class="fa-solid fa-star"></i> Study smarter with structured CTFL prep
+          </p>
+          <h1 class="title text-4xl lg:text-5xl font-bold mt-5">Chapter 1 learning hub for ISTQB Foundation Level</h1>
+          <p class="text-zinc-400 mt-4 max-w-2xl">Review testing fundamentals, explore glossary and mind maps, and jump into chapter resources from one clean dashboard.</p>
+          <div class="flex flex-wrap gap-3 mt-6">
+            <a href="src/page/chapter1/index.html" class="bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-2xl font-semibold">Open Chapter 1</a>
+            <button id="open-glossary" class="border border-zinc-700 px-5 py-3 rounded-2xl font-semibold hover:bg-zinc-800">Preview glossary</button>
+          </div>
+        </div>
+
+        <div class="glass-card p-8">
+          <h2 class="font-semibold text-xl mb-4">Current focus</h2>
+          <div class="space-y-3 text-sm">
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400">Chapter</div>
+              <div class="font-semibold text-white">Chapter 1 - Fundamentals of Testing</div>
+            </div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400">Resources</div>
+              <div class="font-semibold text-white">English notes, Vietnamese notes, quiz, glossary, mind map</div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="panel">
-        <h2>Available study modules</h2>
-        <div id="chapters-grid" class="cards"></div>
+      <section id="study" class="grid md:grid-cols-2 gap-6">
+        <div class="glass-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold">Chapter 1 resources</h2>
+            <a href="src/page/chapter1/index.html" class="text-emerald-400">Open →</a>
+          </div>
+          <div class="space-y-3">
+            <a href="src/page/chapter1/index.html" class="block rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
+              <div class="font-semibold">Study notes</div>
+              <div class="text-sm text-zinc-400">English, Vietnamese, and quiz content for Chapter 1.</div>
+            </a>
+            <button id="open-mindmap" class="w-full text-left rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
+              <div class="font-semibold">Mind map</div>
+              <div class="text-sm text-zinc-400">Visual summary of the key concepts in Chapter 1.</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card p-6">
+          <h2 class="text-xl font-semibold mb-4">Quick study focus</h2>
+          <ul class="space-y-2 text-sm text-zinc-300">
+            <li>• Testing principles and their meaning</li>
+            <li>• Error → Defect → Failure → Root Cause</li>
+            <li>• Testing vs debugging and QA</li>
+            <li>• Whole Team Approach and independence of testing</li>
+          </ul>
+        </div>
       </section>
     </main>
 
-    <script src="./top_page.js"></script>
+    <div id="markdown-modal" class="fixed inset-0 z-[100] hidden bg-black/85 backdrop-blur-sm">
+      <div class="max-w-5xl mx-auto mt-8 h-[88vh] rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <h3 id="modal-title" class="font-semibold">Preview</h3>
+          <button id="close-modal" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="modal-body" class="p-5 markdown-preview"></div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById('markdown-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBody = document.getElementById('modal-body');
+
+      function escapeHtml(text) {
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;');
+      }
+
+      function renderMindmap(code) {
+        const lines = code.split(/\r?\n/).filter((line) => line.trim() && line.trim() !== 'mindmap');
+        const root = { text: 'Mind Map', children: [] };
+        const stack = [root];
+
+        lines.forEach((line) => {
+          const indent = line.match(/^\s*/)[0].length;
+          const depth = Math.max(0, Math.floor(indent / 2));
+          const rawText = line.trim();
+          const text = rawText.replace(/^root\(\((.*)\)\)$/, '$1').replace(/^root\((.*)\)$/, '$1');
+          const node = { text, children: [] };
+
+          while (stack.length > depth + 1) {
+            stack.pop();
+          }
+
+          if (depth === 0) {
+            root.text = text;
+            root.children = [];
+            stack.length = 1;
+            stack[0] = root;
+            root.children.push(node);
+            stack.push(node);
+            return;
+          }
+
+          stack[stack.length - 1].children.push(node);
+          stack.push(node);
+        });
+
+        const positions = [];
+        let counter = 0;
+        const walk = (node, depth, y, parentId = null) => {
+          const width = Math.min(220, 44 + node.text.length * 7);
+          const id = `node-${counter++}`;
+          positions.push({ id, text: node.text, x: 44 + depth * 220, y, width, height: 60, parentId });
+          let nextY = y + 92;
+          node.children.forEach((child) => {
+            nextY = walk(child, depth + 1, nextY, id);
+          });
+          return nextY;
+        };
+
+        const treeRoot = root.children[0] || root;
+        walk(treeRoot, 0, 30);
+
+        const maxX = Math.max(...positions.map((pos) => pos.x + pos.width), 600);
+        const maxY = Math.max(...positions.map((pos) => pos.y + pos.height), 220);
+
+        const renderText = (text) => {
+          const words = text.split(/\s+/);
+          const lines = [];
+          let current = '';
+          words.forEach((word) => {
+            if ((current + ' ' + word).trim().length <= 18) {
+              current = (current + ' ' + word).trim();
+            } else {
+              lines.push(current);
+              current = word;
+            }
+          });
+          if (current) lines.push(current);
+          return lines.slice(0, 3).map((line) => `<tspan x="50%" dy="${line === lines[0] ? 0 : 16}" text-anchor="middle">${escapeHtml(line)}</tspan>`).join('');
+        };
+
+        return `<div class="my-4 rounded-2xl border border-zinc-700 bg-zinc-900/70 p-3"><svg viewBox="0 0 ${maxX + 40} ${maxY + 40}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+          <rect x="0" y="0" width="${maxX + 40}" height="${maxY + 40}" fill="transparent" rx="16"></rect>
+          ${positions.map((pos) => {
+            const parent = positions.find((item) => item.id === pos.parentId);
+            const connector = parent ? `<line x1="${parent.x + parent.width / 2}" y1="${parent.y + parent.height}" x2="${pos.x + pos.width / 2}" y2="${pos.y}" stroke="#34d399" stroke-width="2" stroke-dasharray="4 4"></line>` : '';
+            return `${connector}<rect x="${pos.x}" y="${pos.y}" width="${pos.width}" height="${pos.height}" rx="14" fill="#111827" stroke="#34d399" stroke-width="1.5"></rect><text x="${pos.x + pos.width / 2}" y="${pos.y + 24}" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">${escapeHtml(pos.text)}</text><text x="${pos.x + pos.width / 2}" y="${pos.y + 42}" fill="#94a3b8" font-size="11" text-anchor="middle">${escapeHtml(pos.text)}</text>`;
+          }).join('')}
+        </svg></div>`;
+      }
+
+      function renderMarkdown(markdown) {
+        const lines = markdown.split(/\r?\n/);
+        let html = [];
+        let inList = false;
+        let listType = '';
+
+        const closeList = () => {
+          if (inList) {
+            html.push(listType === 'ol' ? '</ol>' : '</ul>');
+            inList = false;
+            listType = '';
+          }
+        };
+
+        const formatInline = (text) => {
+          return escapeHtml(text)
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/__(.*?)__/g, '<strong>$1</strong>')
+            .replace(/`([^`]+)`/g, '<code>$1</code>');
+        };
+
+        const renderTable = (rows) => {
+          const header = rows[0].split('|').map((cell) => cell.trim()).filter(Boolean);
+          const bodyRows = rows.slice(2).map((row) => row.split('|').map((cell) => cell.trim()).filter(Boolean));
+          return `<table class="w-full text-sm border-collapse my-3"><thead><tr>${header.map((cell) => `<th class="text-left p-2 border border-zinc-700 bg-zinc-900">${formatInline(cell)}</th>`).join('')}</tr></thead><tbody>${bodyRows.map((row) => `<tr>${row.map((cell) => `<td class="p-2 border border-zinc-700 align-top">${formatInline(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+        };
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const trimmed = line.trim();
+          if (!trimmed) {
+            closeList();
+            continue;
+          }
+          if (/^```mermaid\s*$/.test(trimmed)) {
+            closeList();
+            const codeLines = [];
+            i++;
+            while (i < lines.length && !/^```$/.test(lines[i].trim())) {
+              codeLines.push(lines[i]);
+              i++;
+            }
+            const code = codeLines.join('\n');
+            html.push(code.includes('mindmap') ? renderMindmap(code) : `<pre class="my-3 rounded-2xl border border-zinc-700 bg-zinc-900/70 p-4 text-sm text-zinc-300">${escapeHtml(code)}</pre>`);
+            continue;
+          }
+          if (/^\|/.test(trimmed)) {
+            const tableLines = [];
+            while (i < lines.length && /^\|/.test(lines[i].trim())) {
+              tableLines.push(lines[i].trim());
+              i++;
+            }
+            i--;
+            html.push(renderTable(tableLines));
+            continue;
+          }
+          if (/^#{1,3}\s+/.test(trimmed)) {
+            closeList();
+            const level = trimmed.match(/^#+/)[0].length;
+            const text = trimmed.replace(/^#{1,3}\s+/, '');
+            html.push(`<h${level}>${formatInline(text)}</h${level}>`);
+            continue;
+          }
+          if (/^[-*]\s+/.test(trimmed)) {
+            if (!inList || listType !== 'ul') { closeList(); html.push('<ul>'); inList = true; listType = 'ul'; }
+            html.push(`<li>${formatInline(trimmed.replace(/^[-*]\s+/, ''))}</li>`);
+            continue;
+          }
+          if (/^\d+\.\s+/.test(trimmed)) {
+            if (!inList || listType !== 'ol') { closeList(); html.push('<ol>'); inList = true; listType = 'ol'; }
+            html.push(`<li>${formatInline(trimmed.replace(/^\d+\.\s+/, ''))}</li>`);
+            continue;
+          }
+          if (/^---$/.test(trimmed)) {
+            closeList();
+            html.push('<hr />');
+            continue;
+          }
+          closeList();
+          html.push(`<p>${formatInline(trimmed)}</p>`);
+        }
+        closeList();
+        return html.join('');
+      }
+
+      async function openPreview(path, title) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = '<div class="text-zinc-400">Loading preview...</div>';
+        modal.classList.remove('hidden');
+        try {
+          const response = await fetch(path, { cache: 'no-store' });
+          if (!response.ok) throw new Error('Unable to load content');
+          const text = await response.text();
+          modalBody.innerHTML = renderMarkdown(text);
+        } catch (error) {
+          modalBody.innerHTML = `<p class="text-red-400">${error.message}</p>`;
+        }
+      }
+
+      document.getElementById('open-glossary').addEventListener('click', () => openPreview('doc/chapter1/glossary_chapter1.md', 'Chapter 1 Glossary'));
+      document.getElementById('open-mindmap').addEventListener('click', () => openPreview('doc/chapter1/mind_map_chapter1_vi.md', 'Chapter 1 Mind Map'));
+      document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+      modal.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
+    </script>
   </body>
 </html>
