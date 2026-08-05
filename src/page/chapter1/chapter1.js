@@ -74,6 +74,139 @@ function renderMindmap(code) {
   </svg></div>`;
 }
 
+function parseQuiz(markdown) {
+  const lines = markdown.split(/\r?\n/);
+  const questions = [];
+  let current = null;
+  let mode = null;
+
+  const pushCurrent = () => {
+    if (current) {
+      questions.push(current);
+    }
+  };
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+    if (!line) {
+      return;
+    }
+    const questionMatch = line.match(/^###\s+Question\s+\d+/);
+    if (questionMatch) {
+      pushCurrent();
+      current = { prompt: line.replace(/^###\s+Question\s+\d+/,'').trim() || '', choices: [], answer: '', explanation: '' };
+      mode = 'prompt';
+      return;
+    }
+    const choiceMatch = line.match(/^([A-D])\.\s+(.*)$/);
+    if (choiceMatch && current) {
+      current.choices.push({ label: choiceMatch[1], text: choiceMatch[2] });
+      mode = 'choices';
+      return;
+    }
+    if (/^\*\*Answer:\*\*/i.test(line) && current) {
+      current.answer = line.replace(/^\*\*Answer:\*\*/i, '').trim();
+      mode = 'answer';
+      return;
+    }
+    if (/^\*\*Explanation:\*\*/i.test(line) && current) {
+      current.explanation = line.replace(/^\*\*Explanation:\*\*/i, '').trim();
+      mode = 'explanation';
+      return;
+    }
+    if (/^---$/.test(line)) {
+      // section separator
+      return;
+    }
+    if (current) {
+      if (mode === 'prompt') {
+        current.prompt += ' ' + line;
+      } else if (mode === 'explanation') {
+        current.explanation += ' ' + line;
+      }
+    }
+  });
+
+  pushCurrent();
+  return questions;
+}
+
+function renderQuiz(markdown) {
+  const questions = parseQuiz(markdown);
+  if (!questions.length) {
+    return '<p>No quiz questions were found.</p>';
+  }
+
+  return `<div class="quiz-shell"><div class="quiz-summary" id="quiz-summary">Select an answer for each question, then click Check Answers.</div>${questions.map((q, index) => `
+    <div class="quiz-card" data-question-index="${index}">
+      <div class="quiz-prompt"><strong>Question ${index + 1}.</strong> ${escapeHtml(q.prompt)}</div>
+      <div class="quiz-options">
+        ${q.choices.map((choice) => `
+          <label class="quiz-option" data-answer="${choice.label}">
+            <input type="radio" name="quiz-${index}" value="${choice.label}" />
+            <span class="quiz-option-label">${choice.label}.</span>
+            <span>${escapeHtml(choice.text)}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="quiz-feedback-${index}" aria-live="polite"></div>
+      <div class="quiz-explanation" id="quiz-explanation-${index}"></div>
+    </div>
+  `).join('')}
+  <div class="quiz-actions">
+    <button type="button" id="quiz-check-button">Check Answers</button>
+    <button type="button" id="quiz-reset-button">Reset</button>
+  </div>
+  </div>`;
+}
+
+function bindQuizEvents(questions) {
+  const summary = document.getElementById('quiz-summary');
+  const checkButton = document.getElementById('quiz-check-button');
+  const resetButton = document.getElementById('quiz-reset-button');
+
+  if (!checkButton || !resetButton) {
+    return;
+  }
+
+  checkButton.addEventListener('click', () => {
+    let score = 0;
+    let answered = 0;
+
+    questions.forEach((q, index) => {
+      const selected = document.querySelector(`input[name="quiz-${index}"]:checked`);
+      const feedback = document.getElementById(`quiz-feedback-${index}`);
+      const explanation = document.getElementById(`quiz-explanation-${index}`);
+      const correctLabel = q.answer.trim();
+      const isCorrect = selected && selected.value === correctLabel;
+
+      if (selected) answered += 1;
+      if (isCorrect) score += 1;
+
+      if (feedback) {
+        feedback.innerHTML = isCorrect ? `<span class="quiz-correct">Correct!</span>` : `<span class="quiz-wrong">Incorrect.</span> <span class="quiz-correct-answer">Answer: ${escapeHtml(correctLabel)}</span>`;
+      }
+      if (explanation) {
+        explanation.innerHTML = `<div class="quiz-explanation-label">Explanation:</div><div>${escapeHtml(q.explanation)}</div>`;
+      }
+    });
+
+    summary.innerHTML = `Score: ${score}/${questions.length} — ${answered < questions.length ? 'Please answer all questions to finalize your results.' : 'Review each explanation below.'}`;
+  });
+
+  resetButton.addEventListener('click', () => {
+    questions.forEach((_, index) => {
+      const selected = document.querySelector(`input[name="quiz-${index}"]:checked`);
+      if (selected) selected.checked = false;
+      const feedback = document.getElementById(`quiz-feedback-${index}`);
+      const explanation = document.getElementById(`quiz-explanation-${index}`);
+      if (feedback) feedback.innerHTML = '';
+      if (explanation) explanation.innerHTML = '';
+    });
+    summary.innerHTML = 'Select an answer for each question, then click Check Answers.';
+  });
+}
+
 function renderMarkdown(markdown) {
   const lines = markdown.split(/\r?\n/);
   let html = [];
@@ -172,7 +305,12 @@ async function loadDoc(view) {
     const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load content (${response.status})`);
     const markdown = await response.text();
-    contentArea.innerHTML = renderMarkdown(markdown);
+    if (view === 'quiz') {
+      contentArea.innerHTML = renderQuiz(markdown);
+      bindQuizEvents(parseQuiz(markdown));
+    } else {
+      contentArea.innerHTML = renderMarkdown(markdown);
+    }
   } catch (error) {
     contentArea.innerHTML = `<p>Could not load the content. ${error.message}</p>`;
   }
