@@ -30,11 +30,14 @@
             <div class="text-xs text-zinc-400">CTFL Personal Coach</div>
           </div>
         </div>
-        <nav class="flex gap-x-6 text-sm font-medium">
+        <nav class="flex flex-wrap gap-3 text-sm font-medium">
           <a href="#home" class="text-zinc-300 hover:text-emerald-400">Home</a>
           <a href="src/page/chapter1/index.html" class="text-zinc-300 hover:text-emerald-400">Chapter 1</a>
           <a href="src/page/chapter2/index.html" class="text-zinc-300 hover:text-emerald-400">Chapter 2</a>
           <a href="src/page/chapter3/index.html" class="text-zinc-300 hover:text-emerald-400">Chapter 3</a>
+          <a href="#study" class="text-zinc-300 hover:text-emerald-400">Chapter 4</a>
+          <a href="#study" class="text-zinc-300 hover:text-emerald-400">Chapter 5</a>
+          <a href="#study" class="text-zinc-300 hover:text-emerald-400">Chapter 6</a>
           <a href="#study" class="text-zinc-300 hover:text-emerald-400">Study</a>
         </nav>
       </div>
@@ -46,8 +49,8 @@
           <p class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
             <i class="fa-solid fa-star"></i> Study smarter with structured CTFL prep
           </p>
-          <h1 class="title text-4xl lg:text-5xl font-bold mt-5">Chapter 1 learning hub for ISTQB Foundation Level</h1>
-          <p class="text-zinc-400 mt-4 max-w-2xl">Review testing fundamentals, explore glossary and mind maps, and jump into chapter resources from one clean dashboard.</p>
+          <h1 class="title text-4xl lg:text-5xl font-bold mt-5">ISTQB Chapter 1–6 learning hub for Foundation Level</h1>
+          <p class="text-zinc-400 mt-4 max-w-2xl">Review the Foundation path, explore glossary and mind maps, and jump into chapter resources from one dashboard.</p>
           <div class="flex flex-wrap gap-3 mt-6">
             <a href="src/page/chapter1/index.html" class="bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-2xl font-semibold">Open Chapter 1</a>
             <button id="open-glossary" class="border border-zinc-700 px-5 py-3 rounded-2xl font-semibold hover:bg-zinc-800">Preview glossary</button>
@@ -69,39 +72,68 @@
         </div>
       </section>
 
-      <section id="study" class="grid md:grid-cols-2 gap-6">
+      <section id="study" class="grid lg:grid-cols-[1.3fr_0.9fr] gap-6">
         <div class="glass-card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold">Chapter 1 resources</h2>
-            <a href="src/page/chapter1/index.html" class="text-emerald-400">Open →</a>
+            <div>
+              <h2 class="text-xl font-semibold">Chapter study roadmap</h2>
+              <p class="text-sm text-zinc-400 mt-1">Browse the full ISTQB Foundation path from Chapter 1 through Chapter 6.</p>
+            </div>
+            <a href="src/page/chapter1/index.html" class="text-emerald-400">Start Chapter 1 →</a>
           </div>
-          <div class="space-y-3">
-            <a href="src/page/chapter1/index.html" class="block rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
-              <div class="font-semibold">Chapter 1 study notes</div>
-              <div class="text-sm text-zinc-400">English, Vietnamese, quiz, glossary, and mind map for Chapter 1.</div>
-            </a>
-            <a href="src/page/chapter2/index.html" class="block rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
-              <div class="font-semibold">Chapter 2 study notes</div>
-              <div class="text-sm text-zinc-400">English, Vietnamese, quiz, and mind map for Chapter 2.</div>
-            </a>
-            <a href="src/page/chapter3/index.html" class="block rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
-              <div class="font-semibold">Chapter 3 study notes</div>
-              <div class="text-sm text-zinc-400">English, Vietnamese, quiz, glossary, and mind map for Chapter 3.</div>
-            </a>
-            <button id="open-mindmap" class="w-full text-left rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 hover:border-emerald-500/40">
-              <div class="font-semibold">Mind map</div>
-              <div class="text-sm text-zinc-400">Visual summary of the key concepts in Chapter 1.</div>
-            </button>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 1</div>
+              <div class="font-semibold text-white">Fundamentals of Testing</div>
+              <p class="text-sm text-zinc-400 mt-2">English notes, Vietnamese notes, quiz, glossary, and mind map.</p>
+              <a href="src/page/chapter1/index.html" class="mt-4 inline-flex items-center text-emerald-400 text-sm font-semibold">Open chapter 1 →</a>
+            </article>
+
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 2</div>
+              <div class="font-semibold text-white">Testing Throughout SDLC</div>
+              <p class="text-sm text-zinc-400 mt-2">English notes, Vietnamese notes, quiz, glossary, and mind map.</p>
+              <a href="src/page/chapter2/index.html" class="mt-4 inline-flex items-center text-emerald-400 text-sm font-semibold">Open chapter 2 →</a>
+            </article>
+
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 3</div>
+              <div class="font-semibold text-white">Static Testing</div>
+              <p class="text-sm text-zinc-400 mt-2">English notes, Vietnamese notes, quiz, glossary, and mind map.</p>
+              <a href="src/page/chapter3/index.html" class="mt-4 inline-flex items-center text-emerald-400 text-sm font-semibold">Open chapter 3 →</a>
+            </article>
+
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 4</div>
+              <div class="font-semibold text-white">Test Analysis and Design</div>
+              <p class="text-sm text-zinc-400 mt-2">Equivalence partitioning, boundary value analysis, decision tables, state transitions, ATDD.</p>
+              <span class="mt-4 inline-flex items-center rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-400">Page coming soon</span>
+            </article>
+
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 5</div>
+              <div class="font-semibold text-white">Managing the Test Activities</div>
+              <p class="text-sm text-zinc-400 mt-2">Planning, risk, monitoring, defects, configuration management, and test control.</p>
+              <span class="mt-4 inline-flex items-center rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-400">Page coming soon</span>
+            </article>
+
+            <article class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <div class="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Chapter 6</div>
+              <div class="font-semibold text-white">Test Tools and Automation</div>
+              <p class="text-sm text-zinc-400 mt-2">Automation, test management tools, benefits, risks, and continuous testing.</p>
+              <span class="mt-4 inline-flex items-center rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-400">Page coming soon</span>
+            </article>
           </div>
         </div>
 
         <div class="glass-card p-6">
           <h2 class="text-xl font-semibold mb-4">Quick study focus</h2>
           <ul class="space-y-2 text-sm text-zinc-300">
-            <li>• Testing principles and their meaning</li>
-            <li>• Error → Defect → Failure → Root Cause</li>
-            <li>• Testing vs debugging and QA</li>
-            <li>• Whole Team Approach and independence of testing</li>
+            <li>• Start with Chapter 1 and follow the CTFL roadmap.</li>
+            <li>• Use glossary and mind map previews for fast review.</li>
+            <li>• Practice with quizzes after each chapter.</li>
+            <li>• Keep the full Chapter 1–6 path in view as you learn.</li>
           </ul>
         </div>
       </section>
