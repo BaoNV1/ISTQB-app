@@ -4,7 +4,8 @@ const docs = {
   quiz: '../../../doc/chapter3/Chapter3_Quiz.md',
   glossary: '../../../doc/chapter3/glossary_chapter3.md',
   glossaryVi: '../../../doc/chapter3/glossary_chapter3_vi.md',
-  mindmap: '../../../doc/chapter3/mind_map_chapter3_vi.md'
+  mindmap: '../../../doc/chapter3/mind_map_chapter3.md',
+  mindmapVi: '../../../doc/chapter3/mind_map_chapter3_vi.md'
 };
 
 const contentArea = document.getElementById('content-area');
@@ -319,7 +320,11 @@ function renderMarkdown(markdown) {
 }
 
 async function loadDoc(view) {
-  const path = view === 'glossary' ? (currentLanguage === 'vi' ? docs.glossaryVi : docs.glossary) : docs[view];
+  const path = view === 'glossary'
+    ? (currentLanguage === 'vi' ? docs.glossaryVi : docs.glossary)
+    : view === 'mindmap'
+    ? (currentLanguage === 'vi' ? docs.mindmapVi : docs.mindmap)
+    : docs[view];
   if (!path) {
     contentArea.innerHTML = '<p>Content is not available for this option.</p>';
     return;
