@@ -3,7 +3,9 @@ const docs = {
   vi: '../../../doc/chapter4/Chapter4_Vietnamese.md',
   quiz: '../../../doc/chapter4/Chapter4_Quiz.md',
   glossary: '../../../doc/chapter4/glossary_chapter4.md',
-  mindmap: '../../../doc/chapter4/mind_map_chapter4.md'
+  glossaryVi: '../../../doc/chapter4/glossary_chapter4_vi.md',
+  mindmap: '../../../doc/chapter4/mind_map_chapter4.md',
+  mindmapVi: '../../../doc/chapter4/mind_map_chapter4_vi.md'
 };
 
 const contentArea = document.getElementById('content-area');
@@ -153,7 +155,11 @@ function bindQuiz(questions) {
 }
 
 async function loadDoc(view) {
-  const path = view === 'glossary' || view === 'mindmap' ? docs[view] : docs[view];
+  const path = view === 'glossary'
+    ? (currentLanguage === 'vi' ? docs.glossaryVi : docs.glossary)
+    : view === 'mindmap'
+      ? (currentLanguage === 'vi' ? docs.mindmapVi : docs.mindmap)
+      : docs[view];
   contentArea.innerHTML = '<p>Loading chapter content...</p>';
   try {
     const response = await fetch(path, { cache: 'no-store' });
