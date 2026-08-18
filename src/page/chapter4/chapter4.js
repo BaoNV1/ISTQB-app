@@ -21,7 +21,13 @@ function formatInline(text) {
 }
 
 function renderMindmap(markdown) {
-  const lines = markdown.split(/\r?\n/).filter((line) => line.trim() && line.trim() !== 'mindmap');
+  const sourceLines = markdown.split(/\r?\n/);
+  const mindmapStart = sourceLines.findIndex((line) => line.trim() === 'mindmap');
+  const mindmapEnd = mindmapStart >= 0
+    ? sourceLines.findIndex((line, index) => index > mindmapStart && line.trim() === '```')
+    : -1;
+  const lines = (mindmapStart >= 0 ? sourceLines.slice(mindmapStart + 1, mindmapEnd >= 0 ? mindmapEnd : sourceLines.length) : sourceLines)
+    .filter((line) => line.trim() && line.trim() !== 'mindmap');
   const root = { text: 'Mind Map', children: [] };
   const stack = [root];
 
