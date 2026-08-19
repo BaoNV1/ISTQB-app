@@ -1,26 +1,82 @@
-# Chương 4: Phân tích và thiết kế kiểm thử
+# ISTQB CTFL v4.0.1 – Chương 4: Phân tích và Thiết kế Kiểm thử
 
-## 4.1 Kỹ thuật kiểm thử
+## 4.1 Tổng quan về Kỹ thuật Kiểm thử
 
-Kỹ thuật kiểm thử giúp kiểm thử viên suy ra điều kiện và ca kiểm thử từ yêu cầu, mô hình, mã nguồn và kinh nghiệm. Kỹ thuật phù hợp làm rõ lý do chọn ca kiểm thử và giúp phát hiện các khoảng trống trong độ bao phủ.
+Kỹ thuật kiểm thử giúp suy ra điều kiện kiểm thử và ca kiểm thử một cách có hệ thống từ test basis.
 
-## 4.2 Kỹ thuật hộp đen
+Ba nhóm chính:
+- **Black-box** (dựa trên đặc tả)
+- **White-box** (dựa trên cấu trúc)
+- **Experience-based** (dựa trên kinh nghiệm)
 
-Kỹ thuật hộp đen thiết kế kiểm thử dựa trên hành vi mong đợi của hệ thống mà không phụ thuộc vào cách cài đặt bên trong.
+---
 
-- **Phân vùng tương đương** chia dữ liệu vào hoặc ra thành các nhóm mà hệ thống dự kiến xử lý giống nhau. Chọn giá trị đại diện cho cả phân vùng hợp lệ và không hợp lệ.
-- **Phân tích giá trị biên** tập trung vào ranh giới của các phân vùng. Các giá trị tại, ngay dưới và ngay trên biên thường có giá trị cao.
-- **Kiểm thử bảng quyết định** biểu diễn các tổ hợp điều kiện và hành động tương ứng, phù hợp với nhiều luật nghiệp vụ.
-- **Kiểm thử chuyển trạng thái** mô hình hóa trạng thái, sự kiện, điều kiện và chuyển đổi. Cần kiểm thử cả chuyển đổi hợp lệ lẫn sự kiện không hợp lệ.
+## 4.2 Kỹ thuật Hộp đen (Black-box)
 
-## 4.3 Kỹ thuật hộp trắng
+### 4.2.1 Phân vùng tương đương (Equivalence Partitioning - EP)
+- Chia dữ liệu vào/ra thành các nhóm (partition) mà hệ thống xử lý giống nhau.
+- Bao gồm cả partition **hợp lệ** và **không hợp lệ**.
+- Coverage: Ít nhất 1 giá trị từ mỗi partition → 100% EP coverage.
 
-Kỹ thuật hộp trắng sử dụng cấu trúc bên trong của phần mềm. Kiểm thử câu lệnh hướng đến việc thực thi các câu lệnh có thể chạy; kiểm thử nhánh hướng đến các kết quả của quyết định. Độ bao phủ là chỉ báo hữu ích nhưng không chứng minh kiểm thử đã đầy đủ.
+### 4.2.2 Phân tích giá trị biên (Boundary Value Analysis - BVA)
+- Tập trung vào các biên của partition có thứ tự (lỗi thường xảy ra ở biên).
+- Hai biến thể trong syllabus:
+  - **2-value BVA**: Mỗi biên → giá trị biên + giá trị lân cận thuộc partition kế bên.
+  - **3-value BVA**: Mỗi giá trị biên → biên + cả hai phía (bên trong và bên ngoài).
+- Thường kết hợp với EP.
 
-## 4.4 Kỹ thuật dựa trên kinh nghiệm
+### 4.2.3 Kiểm thử bảng quyết định (Decision Table Testing)
+- Dùng khi hành vi phụ thuộc vào tổ hợp nhiều điều kiện (business rules).
+- Cấu trúc: Conditions + Actions.
+- Mỗi cột = một tổ hợp điều kiện = một test case.
+- Coverage: Bao phủ tất cả các cột khả thi.
 
-Đoán lỗi dự đoán các lỗi có khả năng xảy ra dựa trên kinh nghiệm. Kiểm thử thăm dò kết hợp việc học, thiết kế và thực thi kiểm thử. Kiểm thử dựa trên danh sách kiểm tra dùng một danh sách các điểm cần kiểm tra để tạo sự nhất quán.
+### 4.2.4 Kiểm thử chuyển trạng thái (State Transition Testing)
+- Mô hình hóa hệ thống bằng: State – Event – Transition – Guard.
+- Phù hợp với hệ thống có trạng thái (login, workflow, ATM…).
+- Coverage: Tất cả state, tất cả transition hợp lệ, và transition không hợp lệ.
 
-## 4.5 Phương pháp cộng tác
+---
 
-User story mô tả tính năng từ góc nhìn người dùng. Tiêu chí chấp nhận xác định các điều kiện tính năng phải đáp ứng. Với ATDD, nhóm cùng thảo luận và viết kiểm thử chấp nhận trước khi triển khai.
+## 4.3 Kỹ thuật Hộp trắng (White-box)
+
+### 4.3.1 Kiểm thử câu lệnh & Statement Coverage
+- Mục tiêu: Thực thi mọi câu lệnh có thể thực thi ít nhất một lần.
+- Coverage = (Số câu lệnh đã thực thi / Tổng số câu lệnh) × 100%
+
+### 4.3.2 Kiểm thử nhánh & Branch Coverage
+- Mục tiêu: Thực thi mọi nhánh (True/False của mỗi decision) ít nhất một lần.
+- Branch coverage mạnh hơn Statement coverage.
+- 100% Branch coverage ⇒ 100% Statement coverage (ngược lại không đúng).
+
+### 4.3.3 Giá trị của White-box Testing
+- Tìm lỗi liên quan đến luồng điều khiển của code.
+- Bổ sung cho black-box.
+- Độ bao phủ cao **không** chứng minh test đã đúng hoặc đầy đủ.
+
+---
+
+## 4.4 Kỹ thuật dựa trên Kinh nghiệm
+
+### 4.4.1 Error Guessing
+- Dựa vào kinh nghiệm để dự đoán nơi dễ xảy ra lỗi.
+
+### 4.4.2 Exploratory Testing
+- Kết hợp học hỏi + thiết kế + thực thi kiểm thử cùng lúc (thường theo session có charter).
+
+### 4.4.3 Checklist-based Testing
+- Sử dụng danh sách các điểm cần kiểm tra để đảm bảo tính nhất quán.
+
+---
+
+## 4.5 Phương pháp dựa trên Cộng tác
+
+### 4.5.1 Viết User Story cộng tác
+- User story được viết cùng nhau giữa Dev, Tester và Business.
+
+### 4.5.2 Acceptance Criteria
+- Điều kiện mà user story phải thỏa mãn để được chấp nhận.
+
+### 4.5.3 ATDD (Acceptance Test-Driven Development)
+- Team cùng viết acceptance test **trước khi** code.
+- Các test này trở thành ví dụ thực thi được của hành vi mong đợi.
