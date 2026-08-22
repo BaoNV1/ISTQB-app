@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter 6 - ISTQB App</title>
+    <style>
+      :root { color-scheme: dark; --bg: #071827; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: linear-gradient(135deg, var(--bg), #172554); color: var(--text); }
+      .page { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+      .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+      .topbar a { color: var(--accent); text-decoration:none; font-weight:600; }
+      .hero, .panel { background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+      .hero { padding: 28px; margin-bottom: 18px; } .hero h1 { margin: 0 0 10px; } .hero p { color: var(--muted); margin: 0 0 16px; }
+      .pill-list, .tabs, .quiz-actions { display:flex; flex-wrap:wrap; gap:10px; } .pill { padding:8px 12px; border-radius:999px; background: rgba(56,189,248,0.16); color:#e0f2fe; font-size: .9rem; }
+      .panel { padding: 20px; } .tabs { margin-bottom:16px; } .tabs button, .quiz-actions button { border:none; border-radius:999px; padding:10px 14px; background:#1e293b; color:var(--text); cursor:pointer; }
+      .tabs button.active, .quiz-actions button { background: linear-gradient(90deg, var(--accent), #2563eb); color:white; font-weight:700; } .content-area { line-height:1.7; }
+      .content-area h1, .content-area h2, .content-area h3 { color:#f8fafc; } .content-area ul { padding-left:1.2rem; } .content-area code { background:rgba(255,255,255,.08); padding:.15rem .35rem; border-radius:.35rem; }
+      .notice, .quiz-summary { padding:14px 16px; border-radius:16px; background:rgba(30,41,59,.9); border:1px solid rgba(56,189,248,.3); } .glossary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
+      .glossary-card, .quiz-card { background:rgba(15,23,42,.78); border:1px solid rgba(148,163,184,.2); border-radius:16px; padding:14px; } .glossary-term { font-weight:700; color:#f8fafc; margin-bottom:6px; } .glossary-meaning, .quiz-explanation { color:#cbd5e1; }
+      .quiz-shell { display:flex; flex-direction:column; gap:16px; } .quiz-options { display:grid; gap:10px; margin-top:12px; } .quiz-option { display:flex; gap:10px; padding:12px 14px; border-radius:12px; background:rgba(30,41,59,.82); cursor:pointer; }
+      .quiz-feedback { margin-top:10px; min-height:22px; font-weight:600; } .quiz-correct { color:#4ade80; } .quiz-wrong { color:#fb923c; } .quiz-explanation { margin-top:8px; font-size:.95rem; }
+      .mindmap { margin:14px 0; padding:12px; border:1px solid #334155; border-radius:16px; background:#0f172a; overflow:auto; } .mindmap svg { display:block; width:100%; height:auto; min-width:560px; }
+      @media (max-width:640px) { .page { padding:18px 14px 40px; } .hero, .panel { border-radius:18px; } }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="topbar"><a href="../../../index.html">← Back to Home</a><span>Chapter 6</span></div>
+      <section class="hero"><h1>Chapter 6: Test Tools</h1><p>Understand how tools support testing, and weigh the benefits and risks of test automation.</p><div class="pill-list"><span class="pill">Tool support</span><span class="pill">Automation benefits</span><span class="pill">Automation risks</span></div></section>
+      <section class="panel"><div class="tabs"><button type="button" data-view="en" class="active">English</button><button type="button" data-view="vi">Tiếng Việt</button><button type="button" data-view="quiz">Quiz</button><button type="button" data-view="glossary">Glossary</button><button type="button" data-view="mindmap">Mind Map</button></div><div id="content-area" class="content-area">Loading chapter content...</div></section>
+    </main>
+    <script src="./chapter6.js"></script>
+  </body>
+</html>
