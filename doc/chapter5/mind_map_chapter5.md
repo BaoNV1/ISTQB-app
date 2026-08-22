@@ -4,31 +4,34 @@
 
 ```mermaid
 mindmap
-  root((Chapter 5))
-    Test Planning
-      Purpose and content of a test plan
-      Entry criteria
-      Exit criteria
-      Estimation techniques
-      Test case prioritization
-      Test pyramid
-      Testing quadrants
-    Risk Management
-      Project risks
-      Product risks
-      Risk likelihood
-      Risk impact
-      Risk analysis
-      Risk control
-    Monitoring and Control
-      Metrics
-      Test progress reports
-      Status communication
-    Configuration Management
-      Supporting testing
-    Defect Management
-      Defect reports
-      Defect lifecycle basics
+  root((Chapter 5: Managing the Test Activities))
+    5.1 Test Planning
+      Purpose & Content of Test Plan
+      Tester contribution to planning
+      Entry & Exit Criteria
+      Estimation Techniques
+      Test Case Prioritization
+      Test Pyramid
+      Testing Quadrants
+    5.2 Risk Management
+      Risk = Likelihood × Impact
+      Project Risks
+      Product Risks
+      Product Risk Analysis
+      Product Risk Control
+    5.3 Monitoring, Control & Completion
+      Metrics used in Testing
+      Test Reports
+      Communicating Test Status
+    5.4 Configuration Management
+      Version control
+      Change control
+      Supports testing
+    5.5 Defect Management
+      Logging defects
+      Classifying & prioritizing
+      Tracking status
+      Clear defect reports
 ```
 
 ## Study focus
