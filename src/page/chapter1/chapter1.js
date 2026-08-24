@@ -10,6 +10,7 @@ const docs = {
 
 const contentArea = document.getElementById('content-area');
 const buttons = document.querySelectorAll('[data-view]');
+let currentLanguage = 'en';
 
 function escapeHtml(text) {
   return text
@@ -74,6 +75,30 @@ function renderMindmap(code) {
       return `${connector}<rect x="${pos.x}" y="${pos.y}" width="${pos.width}" height="${pos.height}" rx="14" fill="#111827" stroke="#34d399" stroke-width="1.5"></rect><text x="${pos.x + pos.width / 2}" y="${pos.y + 24}" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">${escapeHtml(pos.text)}</text>`;
     }).join('')}
   </svg></div>`;
+}
+
+function renderGlossary(markdown) {
+  const lines = markdown.split(/\r?\n/).filter((line) => line.trim());
+  const title = lines.find((line) => line.startsWith('# '))?.replace(/^#\s+/, '') || 'Glossary';
+  const tableLines = lines.filter((line) => line.startsWith('|'));
+
+  if (tableLines.length < 2) {
+    return `<div class="glossary-shell"><h2>${escapeHtml(title)}</h2><p>No glossary entries available yet.</p></div>`;
+  }
+
+  const rows = tableLines.slice(1).map((line) => line.split('|').slice(1, -1).map((cell) => cell.trim()));
+  const entries = rows.filter((row) => row.length >= 2 && !row.every((cell) => /^-+:*$/.test(cell)));
+  const cards = entries.map(([term, meaning]) => `
+    <article class="glossary-card">
+      <div class="glossary-term">${escapeHtml(term)}</div>
+      <div class="glossary-meaning">${escapeHtml(meaning)}</div>
+    </article>
+  `).join('');
+
+  return `<div class="glossary-shell">
+    <div class="glossary-intro">${escapeHtml(title)} - review the key terms in a compact visual card layout.</div>
+    <div class="glossary-grid">${cards}</div>
+  </div>`;
 }
 
 function parseQuiz(markdown) {
@@ -314,6 +339,8 @@ async function loadDoc(view) {
     if (view === 'quiz') {
       contentArea.innerHTML = renderQuiz(markdown);
       bindQuizEvents(parseQuiz(markdown));
+    } else if (view === 'glossary') {
+      contentArea.innerHTML = renderGlossary(markdown);
     } else {
       contentArea.innerHTML = renderMarkdown(markdown);
     }
@@ -326,6 +353,13 @@ buttons.forEach((button) => {
   button.addEventListener('click', () => {
     buttons.forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
+
+    if (button.dataset.view === 'en') {
+      currentLanguage = 'en';
+    } else if (button.dataset.view === 'vi') {
+      currentLanguage = 'vi';
+    }
+
     loadDoc(button.dataset.view);
   });
 });
