@@ -4,19 +4,20 @@ ISTQB App is a local-friendly study project for learning ISTQB CTFL concepts thr
 
 ## What this project includes
 
-- A landing dashboard with Chapter 1–3 interactive study pages
-- English and Vietnamese chapter notes
-- Chapter quizzes, glossaries, and mind maps for Chapters 1–3
+- A landing dashboard with Chapter 1–6 interactive study pages
+- English and Vietnamese chapter notes for Chapters 1–6
+- Chapter quizzes, glossaries, and mind maps for Chapters 1–6
 - A one-page summary and a 2.5-month study plan
-- Chapter 4–6 glossary and mind map source files in `doc/`
+- ISTQB CTFL syllabus references and mock exam practice materials
 
 ## Main files
 
 - `index.html` – the main study page
-- `src/page/chapter1/index.html`, `src/page/chapter2/index.html`, `src/page/chapter3/index.html` – interactive chapter content
+- `src/page/chapter1/index.html` through `src/page/chapter6/index.html` – interactive chapter content
 - `doc/` – study materials, summaries, and planning files
 - `doc/chapter1` to `doc/chapter6` – chapter-specific glossary and mind map files
 - `doc/one_page_summary.html` – quick revision summary
+- `doc/Mock_Exam/` – mock exam questions and answer materials
 
 ## How to open it
 
@@ -36,7 +37,7 @@ Option 2: Serve it locally (recommended for markdown preview)
 
 ## How to use it
 
-- Start with Chapter 1 and move through Chapters 2 and 3 using the dashboard
+- Start with Chapter 1 and move through Chapters 2–6 using the dashboard
 - Open the chapter glossary and mind map for quick concept review
 - Use the built-in chapter quizzes to test your understanding
 - Review quiz feedback and explanations to improve retention
@@ -45,7 +46,7 @@ Option 2: Serve it locally (recommended for markdown preview)
 
 - The markdown preview works best when the page is served from a local web server
 - You can switch between English and Vietnamese using the chapter page tabs
-- Chapter 4–6 pages are still being prepared, but glossary and mind map source files are included in `doc/`
+- All Chapter 1–6 pages are available; their source notes, quizzes, glossaries, and mind maps are stored under `doc/`
 
 ## License
 
