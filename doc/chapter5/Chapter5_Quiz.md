@@ -52,6 +52,7 @@ D. The project budget is cut
 **Explanation:** Product risks relate to the quality of the product (e.g., functional, performance, or security issues). The others are project risks.
 
 ---
+---
 
 ### Question 5
 What does the Test Pyramid recommend?
@@ -76,6 +77,8 @@ D. Only three-point estimation
 
 **Answer:** B  
 **Explanation:** Metrics-based estimation relies on historical data and metrics from similar past projects.
+
+---
 
 ---
 
@@ -128,3 +131,131 @@ D. It is only needed after release
 
 **Answer:** B  
 **Explanation:** Configuration management supports testing by controlling versions and maintaining traceability of testware and the test object.
+
+### Question 11
+What is the purpose of Test Control?
+
+A. To take corrective actions when testing deviates from the plan
+B. To write production code
+C. To remove all test reporting
+D. To guarantee the schedule never changes
+
+**Answer:** A  
+**Explanation:** Test control uses monitoring information to adjust activities and keep testing aligned with objectives.
+
+---
+
+### Question 12
+Which is an example of a test metric?
+
+A. Number of executed test cases
+B. Developer favorite color
+C. Office location
+D. Product logo size
+
+**Answer:** A  
+**Explanation:** Test metrics provide measurable information about progress, results, quality, or risks.
+
+---
+
+### Question 13
+What should a test report communicate?
+
+A. Test status, results, risks, and significant issues
+B. Only the tester’s personal opinion
+C. Unrelated project expenses
+D. Source code passwords
+
+**Answer:** A  
+**Explanation:** Test reports provide stakeholders with useful evidence about testing progress and product quality.
+
+---
+
+### Question 14
+What is a project risk?
+
+A. A factor that may affect the project’s ability to meet its objectives
+B. A confirmed product failure only
+C. A successful test case
+D. A glossary definition
+
+**Answer:** A  
+**Explanation:** Project risks concern factors such as schedule, resources, budget, or staffing.
+
+---
+
+### Question 15
+What is a product risk?
+
+A. A possibility that the product may fail to satisfy a quality need
+B. A delay in a team meeting
+C. A missing holiday plan
+D. A change to the office furniture
+
+**Answer:** A  
+**Explanation:** Product risks relate to potential quality problems in the system being tested.
+
+---
+
+### Question 16
+What is risk-based testing used for?
+
+A. Prioritizing testing according to identified risks
+B. Avoiding all high-risk features
+C. Replacing test planning
+D. Selecting a programming language
+
+**Answer:** A  
+**Explanation:** Risk-based testing focuses effort where the likelihood and impact of problems are greatest.
+
+---
+
+### Question 17
+What is a test completion activity?
+
+A. Archiving testware and recording lessons learned
+B. Starting requirements analysis
+C. Removing all test results
+D. Disabling defect tracking
+
+**Answer:** A  
+**Explanation:** Test completion includes reporting, archiving useful materials, and capturing lessons learned.
+
+---
+
+### Question 18
+Why should defect reports be clear and objective?
+
+A. To help stakeholders reproduce, understand, and prioritize the defect
+B. To make defects harder to fix
+C. To avoid recording evidence
+D. To replace confirmation testing
+
+**Answer:** A  
+**Explanation:** Accurate evidence and objective language support efficient analysis and resolution.
+
+---
+
+### Question 19
+What does defect priority indicate?
+
+A. How urgently a defect should be fixed
+B. How many testers found it
+C. Which tool created it
+D. The length of its title
+
+**Answer:** A  
+**Explanation:** Priority reflects the business or project urgency of addressing the defect.
+
+---
+
+### Question 20
+Why are baselines useful in configuration management?
+
+A. They identify an agreed version from which changes can be controlled
+B. They delete historical test results
+C. They prevent all future changes
+D. They replace version control
+
+**Answer:** A  
+**Explanation:** A baseline provides a stable reference for managing and tracking subsequent changes.

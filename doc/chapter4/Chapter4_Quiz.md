@@ -14,6 +14,7 @@ D. Error guessing
 **Explanation:** Equivalence Partitioning (EP) divides data into partitions (valid and invalid) where the system should behave the same for all values in a partition.
 
 ---
+---
 
 ### Question 2 What is the main focus of Boundary Value Analysis (BVA)?
 
@@ -180,3 +181,131 @@ D. Because coverage can only be measured for black-box techniques
 ---
 
 **End of Chapter 4 Quiz**
+
+### Question 15
+What is the purpose of using invalid equivalence partitions?
+
+A. To check how the system handles unacceptable inputs
+B. To avoid testing error handling
+C. To test only the happy path
+D. To measure branch coverage
+
+**Answer:** A  
+**Explanation:** Invalid partitions represent inputs that should be rejected or handled as errors.
+
+---
+
+### Question 16
+For a range from 1 to 10 inclusive, which value is a valid boundary value?
+
+A. 0
+B. 1
+C. 11
+D. 20
+
+**Answer:** B  
+**Explanation:** The lower boundary of the valid range is 1.
+
+---
+
+### Question 17
+What does a decision table help testers identify?
+
+A. Missing combinations of conditions and actions
+B. Only user interface colors
+C. Source-code formatting errors
+D. Team responsibilities only
+
+**Answer:** A  
+**Explanation:** Decision tables represent business rules and help reveal incomplete or conflicting combinations.
+
+---
+
+### Question 18
+What does state transition testing use to model?
+
+A. States, events, and transitions
+B. Only database tables
+C. Test team salaries
+D. Build server capacity
+
+**Answer:** A  
+**Explanation:** State transition models show how events move the system between states.
+
+---
+
+### Question 19
+What is a valid transition?
+
+A. A permitted change from one state to another
+B. Any unexpected crash
+C. A code comment
+D. A test report format
+
+**Answer:** A  
+**Explanation:** Valid transitions describe behavior that the system is expected to allow.
+
+---
+
+### Question 20
+What is the main idea of error guessing?
+
+A. Using tester experience to anticipate likely defects
+B. Generating only random values
+C. Measuring statement coverage
+D. Writing requirements automatically
+
+**Answer:** A  
+**Explanation:** Error guessing uses knowledge of common mistakes, defects, and failure patterns.
+
+---
+
+### Question 21
+What is exploratory testing?
+
+A. Simultaneous learning, test design, and execution
+B. Testing with no objective
+C. Testing performed only by tools
+D. Executing a fixed script without learning
+
+**Answer:** A  
+**Explanation:** Exploratory testing combines investigation, design, and execution, often within a time-boxed session.
+
+---
+
+### Question 22
+What is a checklist-based test technique based on?
+
+A. A list of conditions or tests to be checked
+B. Code branches only
+C. Random database records
+D. Release dates only
+
+**Answer:** A  
+**Explanation:** Checklist-based testing uses a prepared list of items, risks, or reminders to guide testing.
+
+---
+
+### Question 23
+Why is coverage measurement useful?
+
+A. It indicates how much of a selected test basis or structure was exercised
+B. It proves that no defects remain
+C. It replaces expected results
+D. It determines the project budget
+
+**Answer:** A  
+**Explanation:** Coverage provides information about exercised items, but it does not prove test effectiveness by itself.
+
+---
+
+### Question 24
+What is a benefit of collaborative test approaches?
+
+A. They build shared understanding of expected behavior
+B. They remove the need for communication
+C. They allow only testers to define quality
+D. They delay feedback until release
+
+**Answer:** A  
+**Explanation:** Collaboration helps business, development, and testing participants agree on examples and acceptance criteria.

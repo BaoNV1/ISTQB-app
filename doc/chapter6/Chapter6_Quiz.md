@@ -70,3 +70,133 @@ D. Prevention of simple human errors
 
 **Answer:** B  
 **Explanation:** Maintenance of automated scripts can be costly and is often underestimated, especially when the system changes frequently.
+
+---
+
+### Question 7
+Which activity can a test management tool support?
+
+A. Planning and tracking test execution
+B. Replacing every tester’s judgment
+C. Guaranteeing complete coverage
+D. Removing the need for requirements
+
+**Answer:** A  
+**Explanation:** Test management tools can organize plans, cases, execution status, and reports.
+
+---
+
+### Question 8
+What is a possible benefit of test automation?
+
+A. Greater consistency and repeatability
+B. No maintenance effort
+C. Guaranteed detection of every defect
+D. Elimination of exploratory testing
+
+**Answer:** A  
+**Explanation:** Automated tests can repeat the same steps consistently, especially during regression testing.
+
+---
+
+### Question 9
+Which task is often supported by a defect tracking tool?
+
+A. Recording and monitoring defect status
+B. Designing the product architecture automatically
+C. Replacing all test cases
+D. Approving business budgets
+
+**Answer:** A  
+**Explanation:** Defect tracking tools store reports and help teams follow defects through their lifecycle.
+
+---
+
+### Question 10
+Why does automation require maintenance?
+
+A. The test object, interfaces, or requirements may change
+B. Automated tests never depend on the system
+C. Maintenance is needed only for manual tests
+D. Tools cannot be updated
+
+**Answer:** A  
+**Explanation:** Automated scripts and test data must be updated when the system or its interfaces change.
+
+---
+
+### Question 11
+Which is an example of a static analysis tool?
+
+A. A tool that detects coding standard violations without running the code
+B. A tool that simulates thousands of users
+C. A tool that records browser clicks only
+D. A tool that prints test plans
+
+**Answer:** A  
+**Explanation:** Static analysis examines source code or other artifacts without executing the software.
+
+---
+
+### Question 12
+What is a risk of relying too heavily on automated tests?
+
+A. Important exploratory or human-centered testing may be neglected
+B. Test execution becomes repeatable
+C. Results can be logged consistently
+D. Regression feedback becomes faster
+
+**Answer:** A  
+**Explanation:** Automation does not replace human investigation, judgment, or all types of testing.
+
+---
+
+### Question 13
+What does continuous testing mean?
+
+A. Integrating testing into an ongoing delivery pipeline
+B. Testing only once after release
+C. Running one test forever
+D. Removing all manual checks
+
+**Answer:** A  
+**Explanation:** Continuous testing provides feedback repeatedly throughout fast development and delivery processes.
+
+---
+
+### Question 14
+What should be considered before automating a test?
+
+A. The test’s suitability, maintenance cost, and expected value
+B. Only the tool’s purchase price
+C. Whether manual testing is forbidden
+D. Whether the test has no expected result
+
+**Answer:** A  
+**Explanation:** Automation decisions should consider value, stability, feasibility, cost, and ongoing maintenance.
+
+---
+
+### Question 15
+Which test activity is commonly suitable for automation?
+
+A. Repetitive regression checks
+B. Understanding an unknown product for the first time
+C. Interviewing users
+D. Making all product decisions
+
+**Answer:** A  
+**Explanation:** Repetitive, stable regression checks can often gain significant value from automation.
+
+---
+
+### Question 16
+What is one limitation of test tools?
+
+A. They support testing but do not replace critical thinking
+B. They can never produce results
+C. They cannot repeat a test
+D. They always remove defects automatically
+
+**Answer:** A  
+**Explanation:** Tools assist testers, but people still need to design meaningful tests, interpret results, and assess risks.

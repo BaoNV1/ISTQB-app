@@ -127,3 +127,133 @@ D. Reduce the number of developers needed
 
 **Answer:** B  
 **Explanation:** Early feedback helps identify misunderstandings and improves quality before more expensive stages of development.
+
+---
+
+### Question 11
+What is the main goal of a review?
+
+A. To find defects in a work product
+B. To execute the application
+C. To replace all dynamic testing
+D. To assign blame
+
+**Answer:** A  
+**Explanation:** Reviews examine work products to identify defects and improve quality before execution.
+
+---
+
+### Question 12
+Which review role leads and manages the review process?
+
+A. Author
+B. Moderator
+C. Scribe
+D. Customer
+
+**Answer:** B  
+**Explanation:** The moderator plans and facilitates the review process.
+
+---
+
+### Question 13
+What is individual preparation intended to achieve?
+
+A. Allow reviewers to examine the work product before the meeting
+B. Prevent reviewers from finding issues
+C. Replace the review meeting in every case
+D. Approve production deployment
+
+**Answer:** A  
+**Explanation:** Preparation helps reviewers understand the work product and identify potential issues efficiently.
+
+---
+
+### Question 14
+Which review type is usually led by the author?
+
+A. Inspection
+B. Walkthrough
+C. Audit
+D. Formal technical review
+
+**Answer:** B  
+**Explanation:** In a walkthrough, the author commonly presents the work product and guides discussion.
+
+---
+
+### Question 15
+What should reviewers focus on during a review?
+
+A. Improving the work product
+B. Criticizing the author personally
+C. Avoiding all documentation
+D. Proving that no future defect is possible
+
+**Answer:** A  
+**Explanation:** A constructive, product-focused review identifies issues without blaming individuals.
+
+---
+
+### Question 16
+Which activity is an example of static analysis?
+
+A. Executing a load test
+B. Checking source code for unreachable code
+C. Testing a login through a browser
+D. Measuring response time under load
+
+**Answer:** B  
+**Explanation:** Static analysis examines code without executing it and can identify issues such as unreachable code.
+
+---
+
+### Question 17
+Why can static testing be performed before executable software exists?
+
+A. It examines work products without execution
+B. It requires a production environment
+C. It only tests runtime behavior
+D. It depends on completed deployment
+
+**Answer:** A  
+**Explanation:** Requirements, designs, and other artifacts can be reviewed before software execution is possible.
+
+---
+
+### Question 18
+What is a characteristic of an inspection?
+
+A. It is a highly formal review with defined roles
+B. It is always performed by one person
+C. It requires no preparation
+D. It only examines performance
+
+**Answer:** A  
+**Explanation:** Inspections use a defined process, roles, preparation, and recorded results.
+
+---
+
+### Question 19
+What is a benefit of a shared review checklist?
+
+A. It supports consistent review coverage
+B. It guarantees zero defects
+C. It eliminates the need for reviewers
+D. It prevents requirements changes
+
+**Answer:** A  
+**Explanation:** Checklists remind reviewers of common issue categories and improve consistency.
+
+---
+
+### Question 20
+Which culture best supports effective reviews?
+
+A. A blame-oriented culture
+B. A culture focused on learning and improvement
+C. A culture that hides issues
+D. A culture that skips preparation
+
+**Answer:** B  
+**Explanation:** Reviews work best when participants can raise issues openly and focus on improving the product.

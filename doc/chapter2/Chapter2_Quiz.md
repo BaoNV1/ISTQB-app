@@ -197,3 +197,132 @@ Test levels and test types are two different dimensions. Any test type (function
 ---
 
 **End of Chapter 2 Quiz**
+
+### Question 15
+Which test level focuses on interactions between components or systems?
+
+A. Component testing
+B. Integration testing
+C. Acceptance testing
+D. Usability testing
+
+**Answer:** B  
+**Explanation:** Integration testing examines interfaces and interactions between integrated components or systems.
+
+---
+
+### Question 16
+What is a key characteristic of iterative development?
+
+A. Testing occurs only after the final release
+B. The product is developed and tested in repeated cycles
+C. Requirements can never change
+D. Reviews are prohibited
+
+**Answer:** B  
+**Explanation:** Iterative development delivers increments through repeated development and testing cycles.
+
+---
+
+### Question 17
+What does Continuous Integration encourage?
+
+A. Integrating changes frequently and checking them with automated tests
+B. Waiting until the end of the project to merge code
+C. Removing version control
+D. Testing only manually
+
+**Answer:** A  
+**Explanation:** Frequent integration with automated checks provides rapid feedback on changes.
+
+---
+
+### Question 18
+Which test type evaluates characteristics such as performance or usability?
+
+A. Functional testing
+B. Non-functional testing
+C. Confirmation testing
+D. Component testing
+
+**Answer:** B  
+**Explanation:** Non-functional testing evaluates quality characteristics other than specific business functions.
+
+---
+
+### Question 19
+What is the purpose of acceptance testing?
+
+A. To verify that the system meets business and user needs
+B. To check only internal code branches
+C. To replace component testing
+D. To measure developer productivity
+
+**Answer:** A  
+**Explanation:** Acceptance testing assesses whether the product is acceptable to its intended users or customers.
+
+---
+
+### Question 20
+Which activity is especially valuable before implementing a user story?
+
+A. Collaborative clarification of acceptance criteria
+B. Deleting the test basis
+C. Disabling regression tests
+D. Deferring all questions until release
+
+**Answer:** A  
+**Explanation:** Early collaboration clarifies expected behavior and improves shared understanding.
+
+---
+
+### Question 21
+What does regression testing focus on after a change?
+
+A. Only the new code author
+B. Existing functionality that could have been affected
+C. The project budget
+D. The user interface color
+
+**Answer:** B  
+**Explanation:** Regression testing checks whether changes caused problems in previously working functionality.
+
+---
+
+### Question 22
+Which event can trigger maintenance testing?
+
+A. Migration to a new platform
+B. Choosing a team name
+C. Writing the first requirement
+D. Closing a review meeting
+
+**Answer:** A  
+**Explanation:** Migration, modification, or retirement of an operational system can require maintenance testing.
+
+---
+
+### Question 23
+What is a benefit of testing throughout the lifecycle?
+
+A. Problems can be detected closer to when they are introduced
+B. Testers no longer need domain knowledge
+C. All test cases become unnecessary
+D. Requirements cannot change
+
+**Answer:** A  
+**Explanation:** Frequent testing gives earlier feedback and can reduce the cost of correction.
+
+---
+
+### Question 24
+Which statement about test levels is correct?
+
+A. Each test level uses exactly one test type
+B. Different test levels provide different scopes of testing
+C. Acceptance testing always occurs first
+D. Component testing evaluates the whole business process
+
+**Answer:** B  
+**Explanation:** Test levels organize testing by scope, from individual components to complete systems and business acceptance.
+---

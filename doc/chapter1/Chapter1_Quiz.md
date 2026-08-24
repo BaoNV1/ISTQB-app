@@ -262,3 +262,132 @@ Even if the system has no defects, it may still be unsuccessful if it does not m
 1. Cover the answers and try to answer each question yourself.
 2. Check the answer and carefully read the explanation.
 3. Review the related section in the syllabus if you got it wrong.
+
+### Question 19
+Which activity determines what needs to be tested and defines test conditions?
+
+A. Test analysis
+B. Test completion
+C. Debugging
+D. Deployment
+
+**Answer:** A  
+**Explanation:** Test analysis examines the test basis and identifies test conditions.
+
+---
+
+### Question 20
+What is the purpose of test design?
+
+A. To fix defects in the product
+B. To derive test cases and test data from test conditions
+C. To approve the project budget
+D. To replace test execution
+
+**Answer:** B  
+**Explanation:** Test design transforms test conditions into test cases, procedures, and supporting test data.
+
+---
+
+### Question 21
+Which work product is an example of testware?
+
+A. A marketing campaign
+B. A test data set
+C. A payroll contract
+D. A production invoice
+
+**Answer:** B  
+**Explanation:** Test data is a testing work product and is therefore part of testware.
+
+---
+
+### Question 22
+Why is traceability useful in testing?
+
+A. It removes the need for expected results
+B. It links requirements to test cases and results
+C. It guarantees defect-free software
+D. It prevents all requirement changes
+
+**Answer:** B  
+**Explanation:** Traceability helps measure coverage and assess the impact of changes.
+
+---
+
+### Question 23
+What does the absence-of-errors fallacy mean?
+
+A. A system with few known defects is automatically useful
+B. Removing defects does not guarantee that the system meets user needs
+C. Errors can only occur in requirements
+D. Testing should stop after the first failure
+
+**Answer:** B  
+**Explanation:** Software can contain few defects and still fail to satisfy user needs or business goals.
+
+---
+
+### Question 24
+Which testing principle explains why complete testing of all combinations is usually impractical?
+
+A. Exhaustive testing is impossible
+B. Defects cluster together
+C. Tests wear out
+D. Testing is context dependent
+
+**Answer:** A  
+**Explanation:** The number of possible inputs and paths is normally too large for exhaustive testing.
+
+---
+
+### Question 25
+What is a failure?
+
+A. A human mistake
+B. An incorrect behavior observed during execution
+C. The reason a defect was introduced
+D. A test plan activity
+
+**Answer:** B  
+**Explanation:** A failure is an observable deviation of the software from its expected behavior.
+
+---
+
+### Question 26
+Which approach gives developers and testers shared responsibility for quality?
+
+A. Whole Team Approach
+B. Big Bang integration
+C. Code freezing
+D. Production-only testing
+
+**Answer:** A  
+**Explanation:** The Whole Team Approach promotes collaboration and shared ownership of product quality.
+
+---
+
+### Question 27
+What is one benefit of testing early in the lifecycle?
+
+A. Defects are cheaper to fix
+B. No test planning is needed
+C. Testers can ignore requirements
+D. Testing becomes exhaustive
+
+**Answer:** A  
+**Explanation:** Earlier feedback reduces the cost and effort of correcting defects.
+
+---
+
+### Question 28
+Which statement about independent testing is correct?
+
+A. It removes the need for developer testing
+B. It can provide a different perspective on the product
+C. It prevents collaboration
+D. It is required for every test activity
+
+**Answer:** B  
+**Explanation:** Independent testers may identify different risks because they bring a separate viewpoint.
+---
