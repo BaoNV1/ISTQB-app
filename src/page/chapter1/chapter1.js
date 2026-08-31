@@ -1,7 +1,9 @@
 const docs = {
   en: '../../../doc/chapter1/Chapter1_English.md',
   vi: '../../../doc/chapter1/Chapter1_Vietnamese.md',
-  quiz: '../../../doc/chapter1/Chapter1_Quiz.md',
+  quiz1: '../../../doc/chapter1/Chapter1_Quiz.md',
+  quiz2: '../../../doc/chapter1/Chapter1_Quiz_2.md',
+  quiz3: '../../../doc/chapter1/Chapter1_Quiz_3.md',
   glossary: '../../../doc/chapter1/glossary_chapter1.md',
   glossaryVi: '../../../doc/chapter1/glossary_chapter1_vi.md',
   mindmap: '../../../doc/chapter1/mind_map_chapter1.md',
@@ -325,6 +327,8 @@ async function loadDoc(view) {
     ? (currentLanguage === 'vi' ? docs.glossaryVi : docs.glossary)
     : view === 'mindmap'
     ? (currentLanguage === 'vi' ? docs.mindmapVi : docs.mindmap)
+    : view.startsWith('quiz')
+    ? docs[view]
     : docs[view];
   if (!path) {
     contentArea.innerHTML = '<p>Content is not available for this option.</p>';
@@ -336,7 +340,7 @@ async function loadDoc(view) {
     const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load content (${response.status})`);
     const markdown = await response.text();
-    if (view === 'quiz') {
+    if (view.startsWith('quiz')) {
       contentArea.innerHTML = renderQuiz(markdown);
       bindQuizEvents(parseQuiz(markdown));
     } else if (view === 'glossary') {
