@@ -1,7 +1,9 @@
 const docs = {
   en: '../../../doc/chapter4/Chapter4_English.md',
   vi: '../../../doc/chapter4/Chapter4_Vietnamese.md',
-  quiz: '../../../doc/chapter4/Chapter4_Quiz.md',
+  quiz1: '../../../doc/chapter4/Chapter4_Quiz.md',
+  quiz2: '../../../doc/chapter4/Chapter4_Quiz_2.md',
+  quiz3: '../../../doc/chapter4/Chapter4_Quiz_3.md',
   glossary: '../../../doc/chapter4/glossary_chapter4.md',
   glossaryVi: '../../../doc/chapter4/glossary_chapter4_vi.md',
   mindmap: '../../../doc/chapter4/mind_map_chapter4.md',
@@ -171,7 +173,7 @@ async function loadDoc(view) {
     const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load content (${response.status})`);
     const markdown = await response.text();
-    if (view === 'quiz') {
+    if (view.startsWith('quiz')) {
       const questions = parseQuiz(markdown);
       contentArea.innerHTML = renderQuiz(questions);
       bindQuiz(questions);
