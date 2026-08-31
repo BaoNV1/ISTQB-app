@@ -1,7 +1,9 @@
 const docs = {
   en: '../../../doc/chapter6/Chapter6_English.md',
   vi: '../../../doc/chapter6/Chapter6_Vietnamese.md',
-  quiz: '../../../doc/chapter6/Chapter6_Quiz.md',
+  quiz1: '../../../doc/chapter6/Chapter6_Quiz.md',
+  quiz2: '../../../doc/chapter6/Chapter6_Quiz_2.md',
+  quiz3: '../../../doc/chapter6/Chapter6_Quiz_3.md',
   glossary: '../../../doc/chapter6/glossary_chapter6.md',
   glossaryVi: '../../../doc/chapter6/glossary_chapter6_vi.md',
   mindmap: '../../../doc/chapter6/mind_map_chapter6.md',
@@ -138,7 +140,7 @@ async function loadDoc(view) {
     const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load content (${response.status})`);
     const markdown = await response.text();
-    if (view === 'quiz') { const questions = parseQuiz(markdown); contentArea.innerHTML = renderQuiz(questions); bindQuiz(questions); }
+    if (view.startsWith('quiz')) { const questions = parseQuiz(markdown); contentArea.innerHTML = renderQuiz(questions); bindQuiz(questions); }
     else if (view === 'glossary') contentArea.innerHTML = renderGlossary(markdown);
     else if (view === 'mindmap') contentArea.innerHTML = renderMindmap(markdown);
     else contentArea.innerHTML = renderMarkdown(markdown);
