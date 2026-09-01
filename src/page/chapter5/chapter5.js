@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter5', 'Chapter 5: Test Management');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter5/Chapter5_English.md',
   vi: '../../../doc/chapter5/Chapter5_Vietnamese.md',

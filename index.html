@@ -17,6 +17,13 @@
       .markdown-preview p { margin: 0.5rem 0; }
       .markdown-preview code { background: rgba(255,255,255,0.08); padding: 0.15rem 0.35rem; border-radius: 0.35rem; }
     </style>
+    <!-- Learning Progress Tracker Modules -->
+    <script src="src/learning-tracker/utils.js"></script>
+    <script src="src/learning-tracker/models.js"></script>
+    <script src="src/learning-tracker/storage.js"></script>
+    <script src="src/learning-tracker/analytics.js"></script>
+    <script src="src/learning-tracker/ui.js"></script>
+    <script src="src/learning-tracker/init.js"></script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 min-h-screen">
     <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
@@ -138,6 +145,52 @@
         </div>
       </section>
     </main>
+
+    <!-- Learning Progress Tracker Dashboard Sections -->
+    <section class="max-w-7xl mx-auto px-6 py-10">
+      <h2 class="text-2xl font-semibold mb-6 text-zinc-100">Your Learning Progress</h2>
+      
+      <!-- Progress Display Section -->
+      <div class="grid lg:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+          <h3 class="text-xl font-semibold mb-4 text-zinc-100">Chapter Progress</h3>
+          <div id="progressDisplay" class="space-y-3">
+            <p class="text-zinc-400">Loading your chapter progress...</p>
+          </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="glass-card p-6">
+          <h3 class="text-xl font-semibold mb-4 text-zinc-100">Learning Statistics</h3>
+          <div id="statistics" class="space-y-3">
+            <p class="text-zinc-400">Loading your statistics...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz History Section -->
+      <div class="glass-card p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-4 text-zinc-100">Quiz Performance History</h3>
+        <div id="quizHistory" class="overflow-x-auto">
+          <p class="text-zinc-400">Loading your quiz attempts...</p>
+        </div>
+      </div>
+
+      <!-- Weak Topics Section -->
+      <div class="glass-card p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-4 text-zinc-100">Topics Needing Focus</h3>
+        <div id="weakTopics">
+          <p class="text-zinc-400">No weak topics identified yet. Keep practicing!</p>
+        </div>
+      </div>
+
+      <!-- Settings Link -->
+      <div class="flex justify-center mb-8">
+        <a href="src/page/settings/index.html" class="bg-zinc-800 hover:bg-zinc-700 px-6 py-3 rounded-2xl font-semibold text-zinc-100 inline-flex items-center gap-2">
+          <i class="fa-solid fa-cog"></i> Data & Settings
+        </a>
+      </div>
+    </section>
 
     <div id="markdown-modal" class="fixed inset-0 z-[100] hidden bg-black/85 backdrop-blur-sm">
       <div class="max-w-5xl mx-auto mt-8 h-[88vh] rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl overflow-hidden">
@@ -340,6 +393,82 @@
       document.getElementById('open-mindmap').addEventListener('click', () => openPreview('doc/chapter1/mind_map_chapter1_vi.md', 'Chapter 1 Mind Map'));
       document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
       modal.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
+
+      // ===== Learning Progress Tracker Dashboard Initialization =====
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tracker system
+        if (typeof initializeStorage === 'function') {
+          initializeStorage();
+        }
+
+        // Populate Progress Display
+        function updateProgressDisplay() {
+          const progressContainer = document.getElementById('progressDisplay');
+          if (!progressContainer) return;
+
+          if (typeof createProgressDisplay === 'function' && typeof getAllChapterProgress === 'function') {
+            const chapters = getAllChapterProgress();
+            const display = createProgressDisplay(chapters);
+            progressContainer.innerHTML = '';
+            progressContainer.appendChild(display);
+          }
+        }
+
+        // Populate Quiz History
+        function updateQuizHistory() {
+          const historyContainer = document.getElementById('quizHistory');
+          if (!historyContainer) return;
+
+          if (typeof createQuizHistoryDisplay === 'function' && typeof getAllQuizAttempts === 'function') {
+            const attempts = getAllQuizAttempts();
+            const display = createQuizHistoryDisplay(attempts);
+            historyContainer.innerHTML = '';
+            historyContainer.appendChild(display);
+          }
+        }
+
+        // Populate Statistics
+        function updateStatistics() {
+          const statsContainer = document.getElementById('statistics');
+          if (!statsContainer) return;
+
+          if (typeof getStatistics === 'function' && typeof createStatisticsDisplay === 'function') {
+            const stats = getStatistics();
+            const display = createStatisticsDisplay(stats);
+            statsContainer.innerHTML = '';
+            statsContainer.appendChild(display);
+          }
+        }
+
+        // Populate Weak Topics
+        function updateWeakTopics() {
+          const topicsContainer = document.getElementById('weakTopics');
+          if (!topicsContainer) return;
+
+          if (typeof storageGet === 'function' && typeof createWeakTopicsDisplay === 'function') {
+            const profile = storageGet('profile');
+            if (profile && profile.weakTopics && profile.weakTopics.length > 0) {
+              const display = createWeakTopicsDisplay(profile.weakTopics);
+              topicsContainer.innerHTML = '';
+              topicsContainer.appendChild(display);
+            }
+          }
+        }
+
+        // Initial population on page load
+        updateProgressDisplay();
+        updateQuizHistory();
+        updateStatistics();
+        updateWeakTopics();
+
+        // Optional: Set up auto-refresh (e.g., when user returns to tab)
+        window.addEventListener('focus', function() {
+          updateProgressDisplay();
+          updateQuizHistory();
+          updateStatistics();
+          updateWeakTopics();
+        });
+      });
     </script>
   </body>
 </html>

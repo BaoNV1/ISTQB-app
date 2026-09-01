@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter4', 'Chapter 4: Dynamic Testing');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter4/Chapter4_English.md',
   vi: '../../../doc/chapter4/Chapter4_Vietnamese.md',

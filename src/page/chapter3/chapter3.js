@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter3', 'Chapter 3: Static Testing');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter3/Chapter3_English.md',
   vi: '../../../doc/chapter3/Chapter3_Vietnamese.md',

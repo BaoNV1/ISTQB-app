@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter2', 'Chapter 2: Testing Throughout the Software Life Cycle');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter2/Chapter2_English.md',
   vi: '../../../doc/chapter2/Chapter2_Vietnamese.md',

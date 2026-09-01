@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter1', 'Chapter 1: Fundamentals of Testing');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter1/Chapter1_English.md',
   vi: '../../../doc/chapter1/Chapter1_Vietnamese.md',
@@ -13,6 +20,9 @@ const docs = {
 const contentArea = document.getElementById('content-area');
 const buttons = document.querySelectorAll('[data-view]');
 let currentLanguage = 'en';
+
+// Track view when page loads
+window.addEventListener('load', trackChapterView);
 
 function escapeHtml(text) {
   return text

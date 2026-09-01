@@ -1,3 +1,10 @@
+// Learning Progress Tracker Integration
+function trackChapterView() {
+  if (typeof trackChapterView_impl === 'function') {
+    trackChapterView_impl('chapter6', 'Chapter 6: Tool Support for Testing');
+  }
+}
+
 const docs = {
   en: '../../../doc/chapter6/Chapter6_English.md',
   vi: '../../../doc/chapter6/Chapter6_Vietnamese.md',
