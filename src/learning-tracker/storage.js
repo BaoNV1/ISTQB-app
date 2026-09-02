@@ -528,6 +528,121 @@ function getAllQuizAttempts() {
     }
 }
 
+
+/**
+ * Rebuild UserProfile chapter counters from stored ChapterProgress records
+ */
+function updateUserProfileChapterStats() {
+    try {
+        let profile = storageGet('profile');
+        if (!profile) {
+            initializeUserProfile();
+            profile = storageGet('profile');
+        }
+        if (!profile) {
+            log(LOG_LEVEL.ERROR, 'updateUserProfileChapterStats: no profile');
+            return false;
+        }
+
+        const allProgress = getAllChapterProgress();
+        const chapterIds = Object.keys(allProgress || {});
+        let completed = 0;
+        for (const id of chapterIds) {
+            if (allProgress[id] && allProgress[id].status === 'completed') {
+                completed += 1;
+            }
+        }
+
+        profile.totalChaptersAttempted = chapterIds.length;
+        profile.totalChaptersCompleted = completed;
+        profile.lastActivityAt = Date.now();
+
+        const success = storageSet('profile', profile);
+        if (!success) {
+            log(LOG_LEVEL.ERROR, 'Failed to save profile after chapter stats update');
+        }
+        return success;
+    } catch (error) {
+        handleError('updateUserProfileChapterStats', error);
+        return false;
+    }
+}
+
+/**
+ * Update UserProfile quiz aggregates after a new attempt
+ * @param {string} quizId
+ * @param {string} quizTitle
+ * @param {number} percentageScore - 0-100
+ */
+function updateUserProfileQuizStats(quizId, quizTitle, percentageScore) {
+    try {
+        let profile = storageGet('profile');
+        if (!profile) {
+            initializeUserProfile();
+            profile = storageGet('profile');
+        }
+        if (!profile) {
+            log(LOG_LEVEL.ERROR, 'updateUserProfileQuizStats: no profile');
+            return false;
+        }
+
+        const allAttempts = getAllQuizAttempts();
+        const totalAttempts = allAttempts.length;
+        let sum = 0;
+        for (const a of allAttempts) {
+            sum += (typeof a.percentageScore === 'number' ? a.percentageScore : 0);
+        }
+        const average = totalAttempts > 0 ? Math.round((sum / totalAttempts) * 100) / 100 : 0;
+
+        profile.totalQuizAttempts = totalAttempts;
+        profile.averageQuizScore = average;
+        profile.lastActivityAt = Date.now();
+
+        // Maintain weakTopics: topics with average score < 70
+        if (!Array.isArray(profile.weakTopics)) {
+            profile.weakTopics = [];
+        }
+
+        if (quizId) {
+            const quizAttempts = allAttempts.filter(a => a.quizId === quizId);
+            const quizSum = quizAttempts.reduce((s, a) => s + (a.percentageScore || 0), 0);
+            const quizAvg = quizAttempts.length > 0 ? quizSum / quizAttempts.length : percentageScore;
+            const lastAt = quizAttempts.length
+                ? Math.max(...quizAttempts.map(a => a.attemptedAt || a.completedAt || 0))
+                : Date.now();
+
+            const existingIdx = profile.weakTopics.findIndex(t => t.quizId === quizId);
+            const entry = {
+                quizId: quizId,
+                quizTitle: quizTitle || quizId,
+                averageScore: Math.round(quizAvg * 100) / 100,
+                attempts: quizAttempts.length,
+                lastAttemptAt: lastAt
+            };
+
+            if (quizAvg < 70) {
+                if (existingIdx >= 0) {
+                    profile.weakTopics[existingIdx] = entry;
+                } else {
+                    profile.weakTopics.push(entry);
+                }
+            } else if (existingIdx >= 0) {
+                // No longer weak — remove
+                profile.weakTopics.splice(existingIdx, 1);
+            }
+        }
+
+        const success = storageSet('profile', profile);
+        if (!success) {
+            log(LOG_LEVEL.ERROR, 'Failed to save profile after quiz stats update');
+        }
+        return success;
+    } catch (error) {
+        handleError('updateUserProfileQuizStats', error, { quizId, percentageScore });
+        return false;
+    }
+}
+
 /**
  * Clear all learning data with confirmation (FR-008, T042)
  * @param {Function} onConfirm - Callback to show confirmation dialog

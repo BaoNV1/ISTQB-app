@@ -1,7 +1,12 @@
 // Learning Progress Tracker Integration
-function trackChapterView() {
+const CHAPTER_ID = 'chapter1';
+const CHAPTER_TITLE = 'Chapter 1: Fundamentals of Testing';
+
+function recordChapterView() {
   if (typeof trackChapterView_impl === 'function') {
-    trackChapterView_impl('chapter1', 'Chapter 1: Fundamentals of Testing');
+    trackChapterView_impl(CHAPTER_ID, CHAPTER_TITLE);
+  } else if (typeof trackChapterView === 'function') {
+    trackChapterView(CHAPTER_ID, CHAPTER_TITLE);
   }
 }
 
@@ -20,9 +25,10 @@ const docs = {
 const contentArea = document.getElementById('content-area');
 const buttons = document.querySelectorAll('[data-view]');
 let currentLanguage = 'en';
+let currentQuizView = null;
 
-// Track view when page loads
-window.addEventListener('load', trackChapterView);
+// Track view when page loads (after tracker scripts)
+window.addEventListener('load', recordChapterView);
 
 function escapeHtml(text) {
   return text
@@ -199,7 +205,7 @@ function renderQuiz(markdown) {
   </div>`;
 }
 
-function bindQuizEvents(questions) {
+function bindQuizEvents(questions, quizView) {
   const summary = document.getElementById('quiz-summary');
   const checkButton = document.getElementById('quiz-check-button');
   const resetButton = document.getElementById('quiz-reset-button');
@@ -230,7 +236,20 @@ function bindQuizEvents(questions) {
       }
     });
 
+    const total = questions.length || 1;
+    const percentage = Math.round((score / total) * 100);
     summary.innerHTML = `Score: ${score}/${questions.length} — ${answered < questions.length ? 'Please answer all questions to finalize your results.' : 'Review each explanation below.'}`;
+
+    // Store quiz attempt when all questions answered
+    if (answered >= questions.length && typeof trackQuizAttempt_impl === 'function') {
+      const quizId = `${CHAPTER_ID}-${quizView || currentQuizView || 'quiz'}`;
+      const quizTitle = `${CHAPTER_TITLE} — ${(quizView || currentQuizView || 'Quiz').toUpperCase()}`;
+      trackQuizAttempt_impl(quizId, quizTitle, score, percentage);
+    } else if (answered >= questions.length && typeof trackQuizAttempt === 'function') {
+      const quizId = `${CHAPTER_ID}-${quizView || currentQuizView || 'quiz'}`;
+      const quizTitle = `${CHAPTER_TITLE} — ${(quizView || currentQuizView || 'Quiz').toUpperCase()}`;
+      trackQuizAttempt(quizId, quizTitle, score, percentage);
+    }
   });
 
   resetButton.addEventListener('click', () => {
@@ -352,7 +371,8 @@ async function loadDoc(view) {
     const markdown = await response.text();
     if (view.startsWith('quiz')) {
       contentArea.innerHTML = renderQuiz(markdown);
-      bindQuizEvents(parseQuiz(markdown));
+      currentQuizView = view;
+      bindQuizEvents(parseQuiz(markdown), view);
     } else if (view === 'glossary') {
       contentArea.innerHTML = renderGlossary(markdown);
     } else {

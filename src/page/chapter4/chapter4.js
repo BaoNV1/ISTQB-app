@@ -1,9 +1,18 @@
 // Learning Progress Tracker Integration
-function trackChapterView() {
+const CHAPTER_ID = 'chapter4';
+const CHAPTER_TITLE = 'Chapter 4: Dynamic Testing';
+
+function recordChapterView() {
   if (typeof trackChapterView_impl === 'function') {
-    trackChapterView_impl('chapter4', 'Chapter 4: Dynamic Testing');
+    trackChapterView_impl(CHAPTER_ID, CHAPTER_TITLE);
+  } else if (typeof trackChapterView === 'function') {
+    trackChapterView(CHAPTER_ID, CHAPTER_TITLE);
   }
 }
+
+let currentQuizView = null;
+window.addEventListener('load', recordChapterView);
+
 
 const docs = {
   en: '../../../doc/chapter4/Chapter4_English.md',
@@ -153,14 +162,27 @@ function bindQuiz(questions) {
   const summary = document.getElementById('quiz-summary');
   document.getElementById('quiz-check').addEventListener('click', () => {
     let score = 0;
+    let answered = 0;
     questions.forEach((question, index) => {
       const selected = document.querySelector(`input[name="quiz-${index}"]:checked`);
       const correct = selected && selected.value === question.answer;
+      if (selected) answered += 1;
       if (correct) score += 1;
       document.getElementById(`quiz-feedback-${index}`).innerHTML = correct ? '<span class="quiz-correct">Correct!</span>' : `<span class="quiz-wrong">Incorrect. Answer: ${escapeHtml(question.answer)}</span>`;
       document.getElementById(`quiz-explanation-${index}`).textContent = question.explanation;
     });
+    const total = questions.length || 1;
+    const percentage = Math.round((score / total) * 100);
     summary.textContent = `Score: ${score}/${questions.length}. Review the explanations below.`;
+    if (answered >= questions.length) {
+      const quizId = `${CHAPTER_ID}-${currentQuizView || 'quiz'}`;
+      const quizTitle = `${CHAPTER_TITLE} — ${(currentQuizView || 'Quiz').toUpperCase()}`;
+      if (typeof trackQuizAttempt_impl === 'function') {
+        trackQuizAttempt_impl(quizId, quizTitle, score, percentage);
+      } else if (typeof trackQuizAttempt === 'function') {
+        trackQuizAttempt(quizId, quizTitle, score, percentage);
+      }
+    }
   });
   document.getElementById('quiz-reset').addEventListener('click', () => {
     document.querySelectorAll('input[type="radio"]').forEach((input) => { input.checked = false; });
@@ -183,6 +205,7 @@ async function loadDoc(view) {
     if (view.startsWith('quiz')) {
       const questions = parseQuiz(markdown);
       contentArea.innerHTML = renderQuiz(questions);
+      currentQuizView = view;
       bindQuiz(questions);
     } else if (view === 'glossary') {
       contentArea.innerHTML = renderGlossary(markdown);
