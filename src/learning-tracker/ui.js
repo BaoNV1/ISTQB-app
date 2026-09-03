@@ -175,6 +175,32 @@ function formatDuration(milliseconds) {
     }
 }
 
+
+/**
+ * Format attempt timestamp for display
+ * @param {number} timestamp - Milliseconds since epoch
+ * @returns {string} Human-readable date/time
+ */
+function formatAttemptDate(timestamp) {
+    if (!timestamp) return 'Unknown';
+    if (typeof formatTimestamp === 'function') {
+        return formatTimestamp(timestamp);
+    }
+    try {
+        const date = new Date(timestamp);
+        if (Number.isNaN(date.getTime())) return 'Unknown';
+        return date.toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        return 'Unknown';
+    }
+}
+
 /**
  * Create a quiz attempt history display
  * @param {array} attempts - Array of QuizAttempt objects
@@ -369,6 +395,77 @@ function createDataSummaryDisplay(summary, storageUsage) {
     }
     
     return container;
+}
+
+
+/**
+ * Update an existing chapter progress indicator in the DOM
+ * @param {string} chapterId
+ * @param {object} chapterProgress
+ * @param {string} chapterTitle
+ */
+function updateProgressIndicator(chapterId, chapterProgress, chapterTitle) {
+    const existing = document.getElementById(`chapter-progress-${chapterId}`);
+    if (!existing) {
+        return createChapterProgressIndicator(chapterProgress, chapterId, chapterTitle);
+    }
+    const replacement = createChapterProgressIndicator(chapterProgress, chapterId, chapterTitle);
+    existing.replaceWith(replacement);
+    return replacement;
+}
+
+/**
+ * Create weak topics display component
+ * @param {array} weakTopics - Array of { quizId, quizTitle, averageScore, attempts, lastAttemptAt }
+ * @returns {HTMLElement}
+ */
+function createWeakTopicsDisplay(weakTopics) {
+    const container = document.createElement('div');
+    container.className = 'weak-topics-container';
+    container.id = 'weak-topics-display';
+
+    if (!weakTopics || weakTopics.length === 0) {
+        container.innerHTML = '<p class="no-weak-topics">No weak topics identified yet</p>';
+        return container;
+    }
+
+    const list = document.createElement('div');
+    list.className = 'weak-topics-list';
+
+    for (const topic of weakTopics) {
+        const row = document.createElement('div');
+        row.className = 'weak-topic-row';
+        const title = topic.quizTitle || topic.quizId || 'Unknown quiz';
+        const avg = typeof topic.averageScore === 'number' ? topic.averageScore : 0;
+        const attempts = topic.attempts || 0;
+        const last = topic.lastAttemptAt ? formatAttemptDate(topic.lastAttemptAt) : '—';
+        row.innerHTML = `
+            <div class="weak-topic-title">${title}</div>
+            <div class="weak-topic-avg">Avg: ${avg}%</div>
+            <div class="weak-topic-attempts">Attempts: ${attempts}</div>
+            <div class="weak-topic-last">Last: ${last}</div>
+        `;
+        list.appendChild(row);
+    }
+
+    container.appendChild(list);
+    return container;
+}
+
+// Browser globals (pages load these as classic scripts)
+if (typeof window !== 'undefined') {
+    window.createChapterProgressIndicator = createChapterProgressIndicator;
+    window.createMarkCompleteButton = createMarkCompleteButton;
+    window.showConfirmationDialog = showConfirmationDialog;
+    window.createProgressDisplay = createProgressDisplay;
+    window.createResumeChapterLink = createResumeChapterLink;
+    window.formatDuration = formatDuration;
+    window.updateProgressIndicator = updateProgressIndicator;
+    window.createQuizHistoryDisplay = createQuizHistoryDisplay;
+    window.formatAttemptDate = formatAttemptDate;
+    window.createStatisticsDisplay = createStatisticsDisplay;
+    window.createWeakTopicsDisplay = createWeakTopicsDisplay;
+    window.createDataSummaryDisplay = createDataSummaryDisplay;
 }
 
 // Export UI components
