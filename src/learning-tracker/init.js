@@ -39,10 +39,10 @@ function trackChapterView_impl(chapterId, chapterTitle) {
 /**
  * Helper for chapter pages to record a quiz attempt safely.
  */
-function trackQuizAttempt_impl(quizId, quizTitle, score, percentageScore) {
+function trackQuizAttempt_impl(quizId, quizTitle, score, percentageScore, timeTakenMs) {
     if (typeof trackQuizAttempt === 'function') {
         try {
-            return trackQuizAttempt(quizId, quizTitle, score, percentageScore);
+            return trackQuizAttempt(quizId, quizTitle, score, percentageScore, timeTakenMs || 0);
         } catch (err) {
             console.error('trackQuizAttempt failed:', err);
             return null;
@@ -65,3 +65,14 @@ document.addEventListener('DOMContentLoaded', function () {
 // Make bridge functions available globally
 window.trackChapterView_impl = trackChapterView_impl;
 window.trackQuizAttempt_impl = trackQuizAttempt_impl;
+
+// Expose active-session helpers for chapter pages / debugging
+if (typeof startActiveLearningSession === 'function') {
+    window.startActiveLearningSession = startActiveLearningSession;
+}
+if (typeof endActiveLearningSession === 'function') {
+    window.endActiveLearningSession = endActiveLearningSession;
+}
+if (typeof touchActiveSession === 'function') {
+    window.touchActiveSession = touchActiveSession;
+}

@@ -213,6 +213,9 @@ function bindQuizEvents(questions, quizView) {
     return;
   }
 
+  // Track when this quiz view started so we can record timeTaken
+  const quizStartTime = Date.now();
+
   checkButton.addEventListener('click', () => {
     let score = 0;
     let answered = 0;
@@ -242,11 +245,11 @@ function bindQuizEvents(questions, quizView) {
     if (answered >= questions.length && typeof trackQuizAttempt_impl === 'function') {
       const quizId = `${CHAPTER_ID}-${quizView || currentQuizView || 'quiz'}`;
       const quizTitle = `${CHAPTER_TITLE} — ${(quizView || currentQuizView || 'Quiz').toUpperCase()}`;
-      trackQuizAttempt_impl(quizId, quizTitle, score, percentage);
+      trackQuizAttempt_impl(quizId, quizTitle, score, percentage, Math.max(0, Date.now() - (typeof quizStartTime !== "undefined" ? quizStartTime : Date.now())));
     } else if (answered >= questions.length && typeof trackQuizAttempt === 'function') {
       const quizId = `${CHAPTER_ID}-${quizView || currentQuizView || 'quiz'}`;
       const quizTitle = `${CHAPTER_TITLE} — ${(quizView || currentQuizView || 'Quiz').toUpperCase()}`;
-      trackQuizAttempt(quizId, quizTitle, score, percentage);
+      trackQuizAttempt(quizId, quizTitle, score, percentage, Math.max(0, Date.now() - (typeof quizStartTime !== "undefined" ? quizStartTime : Date.now())));
     }
   });
 

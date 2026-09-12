@@ -147,6 +147,7 @@ function renderQuiz(questions) {
 
 function bindQuiz(questions) {
   const summary = document.getElementById('quiz-summary');
+  const quizStartTime = Date.now();
   document.getElementById('quiz-check').addEventListener('click', () => {
     let score = 0;
     let answered = 0;
@@ -165,9 +166,9 @@ function bindQuiz(questions) {
       const quizId = `${CHAPTER_ID}-${currentQuizView || 'quiz'}`;
       const quizTitle = `${CHAPTER_TITLE} — ${(currentQuizView || 'Quiz').toUpperCase()}`;
       if (typeof trackQuizAttempt_impl === 'function') {
-        trackQuizAttempt_impl(quizId, quizTitle, score, percentage);
+        trackQuizAttempt_impl(quizId, quizTitle, score, percentage, Math.max(0, Date.now() - (typeof quizStartTime !== "undefined" ? quizStartTime : Date.now())));
       } else if (typeof trackQuizAttempt === 'function') {
-        trackQuizAttempt(quizId, quizTitle, score, percentage);
+        trackQuizAttempt(quizId, quizTitle, score, percentage, Math.max(0, Date.now() - (typeof quizStartTime !== "undefined" ? quizStartTime : Date.now())));
       }
     }
   });

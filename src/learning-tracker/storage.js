@@ -17,6 +17,16 @@ let SESSION_ONLY_MODE = false;
 let sessionCache = {};
 
 /**
+ * Active learning session state (in-memory, tracks current page view)
+ * Used to accumulate real study time while the user is actively viewing a chapter.
+ */
+let currentActiveSession = null; // { chapterId, startTime, lastActivityTime, accumulatedMs, isIdle }
+const IDLE_THRESHOLD_MS = 2 * 60 * 1000; // 2 minutes of inactivity pauses time
+const HEARTBEAT_INTERVAL_MS = 15 * 1000; // flush progress every 15s
+let heartbeatTimer = null;
+let activityListenersAttached = false;
+
+/**
  * Initialize storage system and device ID
  * Must be called once on app startup
  */
@@ -300,7 +310,10 @@ function trackChapterView(chapterId, chapterTitle = null) {
                     lastViewedAt: Date.now(),
                     totalTimeSpent: 0,
                     completedAt: null,
-                    lastViewedPosition: null
+                    lastViewedPosition: null,
+                    lastSessionStart: null,
+                    lastSessionEnd: null,
+                    lastSessionDuration: 0
                 };
             }
         } else {
@@ -310,6 +323,11 @@ function trackChapterView(chapterId, chapterTitle = null) {
             if (progress.status === 'started') {
                 progress.status = 'in-progress';
             }
+            // Ensure new fields exist for older stored records
+            if (typeof progress.totalTimeSpent !== 'number') progress.totalTimeSpent = 0;
+            if (progress.lastSessionStart === undefined) progress.lastSessionStart = null;
+            if (progress.lastSessionEnd === undefined) progress.lastSessionEnd = null;
+            if (typeof progress.lastSessionDuration !== 'number') progress.lastSessionDuration = 0;
         }
         
         // Store updated progress
@@ -319,6 +337,9 @@ function trackChapterView(chapterId, chapterTitle = null) {
             return null;
         }
         
+        // Start / switch active learning session for this chapter
+        startActiveLearningSession(chapterId);
+        
         // Update UserProfile statistics
         updateUserProfileChapterStats();
         
@@ -326,6 +347,216 @@ function trackChapterView(chapterId, chapterTitle = null) {
     } catch (error) {
         handleError('trackChapterView', error, { chapterId });
         return null;
+    }
+}
+
+/**
+ * Start (or switch to) an active learning session for a chapter.
+ * Flushes any previous session first.
+ * @param {string} chapterId
+ */
+function startActiveLearningSession(chapterId) {
+    if (!chapterId) return;
+
+    // If already tracking the same chapter and not idle, just bump activity
+    if (currentActiveSession && currentActiveSession.chapterId === chapterId) {
+        touchActiveSession();
+        return;
+    }
+
+    // Flush previous chapter session if switching
+    if (currentActiveSession) {
+        endActiveLearningSession();
+    }
+
+    const now = Date.now();
+    currentActiveSession = {
+        chapterId: chapterId,
+        startTime: now,
+        lastActivityTime: now,
+        accumulatedMs: 0,
+        isIdle: false
+    };
+
+    // Persist session start on the ChapterProgress record
+    const key = `chapter:${chapterId}`;
+    const progress = storageGet(key);
+    if (progress) {
+        progress.lastSessionStart = now;
+        progress.lastViewedAt = now;
+        storageSet(key, progress);
+    }
+
+    ensureActivityListeners();
+    ensureHeartbeat();
+    log(LOG_LEVEL.INFO, `Active learning session started: ${chapterId}`);
+}
+
+/**
+ * Mark user activity (mouse, key, scroll, touch) so idle timer resets.
+ */
+function touchActiveSession() {
+    if (!currentActiveSession) return;
+    const now = Date.now();
+
+    // If we were idle, resume from now (do not credit idle gap)
+    if (currentActiveSession.isIdle) {
+        currentActiveSession.isIdle = false;
+        currentActiveSession.lastActivityTime = now;
+        // Restart the "active" portion from now; previous active time already in accumulatedMs
+        currentActiveSession.startTime = now;
+        log(LOG_LEVEL.INFO, `Resumed active learning after idle: ${currentActiveSession.chapterId}`);
+    } else {
+        currentActiveSession.lastActivityTime = now;
+    }
+}
+
+/**
+ * Flush current active session time into ChapterProgress.totalTimeSpent
+ * and update profile. Called on unload, visibility hidden, chapter switch, or heartbeat.
+ * @param {boolean} endSession - if true, clear currentActiveSession after flush
+ */
+function flushActiveLearningSession(endSession = false) {
+    if (!currentActiveSession) return;
+
+    const now = Date.now();
+    const sess = currentActiveSession;
+
+    // Only credit time while not idle
+    if (!sess.isIdle) {
+        const elapsed = Math.max(0, now - sess.startTime);
+        // Cap single flush to avoid huge jumps (e.g. tab sleeping)
+        const MAX_FLUSH_MS = 30 * 60 * 1000; // 30 min safety
+        const credit = Math.min(elapsed, MAX_FLUSH_MS);
+        sess.accumulatedMs += credit;
+        // Reset start so next flush only counts new time
+        sess.startTime = now;
+    }
+
+    // Check idle: if no activity for IDLE_THRESHOLD, mark idle and stop accruing
+    if (!sess.isIdle && (now - sess.lastActivityTime) >= IDLE_THRESHOLD_MS) {
+        sess.isIdle = true;
+        log(LOG_LEVEL.INFO, `Active learning paused (idle): ${sess.chapterId}`);
+    }
+
+    if (sess.accumulatedMs <= 0 && !endSession) {
+        // Nothing to write yet
+        return;
+    }
+
+    const chapterId = sess.chapterId;
+    const key = `chapter:${chapterId}`;
+    let progress = storageGet(key);
+
+    if (!progress) {
+        // Should not happen, but recover
+        if (typeof ChapterProgress !== 'undefined') {
+            progress = new ChapterProgress(chapterId);
+        } else {
+            progress = {
+                chapterId,
+                status: 'in-progress',
+                viewCount: 1,
+                firstViewedAt: now,
+                lastViewedAt: now,
+                totalTimeSpent: 0,
+                completedAt: null,
+                lastViewedPosition: null,
+                lastSessionStart: sess.startTime,
+                lastSessionEnd: null,
+                lastSessionDuration: 0
+            };
+        }
+    }
+
+    const added = sess.accumulatedMs;
+    progress.totalTimeSpent = (progress.totalTimeSpent || 0) + added;
+    progress.lastViewedAt = now;
+    progress.lastSessionDuration = (progress.lastSessionDuration || 0) + added;
+    if (endSession) {
+        progress.lastSessionEnd = now;
+    }
+    storageSet(key, progress);
+
+    // Reset accumulated so we don't double-count on next flush
+    sess.accumulatedMs = 0;
+
+    // Keep UserProfile.totalStudyTime in sync (derived sum)
+    updateUserProfileChapterStats();
+
+    if (added > 0) {
+        log(LOG_LEVEL.INFO, `Flushed ${added}ms study time for ${chapterId}. Total now: ${progress.totalTimeSpent}ms`);
+    }
+
+    if (endSession) {
+        currentActiveSession = null;
+        clearHeartbeat();
+    }
+}
+
+/**
+ * End the current active learning session and persist time.
+ */
+function endActiveLearningSession() {
+    flushActiveLearningSession(true);
+}
+
+/**
+ * Ensure activity listeners (mousemove, keydown, scroll, touchstart, visibility)
+ * are attached once per page.
+ */
+function ensureActivityListeners() {
+    if (activityListenersAttached || typeof document === 'undefined') return;
+    activityListenersAttached = true;
+
+    const onActivity = () => touchActiveSession();
+
+    document.addEventListener('mousemove', onActivity, { passive: true });
+    document.addEventListener('keydown', onActivity, { passive: true });
+    document.addEventListener('scroll', onActivity, { passive: true });
+    document.addEventListener('touchstart', onActivity, { passive: true });
+    document.addEventListener('click', onActivity, { passive: true });
+
+    // Visibility: pause when tab hidden, resume when visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // Flush and mark idle so time stops while tab is in background
+            flushActiveLearningSession(false);
+            if (currentActiveSession) {
+                currentActiveSession.isIdle = true;
+            }
+        } else {
+            // Tab became visible again — resume if we have a session
+            if (currentActiveSession) {
+                currentActiveSession.isIdle = false;
+                currentActiveSession.startTime = Date.now();
+                currentActiveSession.lastActivityTime = Date.now();
+                touchActiveSession();
+            }
+        }
+    });
+
+    // Persist on page leave
+    window.addEventListener('pagehide', () => endActiveLearningSession());
+    window.addEventListener('beforeunload', () => endActiveLearningSession());
+}
+
+/**
+ * Heartbeat: periodically flush time so progress is not lost if the tab is closed abruptly.
+ */
+function ensureHeartbeat() {
+    if (heartbeatTimer) return;
+    heartbeatTimer = setInterval(() => {
+        if (currentActiveSession) {
+            flushActiveLearningSession(false);
+        }
+    }, HEARTBEAT_INTERVAL_MS);
+}
+
+function clearHeartbeat() {
+    if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
     }
 }
 
@@ -418,7 +649,7 @@ function getAllChapterProgress() {
  * @param {number} percentageScore - Percentage score (0-100)
  * @returns {object} Created QuizAttempt or null
  */
-function trackQuizAttempt(quizId, quizTitle, score, percentageScore) {
+function trackQuizAttempt(quizId, quizTitle, score, percentageScore, timeTakenMs = 0) {
     if (!quizId || typeof percentageScore !== 'number') {
         handleError('trackQuizAttempt', new Error('Missing or invalid parameters'));
         return null;
@@ -431,13 +662,19 @@ function trackQuizAttempt(quizId, quizTitle, score, percentageScore) {
         const attempts = getQuizAttempts(quizId);
         const attemptNumber = attempts.length + 1;
         
+        const now = Date.now();
+        const safeTimeTaken = (typeof timeTakenMs === 'number' && timeTakenMs >= 0) ? timeTakenMs : 0;
+        
         // Create QuizAttempt
-        const attemptId = `${quizId}-attempt-${Date.now()}`;
+        const attemptId = `${quizId}-attempt-${now}`;
         let attempt;
         
         if (typeof QuizAttempt !== 'undefined') {
             attempt = new QuizAttempt(attemptId, quizId, score, percentageScore);
             attempt.attemptNumber = attemptNumber;
+            attempt.timeTaken = safeTimeTaken;
+            attempt.attemptedAt = now - safeTimeTaken;
+            attempt.completedAt = now;
         } else {
             attempt = {
                 attemptId: attemptId,
@@ -445,9 +682,9 @@ function trackQuizAttempt(quizId, quizTitle, score, percentageScore) {
                 score: score,
                 percentageScore: percentageScore,
                 attemptNumber: attemptNumber,
-                attemptedAt: Date.now(),
-                completedAt: Date.now(),
-                timeTaken: 0,
+                attemptedAt: now - safeTimeTaken,
+                completedAt: now,
+                timeTaken: safeTimeTaken,
                 sessionId: null
             };
         }
@@ -547,14 +784,19 @@ function updateUserProfileChapterStats() {
         const allProgress = getAllChapterProgress();
         const chapterIds = Object.keys(allProgress || {});
         let completed = 0;
+        let totalStudyTime = 0;
         for (const id of chapterIds) {
-            if (allProgress[id] && allProgress[id].status === 'completed') {
-                completed += 1;
+            if (allProgress[id]) {
+                if (allProgress[id].status === 'completed') {
+                    completed += 1;
+                }
+                totalStudyTime += (allProgress[id].totalTimeSpent || 0);
             }
         }
 
         profile.totalChaptersAttempted = chapterIds.length;
         profile.totalChaptersCompleted = completed;
+        profile.totalStudyTime = totalStudyTime;
         profile.lastActivityAt = Date.now();
 
         const success = storageSet('profile', profile);
@@ -831,6 +1073,10 @@ if (typeof module !== 'undefined' && module.exports) {
         getDataSummary,
         getStorageUsage,
         isStorageNearlyFull,
+        startActiveLearningSession,
+        endActiveLearningSession,
+        flushActiveLearningSession,
+        touchActiveSession,
         LOG_LEVEL
     };
 }

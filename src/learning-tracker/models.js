@@ -69,9 +69,13 @@ class ChapterProgress {
         this.viewCount = 1;
         this.firstViewedAt = Date.now();
         this.lastViewedAt = Date.now();
-        this.totalTimeSpent = 0; // milliseconds
+        this.totalTimeSpent = 0; // milliseconds (active learning time)
         this.completedAt = null; // timestamp when marked complete
         this.lastViewedPosition = null; // section/scroll position for resume
+        // Active session tracking (matches data-model)
+        this.lastSessionStart = null;
+        this.lastSessionEnd = null;
+        this.lastSessionDuration = 0; // ms of most recent viewing session
     }
     
     validate() {
