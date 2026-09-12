@@ -202,7 +202,43 @@ function formatAttemptDate(timestamp) {
 }
 
 /**
- * Create a quiz attempt history display
+ * Turn raw quizId (e.g. "chapter3-quiz2") into a readable label.
+ * @param {string} quizId
+ * @param {string} [fallbackTitle]
+ * @returns {string}
+ */
+function formatQuizLabel(quizId, fallbackTitle) {
+    if (fallbackTitle && typeof fallbackTitle === 'string' && fallbackTitle.trim()) {
+        // Prefer stored title when it is already friendly
+        if (!/^chapter\d+-quiz/i.test(fallbackTitle)) {
+            return fallbackTitle.trim();
+        }
+    }
+    if (!quizId || typeof quizId !== 'string') return 'Unknown quiz';
+
+    const m = quizId.match(/^chapter(\d+)[-_]?(quiz)?(\d+)?$/i) ||
+              quizId.match(/^chapter(\d+)[-_]quiz[-_]?(\d+)$/i);
+    if (m) {
+        const ch = m[1];
+        const qn = m[3] || m[2] || '';
+        return qn ? `Chapter ${ch} · Quiz ${qn}` : `Chapter ${ch} · Quiz`;
+    }
+    // Generic cleanup: chapter3-quiz3 → Chapter 3 · Quiz 3
+    return quizId
+        .replace(/[-_]+/g, ' ')
+        .replace(/\bchapter\s*(\d+)/i, 'Chapter $1')
+        .replace(/\bquiz\s*(\d+)/i, 'Quiz $1')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+/**
+ * Create a quiz attempt history display (improved for easy tracking)
+ * - Fixes attempt number interpolation bug
+ * - Human-readable quiz names
+ * - Grouped by quiz with summary (best / latest / attempts / trend)
+ * - Attempts sorted newest first
  * @param {array} attempts - Array of QuizAttempt objects
  * @returns {HTMLElement} Container div with quiz history
  */
@@ -210,55 +246,214 @@ function createQuizHistoryDisplay(attempts) {
     const container = document.createElement('div');
     container.className = 'quiz-history-container';
     container.id = 'quiz-history-display';
-    
+
+    // Inject styles once
+    if (!document.getElementById('quiz-history-styles')) {
+        const style = document.createElement('style');
+        style.id = 'quiz-history-styles';
+        style.textContent = `
+            .quiz-history-container { color: #e2e8f0; font-size: 0.95rem; }
+            .qh-empty { color: #94a3b8; padding: 12px 0; }
+            .qh-summary-bar {
+                display: flex; flex-wrap: wrap; gap: 12px 20px;
+                margin-bottom: 16px; padding: 12px 14px;
+                background: rgba(30,41,59,0.7); border-radius: 12px;
+                border: 1px solid rgba(148,163,184,0.15);
+            }
+            .qh-summary-bar span { color: #94a3b8; }
+            .qh-summary-bar strong { color: #f1f5f9; margin-left: 4px; }
+            .qh-quiz-card {
+                margin-bottom: 14px; border-radius: 14px;
+                background: rgba(15,23,42,0.75);
+                border: 1px solid rgba(148,163,184,0.18);
+                overflow: hidden;
+            }
+            .qh-quiz-head {
+                display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+                padding: 12px 14px; cursor: pointer;
+                background: rgba(30,41,59,0.55);
+            }
+            .qh-quiz-head:hover { background: rgba(30,41,59,0.85); }
+            .qh-quiz-name { font-weight: 600; color: #f8fafc; flex: 1 1 160px; min-width: 140px; }
+            .qh-badge {
+                display: inline-flex; align-items: center; gap: 4px;
+                padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+            }
+            .qh-badge-pass { background: rgba(34,197,94,0.18); color: #86efac; }
+            .qh-badge-fail { background: rgba(239,68,68,0.18); color: #fca5a5; }
+            .qh-meta { color: #94a3b8; font-size: 0.85rem; }
+            .qh-trend-up { color: #4ade80; }
+            .qh-trend-down { color: #f87171; }
+            .qh-trend-same { color: #94a3b8; }
+            .qh-attempts { display: none; border-top: 1px solid rgba(148,163,184,0.12); }
+            .qh-quiz-card.open .qh-attempts { display: block; }
+            .qh-attempt-row {
+                display: grid;
+                grid-template-columns: 72px 64px 1fr 90px;
+                gap: 8px; align-items: center;
+                padding: 8px 14px; border-bottom: 1px solid rgba(148,163,184,0.08);
+            }
+            .qh-attempt-row:last-child { border-bottom: none; }
+            .qh-attempt-row:hover { background: rgba(51,65,85,0.35); }
+            .qh-score-pass { color: #4ade80; font-weight: 600; }
+            .qh-score-fail { color: #f87171; font-weight: 600; }
+            .qh-chevron { transition: transform 0.2s; color: #64748b; font-size: 0.75rem; }
+            .qh-quiz-card.open .qh-chevron { transform: rotate(90deg); }
+            @media (max-width: 560px) {
+                .qh-attempt-row { grid-template-columns: 60px 56px 1fr; }
+                .qh-attempt-row .qh-time { display: none; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     if (!attempts || attempts.length === 0) {
-        container.innerHTML = '<p class="no-attempts">No quiz attempts yet</p>';
+        container.innerHTML = '<p class="qh-empty">No quiz attempts yet. Complete a chapter quiz to see your history here.</p>';
         return container;
     }
-    
-    // Create header
-    const header = document.createElement('div');
-    header.className = 'quiz-history-header';
-    header.innerHTML = `
-        <div class="quiz-header-item">Quiz</div>
-        <div class="quiz-header-item">Score</div>
-        <div class="quiz-header-item">Attempt</div>
-        <div class="quiz-header-item">Date</div>
+
+    // Normalize + sort all attempts newest first
+    const normalized = attempts
+        .filter(a => a && a.quizId)
+        .map(a => ({
+            ...a,
+            percentageScore: typeof a.percentageScore === 'number' ? a.percentageScore : 0,
+            attemptNumber: a.attemptNumber || 1,
+            ts: a.attemptedAt || a.completedAt || 0
+        }))
+        .sort((a, b) => b.ts - a.ts);
+
+    // Group by quizId
+    const byQuiz = {};
+    for (const a of normalized) {
+        if (!byQuiz[a.quizId]) byQuiz[a.quizId] = [];
+        byQuiz[a.quizId].push(a);
+    }
+
+    // Overall summary
+    const totalAttempts = normalized.length;
+    const avgScore = Math.round(
+        (normalized.reduce((s, a) => s + a.percentageScore, 0) / totalAttempts) * 10
+    ) / 10;
+    const passCount = normalized.filter(a => a.percentageScore >= 70).length;
+    const uniqueQuizzes = Object.keys(byQuiz).length;
+
+    const summary = document.createElement('div');
+    summary.className = 'qh-summary-bar';
+    summary.innerHTML = `
+        <div><span>Quizzes practiced</span><strong>${uniqueQuizzes}</strong></div>
+        <div><span>Total attempts</span><strong>${totalAttempts}</strong></div>
+        <div><span>Average score</span><strong>${avgScore}%</strong></div>
+        <div><span>Pass rate (≥70%)</span><strong>${Math.round((passCount / totalAttempts) * 100)}%</strong></div>
     `;
-    container.appendChild(header);
-    
-    // Group attempts by quiz for display
-    const attemptsMap = {};
-    for (let attempt of attempts) {
-        if (!attemptsMap[attempt.quizId]) {
-            attemptsMap[attempt.quizId] = [];
+    container.appendChild(summary);
+
+    // Sort quiz groups by most recent activity
+    const quizIds = Object.keys(byQuiz).sort((a, b) => {
+        const ta = byQuiz[a][0].ts;
+        const tb = byQuiz[b][0].ts;
+        return tb - ta;
+    });
+
+    for (const quizId of quizIds) {
+        const list = byQuiz[quizId]; // already newest-first
+        // Ensure attempt numbers are sensible (fallback by chronological order)
+        const chronological = [...list].sort((a, b) => a.ts - b.ts);
+        chronological.forEach((a, i) => {
+            if (!a.attemptNumber || a.attemptNumber < 1) a.attemptNumber = i + 1;
+        });
+
+        const latest = list[0];
+        const best = list.reduce((m, a) => (a.percentageScore > m.percentageScore ? a : m), list[0]);
+        const first = chronological[0];
+        const last = chronological[chronological.length - 1];
+
+        let trendHtml = '<span class="qh-trend-same">—</span>';
+        if (list.length >= 2) {
+            const delta = last.percentageScore - first.percentageScore;
+            if (delta > 0) trendHtml = `<span class="qh-trend-up">↑ +${delta}%</span>`;
+            else if (delta < 0) trendHtml = `<span class="qh-trend-down">↓ ${delta}%</span>`;
+            else trendHtml = '<span class="qh-trend-same">→ same</span>';
         }
-        attemptsMap[attempt.quizId].push(attempt);
-    }
-    
-    // Display each quiz's attempts
-    for (let quizId in attemptsMap) {
-        const quizAttempts = attemptsMap[quizId];
-        
-        for (let attempt of quizAttempts) {
-            const row = document.createElement('div');
-            row.className = 'quiz-attempt-row';
-            
-            const scoreClass = attempt.percentageScore >= 70 ? 'score-pass' : 'score-fail';
-            const dateStr = formatAttemptDate(attempt.attemptedAt || attempt.completedAt);
-            
-            row.innerHTML = `
-                <div class="quiz-item quiz-title">${quizId}</div>
-                <div class="quiz-item ${scoreClass}">${attempt.percentageScore}%</div>
-                <div class="quiz-item">#{attempt.attemptNumber}</div>
-                <div class="quiz-item">${dateStr}</div>
-            `;
-            
-            container.appendChild(row);
+
+        const label = formatQuizLabel(quizId, latest.quizTitle);
+        const latestPass = latest.percentageScore >= 70;
+        const bestPass = best.percentageScore >= 70;
+
+        const card = document.createElement('div');
+        card.className = 'qh-quiz-card';
+        card.innerHTML = `
+            <div class="qh-quiz-head" role="button" tabindex="0" aria-expanded="false">
+                <span class="qh-chevron">▶</span>
+                <span class="qh-quiz-name">${escapeHtmlUi(label)}</span>
+                <span class="qh-badge ${latestPass ? 'qh-badge-pass' : 'qh-badge-fail'}">
+                    Latest ${latest.percentageScore}%
+                </span>
+                <span class="qh-badge ${bestPass ? 'qh-badge-pass' : 'qh-badge-fail'}">
+                    Best ${best.percentageScore}%
+                </span>
+                <span class="qh-meta">${list.length} attempt${list.length > 1 ? 's' : ''} · Trend ${trendHtml}</span>
+            </div>
+            <div class="qh-attempts">
+                <div class="qh-attempt-row" style="font-size:0.8rem;color:#94a3b8;font-weight:600;">
+                    <div>Attempt</div>
+                    <div>Score</div>
+                    <div>Date</div>
+                    <div class="qh-time">Time</div>
+                </div>
+                ${list.map(a => {
+                    const scoreClass = a.percentageScore >= 70 ? 'qh-score-pass' : 'qh-score-fail';
+                    const dateStr = formatAttemptDate(a.ts);
+                    const timeStr = (typeof a.timeTaken === 'number' && a.timeTaken > 0 && typeof formatDuration === 'function')
+                        ? formatDuration(a.timeTaken)
+                        : '—';
+                    return `
+                        <div class="qh-attempt-row">
+                            <div>#${a.attemptNumber}</div>
+                            <div class="${scoreClass}">${a.percentageScore}%</div>
+                            <div>${dateStr}</div>
+                            <div class="qh-time qh-meta">${timeStr}</div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        const head = card.querySelector('.qh-quiz-head');
+        const toggle = () => {
+            card.classList.toggle('open');
+            head.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
+        };
+        head.addEventListener('click', toggle);
+        head.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle();
+            }
+        });
+
+        // Open the most recently practiced quiz by default
+        if (quizId === quizIds[0]) {
+            card.classList.add('open');
+            head.setAttribute('aria-expanded', 'true');
         }
+
+        container.appendChild(card);
     }
-    
+
     return container;
+}
+
+/**
+ * Minimal HTML escape for labels in quiz history UI
+ */
+function escapeHtmlUi(text) {
+    if (text == null) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
 
 /**
