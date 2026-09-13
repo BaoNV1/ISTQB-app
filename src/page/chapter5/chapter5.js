@@ -128,14 +128,28 @@ function parseQuiz(markdown) {
   const push = () => { if (current) questions.push(current); };
   markdown.split(/\r?\n/).forEach((rawLine) => {
     const line = rawLine.trim();
-    if (!line) return;
+    if (!line || line === '---') return;
     if (/^###\s+Question\s+\d+/.test(line)) {
-      push(); current = { prompt: line.replace(/^###\s+Question\s+\d+/, '').trim(), choices: [], answer: '', explanation: '' }; mode = 'prompt';
+      push();
+      const rest = line.replace(/^###\s+Question\s+\d+\.?\s*/, '').trim();
+      current = { prompt: rest, choices: [], answer: '', explanation: '' };
+      mode = 'prompt';
     } else if (current && /^([A-D])\.\s+/.test(line)) {
-      const match = line.match(/^([A-D])\.\s+(.*)$/); current.choices.push({ label: match[1], text: match[2] }); mode = 'choices';
-    } else if (current && /^\*\*Answer:\*\*/i.test(line)) { current.answer = line.replace(/^\*\*Answer:\*\*/i, '').trim(); mode = 'answer';
-    } else if (current && /^\*\*Explanation:\*\*/i.test(line)) { current.explanation = line.replace(/^\*\*Explanation:\*\*/i, '').trim(); mode = 'explanation';
-    } else if (current && mode === 'explanation') current.explanation += ` ${line}`;
+      const match = line.match(/^([A-D])\.\s+(.*)$/);
+      current.choices.push({ label: match[1], text: match[2] });
+      mode = 'choices';
+    } else if (current && /^\*\*Answer:\*\*/i.test(line)) {
+      const ans = line.replace(/^\*\*Answer:\*\*/i, '').trim();
+      current.answer = (ans.match(/^([A-D])/i) || [null, ans])[1].toUpperCase();
+      mode = 'answer';
+    } else if (current && /^\*\*Explanation:\*\*/i.test(line)) {
+      current.explanation = line.replace(/^\*\*Explanation:\*\*/i, '').trim();
+      mode = 'explanation';
+    } else if (current && mode === 'prompt') {
+      current.prompt = (current.prompt ? current.prompt + ' ' : '') + line;
+    } else if (current && mode === 'explanation') {
+      current.explanation += ` ${line}`;
+    }
   });
   push();
   return questions;
