@@ -7,13 +7,23 @@
 const EXAMS = [
   {
     id: 'full-40',
-    title: 'Full Practice Exam (40 questions)',
+    title: 'Full Practice Exam A (40 questions)',
     description: 'Complete mock exam covering CTFL fundamentals through tools. Timed practice recommended.',
     path: '../../../doc/Mock_Exam/Practice_Exam_Full_40.md',
     questionsHint: '40 questions',
     timeMinutes: 60,
     passPercent: 65,
     quizId: 'mock-full-40',
+  },
+  {
+    id: 'full-40-b',
+    title: 'Full Practice Exam B (40 questions)',
+    description: 'Second original full mock exam — different questions on the same CTFL topics. Use for extra timed practice.',
+    path: '../../../doc/Mock_Exam/Practice_Exam_Full_40_B.md',
+    questionsHint: '40 questions',
+    timeMinutes: 60,
+    passPercent: 65,
+    quizId: 'mock-full-40-b',
   },
   {
     id: 'focus-fundamentals',
