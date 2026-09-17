@@ -39,13 +39,11 @@ Help systematically derive **test conditions** and **test cases** from the **tes
 - Includes **valid** and **invalid** partitions.
 - One representative value from each partition is usually enough for coverage.
 
-**Coverage formula:**  
-\[
-\text{EP Coverage} = \frac{\text{Number of partitions exercised}}{\text{Total number of partitions}} \times 100\%
-\]
+**Coverage formula:**
 
-**Example (exam-style):**  
-Age field accepts 18–60 inclusive.
+EP Coverage (%) = (Number of partitions exercised ÷ Total partitions) × 100
+
+**Example (exam-style):** Age field accepts 18–60 inclusive.
 
 | Partition | Range | Type |
 |-----------|-------|------|
@@ -152,21 +150,17 @@ Covering **all valid transitions** is **stronger** than covering only states.
 
 **Goal:** Execute every **executable statement** at least once.
 
-\[
-\text{Statement Coverage} = \frac{\text{Executed statements}}{\text{Total executable statements}} \times 100\%
-\]
+Statement Coverage (%) = (Executed statements ÷ Total executable statements) × 100
 
 ### 4.3.2 Branch Testing & Branch Coverage
 
 **Goal:** Execute every **branch** (True and False outcome of every decision) at least once.
 
-\[
-\text{Branch Coverage} = \frac{\text{Executed branches}}{\text{Total branches}} \times 100\%
-\]
+Branch Coverage (%) = (Executed branches ÷ Total branches) × 100
 
 **Critical exam relationship:**
-- **100% branch coverage ⇒ 100% statement coverage**
-- **100% statement coverage ⇏ 100% branch coverage**
+- **100% branch coverage → 100% statement coverage** (always true)
+- **100% statement coverage → 100% branch coverage** (NOT always true)
 
 Branch coverage is **stronger** than statement coverage.
 

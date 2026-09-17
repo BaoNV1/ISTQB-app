@@ -1,6 +1,6 @@
 // Learning Progress Tracker Integration
 const CHAPTER_ID = 'chapter4';
-const CHAPTER_TITLE = 'Chapter 4: Dynamic Testing';
+const CHAPTER_TITLE = 'Chapter 4: Test Analysis and Design';
 
 function recordChapterView() {
   if (typeof trackChapterView_impl === 'function') {
@@ -87,31 +87,128 @@ function renderMindmap(markdown) {
   return `<div style="margin:14px 0; padding:12px; border:1px solid #334155; border-radius:16px; background:#0f172a; overflow:auto"><svg viewBox="0 0 ${maxX + 40} ${maxY + 40}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto">${nodes}</svg></div>`;
 }
 
+function isTableRow(line) {
+  return /^\|(.+)\|$/.test(line.trim());
+}
+
+function isTableSeparator(line) {
+  return /^\|[\s|:\-]+\|$/.test(line.trim());
+}
+
+function parseTableRow(line) {
+  return line.trim().split('|').slice(1, -1).map((cell) => cell.trim());
+}
+
+function renderMarkdownTable(rows) {
+  if (!rows.length) return '';
+  const header = rows[0];
+  const body = rows.slice(1);
+  const thead = `<thead><tr>${header.map((c) => `<th>${formatInline(c)}</th>`).join('')}</tr></thead>`;
+  const tbody = `<tbody>${body.map((row) =>
+    `<tr>${row.map((c) => `<td>${formatInline(c)}</td>`).join('')}</tr>`
+  ).join('')}</tbody>`;
+  return `<div class="md-table-wrap"><table class="md-table">${thead}${tbody}</table></div>`;
+}
+
 function renderMarkdown(markdown) {
   const html = [];
   let listOpen = false;
   const closeList = () => { if (listOpen) { html.push('</ul>'); listOpen = false; } };
+  const lines = markdown.split(/\r?\n/);
+  let i = 0;
 
-  markdown.split(/\r?\n/).forEach((rawLine) => {
+  while (i < lines.length) {
+    const rawLine = lines[i];
     const line = rawLine.trim();
-    if (!line) { closeList(); return; }
-    if (/^```mermaid\s*$/.test(line)) return;
-    if (/^```$/.test(line)) return;
+
+    // Skip empty
+    if (!line) {
+      closeList();
+      i += 1;
+      continue;
+    }
+
+    // Skip code fence markers for mermaid blocks
+    if (/^```mermaid\s*$/.test(line) || /^```$/.test(line)) {
+      i += 1;
+      continue;
+    }
+
+    // Markdown table: collect consecutive |...| rows
+    if (isTableRow(line)) {
+      closeList();
+      const tableLines = [];
+      while (i < lines.length && isTableRow(lines[i].trim())) {
+        const rowLine = lines[i].trim();
+        if (!isTableSeparator(rowLine)) {
+          tableLines.push(parseTableRow(rowLine));
+        }
+        i += 1;
+      }
+      html.push(renderMarkdownTable(tableLines));
+      continue;
+    }
+
+    // LaTeX-style block formula \[ ... \]
+    if (/^\\\[/.test(line) || line === '\\[') {
+      closeList();
+      let formula = line.replace(/^\\\[/, '').replace(/\\\]$/, '').trim();
+      i += 1;
+      while (i < lines.length && !/\\\]/.test(lines[i]) && lines[i].trim() !== '\\]') {
+        formula += ' ' + lines[i].trim();
+        i += 1;
+      }
+      // skip closing \]
+      if (i < lines.length) i += 1;
+      // Make formula human-readable
+      const readable = formula
+        .replace(/\\text\{([^}]+)\}/g, '$1')
+        .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1) / ($2)')
+        .replace(/\\times/g, '×')
+        .replace(/\\,/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      html.push(`<div class="formula-card"><span class="formula-label">Formula</span><div class="formula-body">${escapeHtml(readable)}</div></div>`);
+      continue;
+    }
+
+    // Headings
     if (/^#{1,3}\s+/.test(line)) {
       closeList();
       const level = line.match(/^#+/)[0].length;
       html.push(`<h${level}>${formatInline(line.replace(/^#{1,3}\s+/, ''))}</h${level}>`);
-      return;
+      i += 1;
+      continue;
     }
+
+    // Bullet lists
     if (/^[-*]\s+/.test(line)) {
       if (!listOpen) { html.push('<ul>'); listOpen = true; }
       html.push(`<li>${formatInline(line.replace(/^[-*]\s+/, ''))}</li>`);
-      return;
+      i += 1;
+      continue;
     }
-    if (/^---$/.test(line)) { closeList(); html.push('<hr />'); return; }
+
+    // Horizontal rule
+    if (/^---$/.test(line)) {
+      closeList();
+      html.push('<hr />');
+      i += 1;
+      continue;
+    }
+
+    // Callout / tip lines starting with **Exam
+    if (/^\*\*(Exam|Study|Key|Note)/i.test(line)) {
+      closeList();
+      html.push(`<div class="callout">${formatInline(line)}</div>`);
+      i += 1;
+      continue;
+    }
+
     closeList();
     html.push(`<p>${formatInline(line)}</p>`);
-  });
+    i += 1;
+  }
 
   closeList();
   return html.join('');
