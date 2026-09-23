@@ -38,30 +38,86 @@ function formatInline(text) {
   return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
+function isTableRow(line) {
+  return /^\|(.+)\|$/.test(line.trim());
+}
+
+function isTableSeparator(line) {
+  return /^\|[\s|:\-]+\|$/.test(line.trim());
+}
+
+function parseTableRow(line) {
+  return line.trim().split('|').slice(1, -1).map((cell) => cell.trim());
+}
+
+function renderMarkdownTable(rows) {
+  if (!rows.length) return '';
+  const header = rows[0];
+  const body = rows.slice(1);
+  const thead = `<thead><tr>${header.map((c) => `<th>${formatInline(c)}</th>`).join('')}</tr></thead>`;
+  const tbody = `<tbody>${body.map((row) =>
+    `<tr>${row.map((c) => `<td>${formatInline(c)}</td>`).join('')}</tr>`
+  ).join('')}</tbody>`;
+  return `<div class="md-table-wrap"><table class="md-table">${thead}${tbody}</table></div>`;
+}
+
 function renderMarkdown(markdown) {
   const html = [];
   let listOpen = false;
   const closeList = () => { if (listOpen) { html.push('</ul>'); listOpen = false; } };
+  const lines = markdown.split(/\r?\n/);
+  let i = 0;
 
-  markdown.split(/\r?\n/).forEach((rawLine) => {
-    const line = rawLine.trim();
-    if (!line) { closeList(); return; }
-    if (/^```/.test(line)) return;
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    if (!line) { closeList(); i += 1; continue; }
+    if (/^```/.test(line)) { i += 1; continue; }
+
+    if (isTableRow(line)) {
+      closeList();
+      const tableLines = [];
+      while (i < lines.length && isTableRow(lines[i].trim())) {
+        const rowLine = lines[i].trim();
+        if (!isTableSeparator(rowLine)) tableLines.push(parseTableRow(rowLine));
+        i += 1;
+      }
+      html.push(renderMarkdownTable(tableLines));
+      continue;
+    }
+
     if (/^#{1,3}\s+/.test(line)) {
       closeList();
       const level = line.match(/^#+/)[0].length;
       html.push(`<h${level}>${formatInline(line.replace(/^#{1,3}\s+/, ''))}</h${level}>`);
-      return;
+      i += 1;
+      continue;
     }
+
     if (/^[-*]\s+/.test(line)) {
       if (!listOpen) { html.push('<ul>'); listOpen = true; }
       html.push(`<li>${formatInline(line.replace(/^[-*]\s+/, ''))}</li>`);
-      return;
+      i += 1;
+      continue;
     }
-    if (/^---$/.test(line)) { closeList(); html.push('<hr />'); return; }
+
+    if (/^---$/.test(line)) {
+      closeList();
+      html.push('<hr />');
+      i += 1;
+      continue;
+    }
+
+    if (/^\*\*(Exam tip|Study tip|Key|Note|Mẹo)/i.test(line)) {
+      closeList();
+      html.push(`<div class="callout">${formatInline(line)}</div>`);
+      i += 1;
+      continue;
+    }
+
     closeList();
     html.push(`<p>${formatInline(line)}</p>`);
-  });
+    i += 1;
+  }
   closeList();
   return html.join('');
 }
