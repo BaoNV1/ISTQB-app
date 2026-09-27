@@ -1,261 +1,329 @@
-# ISTQB CTFL v4.0.1 – Chapter 5 Practice Quiz
+# ISTQB CTFL v4.0.1 – Chapter 5 Practice Quiz 1
 ## Managing the Test Activities
 
-### Question 1
-What is the main purpose of a Test Plan?
+**Aligned with syllabus LOs FL-5.1.1 – FL-5.5.1**
 
-A. To list all defects found during testing  
-B. To describe the objectives, approach, resources, and schedule of testing  
-C. To replace the need for test cases  
-D. To only document exit criteria  
+---
+
+### Question 1
+What is a main purpose of a test plan?
+
+A. To list every defect found after release  
+B. To document objectives, approach, resources, and schedule for testing  
+C. To replace the need for a test strategy  
+D. To store only source code versions  
 
 **Answer:** B  
-**Explanation:** A test plan describes how testing will be performed, including objectives, scope, approach, resources, schedule, risks, and criteria.
+**Explanation:** A test plan documents means and schedule for achieving test objectives, communicates with stakeholders, and shows how testing follows (or deviates from) policy and strategy.
 
 ---
 
 ### Question 2
-What is the difference between Entry Criteria and Exit Criteria?
+Which item is typically included in a test plan?
 
-A. Entry criteria are used only in Agile; Exit criteria are used only in Waterfall  
-B. Entry criteria define when testing can start; Exit criteria define when testing can finish  
-C. They are the same thing  
-D. Exit criteria are only related to defect counts  
+A. Marketing campaign slogans  
+B. Risk register and test approach (levels, types, techniques, entry/exit criteria)  
+C. Only the final production password  
+D. Employee salary details  
 
 **Answer:** B  
-**Explanation:** Entry criteria must be met before testing begins. Exit criteria must be met before testing is considered complete.
+**Explanation:** Typical content includes context, stakeholders, communication, risk register, test approach, budget, and schedule.
 
 ---
 
 ### Question 3
-How is Risk Level typically calculated?
+How does a tester mainly add value during release planning?
 
-A. Likelihood + Impact  
-B. Likelihood × Impact  
-C. Impact – Likelihood  
-D. Number of defects × Severity  
+A. By writing production deployment scripts only  
+B. By participating in testable user stories, acceptance criteria, risk analysis, and test effort estimates  
+C. By avoiding all estimation work  
+D. By deleting the product backlog  
 
 **Answer:** B  
-**Explanation:** Risk Level = Likelihood × Impact.
+**Explanation:** Testers help with testable stories and acceptance criteria, project/quality risk analysis, and estimating test effort across iterations (FL-5.1.2).
 
 ---
 
 ### Question 4
-Which of the following is an example of a **Product Risk**?
+What is the correct distinction between entry and exit criteria?
 
-A. A key tester leaves the project  
-B. The test environment is not ready on time  
-C. The system may have serious security vulnerabilities  
-D. The project budget is cut  
+A. Entry criteria define when testing can finish; exit criteria define when testing can start  
+B. Entry criteria define when testing can start; exit criteria define when testing can be considered complete  
+C. They are identical terms  
+D. Exit criteria are only used in unit testing  
 
-**Answer:** C  
-**Explanation:** Product risks relate to the quality of the product (e.g., functional, performance, or security issues). The others are project risks.
+**Answer:** B  
+**Explanation:** Entry criteria are preconditions to start; exit criteria are conditions for completion (FL-5.1.3).
 
----
 ---
 
 ### Question 5
-What does the Test Pyramid recommend?
+In Agile development, exit criteria for a releasable item are often called:
 
-A. Many UI tests and few unit tests  
-B. Many automated unit/component tests at the bottom and fewer end-to-end tests at the top  
-C. Only manual testing  
-D. Equal number of tests at every level  
+A. Definition of Ready  
+B. Definition of Done  
+C. Test policy  
+D. Risk register  
 
 **Answer:** B  
-**Explanation:** The Test Pyramid suggests having a large base of fast, automated unit tests and fewer high-level end-to-end tests.
+**Explanation:** Definition of Done defines objective metrics for a releasable item; Definition of Ready relates to entry conditions for starting work.
 
 ---
 
 ### Question 6
-Which estimation technique uses historical data from previous projects?
+In a previous project the development-to-test effort ratio was 3:2. Current development effort is estimated at 600 person-days. Using ratio-based estimation, what is the test effort?
 
-A. Expert-based estimation  
-B. Metrics-based estimation  
-C. Random estimation  
-D. Only three-point estimation  
+A. 200 person-days  
+B. 300 person-days  
+C. 400 person-days  
+D. 900 person-days  
 
-**Answer:** B  
-**Explanation:** Metrics-based estimation relies on historical data and metrics from similar past projects.
-
----
+**Answer:** C  
+**Explanation:** Ratio 3:2 means test = (2/3) × development = (2/3) × 600 = 400 person-days (FL-5.1.4).
 
 ---
 
 ### Question 7
-What is the main purpose of Test Monitoring?
+Which estimation technique uses optimistic, most likely, and pessimistic estimates?
 
-A. To write new test cases  
-B. To collect information about testing progress and compare it with the plan  
-C. To fix defects  
-D. To design the test environment  
+A. Estimation based on ratios only  
+B. Three-point estimation  
+C. Exhaustive path counting  
+D. Random guessing  
 
 **Answer:** B  
-**Explanation:** Test monitoring involves continuously checking progress against the plan using metrics and reports.
+**Explanation:** Three-point estimation uses optimistic (a), most likely (m), and pessimistic (b); often E = (a + 4m + b) / 6.
 
 ---
 
 ### Question 8
-Which of the following is a typical content of a good Defect Report?
+Planning Poker is best described as a variant of:
 
-A. Only the defect ID  
-B. Steps to reproduce, expected result, actual result, and severity  
-C. Only the name of the tester  
-D. The full source code of the system  
+A. Statement coverage  
+B. Wideband Delphi  
+C. Equivalence partitioning  
+D. Static analysis  
 
 **Answer:** B  
-**Explanation:** A clear defect report should include steps to reproduce, expected vs actual results, severity/priority, and other relevant information so the defect can be understood and fixed.
+**Explanation:** Planning Poker is an iterative expert-based technique related to Wideband Delphi (FL-5.1.4).
 
 ---
 
 ### Question 9
-How can product risk analysis influence testing?
+Under time pressure, which prioritization approach is most consistent with risk-based testing?
 
-A. It has no influence on testing  
-B. It helps decide the scope, thoroughness, and prioritization of testing  
-C. It only affects project management  
-D. It replaces the need for test planning  
+A. Run only the newest tests regardless of importance  
+B. Run higher product-risk tests first  
+C. Skip all regression tests always  
+D. Prioritize only by alphabetical test id  
 
 **Answer:** B  
-**Explanation:** Higher product risks usually receive more testing effort, more rigorous techniques, and higher priority.
+**Explanation:** Risk-based prioritization runs higher-risk areas earlier (FL-5.1.5).
 
 ---
 
 ### Question 10
-What is the role of Configuration Management in testing?
+What does the test pyramid recommend?
 
-A. It is only used for defect tracking  
-B. It ensures the correct versions of code, tests, and documentation are used and changes are controlled  
-C. It replaces test planning  
-D. It is only needed after release  
+A. Many slow UI tests and almost no unit tests  
+B. Many automated unit/component tests at the bottom and fewer end-to-end tests at the top  
+C. Equal numbers of tests at every level always  
+D. Only manual testing at all levels  
 
 **Answer:** B  
-**Explanation:** Configuration management supports testing by controlling versions and maintaining traceability of testware and the test object.
+**Explanation:** The pyramid favors a large base of fast low-level tests and fewer expensive high-level tests (FL-5.1.6).
+
+---
 
 ### Question 11
-What is the purpose of Test Control?
+Which testing quadrant is technology-facing and supports the team (e.g. automated component tests in CI)?
 
-A. To take corrective actions when testing deviates from the plan
-B. To write production code
-C. To remove all test reporting
-D. To guarantee the schedule never changes
+A. Q1  
+B. Q2  
+C. Q3  
+D. Q4  
 
 **Answer:** A  
-**Explanation:** Test control uses monitoring information to adjust activities and keep testing aligned with objectives.
+**Explanation:** Q1 = technology-facing, support the team (component / component integration; often in CI) (FL-5.1.7).
 
 ---
 
 ### Question 12
-Which is an example of a test metric?
+Exploratory testing and user acceptance testing are most associated with which quadrant?
 
-A. Number of executed test cases
-B. Developer favorite color
-C. Office location
-D. Product logo size
+A. Q1  
+B. Q2  
+C. Q3  
+D. Q4  
 
-**Answer:** A  
-**Explanation:** Test metrics provide measurable information about progress, results, quality, or risks.
+**Answer:** C  
+**Explanation:** Q3 = business-facing, critique the product (exploratory, usability, UAT; often manual).
 
 ---
 
 ### Question 13
-What should a test report communicate?
+Performance and security tests (non-functional, often automated) typically map to:
 
-A. Test status, results, risks, and significant issues
-B. Only the tester’s personal opinion
-C. Unrelated project expenses
-D. Source code passwords
+A. Q1  
+B. Q2  
+C. Q3  
+D. Q4  
 
-**Answer:** A  
-**Explanation:** Test reports provide stakeholders with useful evidence about testing progress and product quality.
+**Answer:** D  
+**Explanation:** Q4 = technology-facing, critique the product (smoke, performance, security, other non-functional except usability).
 
 ---
 
 ### Question 14
-What is a project risk?
+How is risk level typically expressed in the syllabus?
 
-A. A factor that may affect the project’s ability to meet its objectives
-B. A confirmed product failure only
-C. A successful test case
-D. A glossary definition
+A. Impact only  
+B. Likelihood only  
+C. A combination of likelihood and impact (often likelihood × impact)  
+D. Number of test cases written  
 
-**Answer:** A  
-**Explanation:** Project risks concern factors such as schedule, resources, budget, or staffing.
+**Answer:** C  
+**Explanation:** Risk is characterized by likelihood and impact; risk level combines them (FL-5.2.1).
 
 ---
 
 ### Question 15
-What is a product risk?
+Which of the following is a **product risk**?
 
-A. A possibility that the product may fail to satisfy a quality need
-B. A delay in a team meeting
-C. A missing holiday plan
-D. A change to the office furniture
+A. Key tester leaves the project  
+B. Test environment delivery is delayed  
+C. The payment function may fail under peak load  
+D. Project budget is reduced  
 
-**Answer:** A  
-**Explanation:** Product risks relate to potential quality problems in the system being tested.
+**Answer:** C  
+**Explanation:** Product risks concern product quality (e.g. functional, performance, security). The others are project risks (FL-5.2.2).
 
 ---
 
 ### Question 16
-What is risk-based testing used for?
+Which of the following is a **project risk**?
 
-A. Prioritizing testing according to identified risks
-B. Avoiding all high-risk features
-C. Replacing test planning
-D. Selecting a programming language
+A. Security vulnerability in production code  
+B. Incorrect interest calculation  
+C. Skills shortage delaying test automation setup  
+D. Missing mandatory field validation  
 
-**Answer:** A  
-**Explanation:** Risk-based testing focuses effort where the likelihood and impact of problems are greatest.
+**Answer:** C  
+**Explanation:** Project risks affect project success (schedule, resources, skills, tools, environment).
 
 ---
 
 ### Question 17
-What is a test completion activity?
+How can product risk analysis influence testing?
 
-A. Archiving testware and recording lessons learned
-B. Starting requirements analysis
-C. Removing all test results
-D. Disabling defect tracking
+A. It has no effect on test scope  
+B. It can change thoroughness, scope, prioritization, and effort allocation  
+C. It only affects marketing  
+D. It replaces all test design techniques  
 
-**Answer:** A  
-**Explanation:** Test completion includes reporting, archiving useful materials, and capturing lessons learned.
+**Answer:** B  
+**Explanation:** Higher product risk areas typically receive more, earlier, and stronger testing (FL-5.2.3).
 
 ---
 
 ### Question 18
-Why should defect reports be clear and objective?
+Which action is a valid response to analyzed product risks by testing?
 
-A. To help stakeholders reproduce, understand, and prioritize the defect
-B. To make defects harder to fix
-C. To avoid recording evidence
-D. To replace confirmation testing
+A. Ignore high-risk areas to save time  
+B. Apply stronger techniques, higher coverage, reviews, and skilled testers on high-risk areas  
+C. Delete the risk register  
+D. Stop all regression testing permanently  
 
-**Answer:** A  
-**Explanation:** Accurate evidence and objective language support efficient analysis and resolution.
+**Answer:** B  
+**Explanation:** Mitigation by testing includes right skills, independence, reviews/static analysis, techniques/coverage, relevant test types, and dynamic testing including regression (FL-5.2.4).
 
 ---
 
 ### Question 19
-What does defect priority indicate?
+What is the difference between test monitoring and test control?
 
-A. How urgently a defect should be fixed
-B. How many testers found it
-C. Which tool created it
-D. The length of its title
+A. They are the same activity  
+B. Monitoring collects information about progress; control uses that information to take corrective actions  
+C. Control only happens before testing starts  
+D. Monitoring only counts lines of code  
 
-**Answer:** A  
-**Explanation:** Priority reflects the business or project urgency of addressing the defect.
+**Answer:** B  
+**Explanation:** Monitoring gathers data; control issues directives such as reprioritizing tests or adjusting schedule (section 5.3).
 
 ---
 
 ### Question 20
-Why are baselines useful in configuration management?
+Which is an example of a control directive?
 
-A. They identify an agreed version from which changes can be controlled
-B. They delete historical test results
-C. They prevent all future changes
-D. They replace version control
+A. Writing the first requirement  
+B. Reprioritizing tests when an identified risk becomes an issue  
+C. Deleting all metrics  
+D. Avoiding communication with stakeholders  
+
+**Answer:** B  
+**Explanation:** Control directives include reprioritizing tests, re-evaluating entry/exit criteria, adjusting schedule, and adding resources.
+
+---
+
+### Question 21
+Which metric is commonly used in testing?
+
+A. Office temperature only  
+B. Percentage of planned tests executed and pass/fail counts  
+C. Number of coffee breaks  
+D. Logo color codes  
+
+**Answer:** B  
+**Explanation:** Common metrics include execution progress, defects, coverage, and pass/fail rates (FL-5.3.1).
+
+---
+
+### Question 22
+What is a main difference between a test progress report and a test completion report?
+
+A. There is no difference  
+B. Progress reports are used during testing; completion reports summarize outcomes at a milestone or end of testing  
+C. Completion reports are only written before testing starts  
+D. Progress reports must never show defects  
+
+**Answer:** B  
+**Explanation:** Progress reports support ongoing monitoring/control; completion reports consolidate results, residual risks, and recommendations (FL-5.3.2).
+
+---
+
+### Question 23
+How does configuration management support testing?
+
+A. By preventing any test execution  
+B. By ensuring correct versions of code and testware, controlled changes, and traceability  
+C. By removing the need for test cases  
+D. By replacing defect management  
+
+**Answer:** B  
+**Explanation:** CM provides known baselines, controlled versions, and traceability so results are reproducible and trustworthy (FL-5.4.1).
+
+---
+
+### Question 24
+Which information is most important in a defect report for reproducibility?
+
+A. Only the author’s favorite color  
+B. Steps to reproduce, expected vs actual results, and environment  
+C. Only the project code name  
+D. Only the meeting room number  
+
+**Answer:** B  
+**Explanation:** Reproducibility needs clear steps, expected/actual results, and environment (and usually logs/screenshots) (FL-5.5.1).
+
+---
+
+### Question 25
+A good defect report typically includes:
+
+A. Unique id, title, severity, priority, status, and references to the test case  
+B. Only a single word “bug”  
+C. Only the developer’s personal email password  
+D. No status field ever  
 
 **Answer:** A  
-**Explanation:** A baseline provides a stable reference for managing and tracking subsequent changes.
+**Explanation:** Syllabus lists identifier, title, date/author, object/environment, context, description/steps, expected/actual, severity, priority, status, and references.
