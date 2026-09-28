@@ -1,74 +1,132 @@
-# ISTQB CTFL v4.0.1 – Chapter 6 Additional Quiz 2
-## Test Tools - Part 2
+# ISTQB CTFL v4.0.1 – Chapter 6 Practice Quiz 2
+## Focus: Tool Types (FL-6.1.1)
 
 ---
 
 ### Question 1
-What is a primary benefit of test automation?
+A team uses a tool to track requirements, test cases, defects, and configuration items. This is best classified as a:
 
-A. It eliminates the need for manual testing  
-B. It can reduce testing costs over time by running tests repetitively and quickly  
-C. It finds more defects than manual testing  
-D. It is faster to set up than manual testing  
+A. Non-functional testing tool  
+B. Test management tool  
+C. Only a collaboration chat app  
+D. Static analysis tool only  
 
 **Answer:** B  
-**Explanation:**  
-Test automation can reduce costs by efficiently running repetitive tests, enabling quick feedback, and freeing testers for exploratory and complex testing.
+**Explanation:** Test management tools facilitate management of the SDLC, requirements, tests, defects, and configuration.
 
 ---
 
 ### Question 2
-Which is NOT a suitable activity for test automation?
+A tool that runs automated checks against coding standards without executing the application is closest to:
 
-A. Regression testing  
-B. Data-driven testing  
-C. Exploratory testing  
-D. Performance testing  
+A. A pure load-testing tool  
+B. A static testing tool  
+C. A UAT recording tool only  
+D. A deployment container only  
 
-**Answer:** C  
-**Explanation:**  
-Exploratory testing relies on human intuition, creativity, and discovery, making it unsuitable for automation. It's best done manually.
+**Answer:** B  
+**Explanation:** Static testing tools support reviews and static analysis (including coding-standard checks).
 
 ---
 
 ### Question 3
-When selecting a test tool, which factor is MOST important?
+Generating large volumes of test data and draft test procedures from models or rules is mainly supported by:
 
-A. The tool has the most features  
-B. The tool aligns with the organization's needs, technical environment, and team skills  
-C. The tool is the most expensive  
-D. The tool is the newest on the market  
+A. Test design and test implementation tools  
+B. Only physical hardware monitors  
+C. Only informal review meetings  
+D. Only defect severity labels  
 
-**Answer:** B  
-**Explanation:**  
-Effective tool selection requires matching tool capabilities with organizational needs, existing infrastructure, team competencies, and maintenance requirements.
+**Answer:** A  
+**Explanation:** Design and implementation tools facilitate generation of test cases, test data, and test procedures.
 
 ---
 
 ### Question 4
-Test automation risks include all EXCEPT:
+Measuring statement or branch coverage while automated tests run is a job for:
 
-A. High initial investment in creating and maintaining automated tests  
-B. Automated tests may not catch all defects  
-C. Test automation always improves test coverage  
-D. Maintenance effort when application changes  
+A. Collaboration tools only  
+B. Test execution and test coverage tools  
+C. Only marketing dashboards  
+D. Only project risk registers  
 
-**Answer:** C  
-**Explanation:**  
-Automation can reduce costs and increase efficiency over time, but it doesn't guarantee 100% coverage or catch all defects. It's not a magic solution.
+**Answer:** B  
+**Explanation:** Execution and coverage tools facilitate automated execution and coverage measurement.
 
 ---
 
 ### Question 5
-What is the relationship between test automation and test design?
+Which tool category best supports stress testing a web service under thousands of concurrent users?
 
-A. Test design must be done after automation is complete  
-B. Automation replaces the need for test design  
-C. Good test design is a prerequisite for effective automation  
-D. They are independent activities  
+A. Static testing tools  
+B. Non-functional testing tools  
+C. Only spreadsheets  
+D. Only walkthrough facilitators  
 
-**Answer:** C  
-**Explanation:**  
-Well-designed test cases with clear objectives, data, and expected results form the foundation for effective test automation.
+**Answer:** B  
+**Explanation:** Non-functional testing tools enable testing that is difficult or impossible manually (e.g. performance/load).
 
 ---
+
+### Question 6
+CI/CD pipeline orchestration, automated builds, and workflow tracking are typically supported by:
+
+A. DevOps tools  
+B. Only paper checklists  
+C. Only equivalence partitioning  
+D. Only inspection moderators  
+
+**Answer:** A  
+**Explanation:** DevOps tools support the delivery pipeline, workflow tracking, automated builds, and CI/CD.
+
+---
+
+### Question 7
+Virtual machines and containerization tools mainly help testing by:
+
+A. Replacing all test design  
+B. Supporting scalability and deployment standardization  
+C. Removing the need for exit criteria  
+D. Guaranteeing zero product risk  
+
+**Answer:** B  
+**Explanation:** Tools supporting scalability and deployment standardization (e.g. VMs, containers) help consistent environments.
+
+---
+
+### Question 8
+Using a spreadsheet to plan tests and record results means the spreadsheet is:
+
+A. Never a test tool  
+B. A test tool in the context of testing  
+C. Only a legal contract  
+D. Forbidden by the syllabus  
+
+**Answer:** B  
+**Explanation:** The syllabus explicitly notes that a spreadsheet can be a test tool in the context of testing.
+
+---
+
+### Question 9
+Collaboration tools support testing primarily by:
+
+A. Measuring branch coverage automatically  
+B. Facilitating communication  
+C. Replacing defect management  
+D. Eliminating product risks  
+
+**Answer:** B  
+**Explanation:** Collaboration tools facilitate communication among those involved in testing.
+
+---
+
+### Question 10
+Which mapping is CORRECT?
+
+A. Static testing tools → CI/CD pipeline only  
+B. Test management tools → requirements, tests, defects, configuration  
+C. Non-functional tools → only unit test stubs  
+D. DevOps tools → only peer review checklists  
+
+**Answer:** B  
+**Explanation:** Test management tools cover SDLC/requirements/tests/defects/configuration management support.

@@ -1,202 +1,264 @@
-# ISTQB CTFL v4.0.1 – Chapter 6 Practice Quiz
+# ISTQB CTFL v4.0.1 – Chapter 6 Practice Quiz 1
 ## Test Tools
 
+**Aligned with syllabus LOs FL-6.1.1 and FL-6.2.1**
+
+---
+
 ### Question 1
-What is a potential benefit of test automation?
-A. It completely eliminates the need for manual testing  
-B. Reduction of repetitive manual work  
-C. It guarantees that all defects will be found  
-D. It requires no maintenance  
+According to the syllabus, simply acquiring a test tool:
+
+A. Guarantees project success  
+B. Does not guarantee success; introduction, maintenance, and training still require effort  
+C. Automatically removes all manual testing  
+D. Eliminates the need for a test plan  
 
 **Answer:** B  
-**Explanation:** One of the main benefits is reducing repetitive manual tasks such as regression testing.
+**Explanation:** Each new tool needs effort for introduction, maintenance, and training. Risks must be analyzed and mitigated.
 
 ---
 
 ### Question 2
-Which of the following is a potential risk of introducing test automation?
-A. Faster feedback  
-B. Greater consistency  
-C. Unrealistic expectations about the tool’s benefits  
-D. Reduced human errors  
+Which statement about test tools is TRUE?
 
-**Answer:** C  
-**Explanation:** Unrealistic expectations about functionality, ease of use, or benefits is a common risk.
+A. Only commercial automation products count as test tools  
+B. Any tool that assists testing can be a test tool in context, including a spreadsheet  
+C. Spreadsheets can never be considered test tools  
+D. Only tools that execute scripts are test tools  
+
+**Answer:** B  
+**Explanation:** The syllabus states that any tool that assists in testing (e.g. a spreadsheet) is a test tool in the context of testing.
 
 ---
 
 ### Question 3
-According to the syllabus, simply acquiring a test tool:
-A. Guarantees success  
-B. Does not guarantee success  
-C. Automatically reduces all testing effort  
-D. Eliminates the need for training  
+Which tool type mainly supports management of requirements, tests, defects, and configuration?
+
+A. Non-functional testing tools  
+B. Test management tools  
+C. Containerization tools only  
+D. Collaboration tools only  
 
 **Answer:** B  
-**Explanation:** Introducing a tool requires effort for training, maintenance, and process changes.
+**Explanation:** Test management tools increase process efficiency by facilitating management of the SDLC, requirements, tests, defects, and configuration.
 
 ---
 
 ### Question 4
-Which of the following can be considered a test tool?
-A. Only commercial automation tools  
-B. Only performance testing tools  
-C. Any tool that supports testing activities (including spreadsheets)  
-D. Only tools that execute test scripts  
+Which tool type supports reviews and static analysis?
 
-**Answer:** C  
-**Explanation:** The syllabus states that any tool supporting testing (even a spreadsheet) can be considered a test tool in the right context.
+A. DevOps tools  
+B. Static testing tools  
+C. Non-functional testing tools  
+D. Scalability tools only  
+
+**Answer:** B  
+**Explanation:** Static testing tools support the tester in performing reviews and static analysis.
 
 ---
 
 ### Question 5
-What is a benefit of using test tools for test execution?
-A. Tests are always written faster  
-B. Reduced test execution time and earlier feedback  
-C. No need to design test cases  
-D. Complete replacement of exploratory testing  
+Tools that generate test cases, test data, and test procedures are:
 
-**Answer:** B  
-**Explanation:** Automation can significantly reduce execution time, leading to faster feedback.
+A. Test design and test implementation tools  
+B. Collaboration tools only  
+C. Vendor marketing tools  
+D. Only production monitoring tools  
+
+**Answer:** A  
+**Explanation:** Test design and implementation tools facilitate generation of test cases, test data, and test procedures.
 
 ---
 
 ### Question 6
-Which of the following is a risk related to test automation?
-A. More time for testers to design better tests  
-B. Underestimating the effort needed to maintain automated scripts  
-C. Greater repeatability of tests  
-D. Prevention of simple human errors  
+Which tool type facilitates automated test execution and coverage measurement?
 
-**Answer:** B  
-**Explanation:** Maintenance of automated scripts can be costly and is often underestimated, especially when the system changes frequently.
+A. Test execution and test coverage tools  
+B. Only collaboration tools  
+C. Only static testing tools  
+D. Only requirement documentation tools  
+
+**Answer:** A  
+**Explanation:** Test execution and coverage tools support automated execution and measuring coverage.
 
 ---
 
 ### Question 7
-Which activity can a test management tool support?
+Performance and load testing that is difficult to do manually is typically supported by:
 
-A. Planning and tracking test execution
-B. Replacing every tester’s judgment
-C. Guaranteeing complete coverage
-D. Removing the need for requirements
+A. Only spreadsheets  
+B. Non-functional testing tools  
+C. Only walkthrough meetings  
+D. Only inspection checklists  
 
-**Answer:** A  
-**Explanation:** Test management tools can organize plans, cases, execution status, and reports.
+**Answer:** B  
+**Explanation:** Non-functional testing tools allow non-functional testing that is difficult or impossible to perform manually.
 
 ---
 
 ### Question 8
-What is a possible benefit of test automation?
+Which tool type supports the delivery pipeline, automated builds, and CI/CD?
 
-A. Greater consistency and repeatability
-B. No maintenance effort
-C. Guaranteed detection of every defect
-D. Elimination of exploratory testing
+A. Static testing tools only  
+B. DevOps tools  
+C. Only defect report templates  
+D. Only equivalence partitioning tools  
 
-**Answer:** A  
-**Explanation:** Automated tests can repeat the same steps consistently, especially during regression testing.
+**Answer:** B  
+**Explanation:** DevOps tools support the DevOps delivery pipeline, workflow tracking, automated builds, and CI/CD.
 
 ---
 
 ### Question 9
-Which task is often supported by a defect tracking tool?
+Which of the following is a potential **benefit** of test automation?
 
-A. Recording and monitoring defect status
-B. Designing the product architecture automatically
-C. Replacing all test cases
-D. Approving business budgets
+A. Unrealistic expectations about ease of use  
+B. Time saved by reducing repetitive manual work such as regression execution  
+C. Vendor going out of business  
+D. Tool incompatible with the development platform  
 
-**Answer:** A  
-**Explanation:** Defect tracking tools store reports and help teams follow defects through their lifecycle.
+**Answer:** B  
+**Explanation:** Benefits include time saved on repetitive work (regression, data entry, result comparison, coding-standard checks).
 
 ---
 
 ### Question 10
-Why does automation require maintenance?
+Greater consistency and repeatability of tests is mainly a:
 
-A. The test object, interfaces, or requirements may change
-B. Automated tests never depend on the system
-C. Maintenance is needed only for manual tests
-D. Tools cannot be updated
+A. Risk of automation  
+B. Benefit of automation  
+C. Reason to avoid all tools  
+D. Type of product risk only  
 
-**Answer:** A  
-**Explanation:** Automated scripts and test data must be updated when the system or its interfaces change.
+**Answer:** B  
+**Explanation:** Automation can prevent simple human errors through consistent derivation, systematic data, and repeatable execution.
 
 ---
 
 ### Question 11
-Which is an example of a static analysis tool?
+More objective assessment of coverage that is hard for humans to determine is a:
 
-A. A tool that detects coding standard violations without running the code
-B. A tool that simulates thousands of users
-C. A tool that records browser clicks only
-D. A tool that prints test plans
+A. Risk  
+B. Benefit of using test automation  
+C. Reason to stop testing  
+D. Project risk definition  
 
-**Answer:** A  
-**Explanation:** Static analysis examines source code or other artifacts without executing the software.
+**Answer:** B  
+**Explanation:** Automation can provide more objective assessment (e.g. coverage) and measures too complicated for humans to determine reliably.
 
 ---
 
 ### Question 12
-What is a risk of relying too heavily on automated tests?
+Easier access to statistics, graphs, and aggregated test progress data supports:
 
-A. Important exploratory or human-centered testing may be neglected
-B. Test execution becomes repeatable
-C. Results can be logged consistently
-D. Regression feedback becomes faster
+A. Only exploratory testing  
+B. Test management and test reporting  
+C. Only static analysis  
+D. Removing all metrics  
 
-**Answer:** A  
-**Explanation:** Automation does not replace human investigation, judgment, or all types of testing.
+**Answer:** B  
+**Explanation:** A benefit is easier access to testing information for management and reporting (statistics, graphs, failure rates, duration).
 
 ---
 
 ### Question 13
-What does continuous testing mean?
+Reduced test execution times can lead to:
 
-A. Integrating testing into an ongoing delivery pipeline
-B. Testing only once after release
-C. Running one test forever
-D. Removing all manual checks
+A. Later defect detection only  
+B. Earlier defect detection, faster feedback, and faster time to market  
+C. Mandatory full manual regression always  
+D. Automatic removal of exit criteria  
 
-**Answer:** A  
-**Explanation:** Continuous testing provides feedback repeatedly throughout fast development and delivery processes.
+**Answer:** B  
+**Explanation:** Faster execution supports earlier defect detection, faster feedback, and faster time to market.
 
 ---
 
 ### Question 14
-What should be considered before automating a test?
+Which is a potential **risk** of test automation?
 
-A. The test’s suitability, maintenance cost, and expected value
-B. Only the tool’s purchase price
-C. Whether manual testing is forbidden
-D. Whether the test has no expected result
+A. More time for testers to design deeper tests  
+B. Unrealistic expectations about benefits, functionality, or ease of use  
+C. Greater consistency of execution  
+D. Objective coverage measures  
 
-**Answer:** A  
-**Explanation:** Automation decisions should consider value, stability, feasibility, cost, and ongoing maintenance.
+**Answer:** B  
+**Explanation:** Unrealistic expectations about the tool’s benefits, functionality, or ease of use is a listed risk.
 
 ---
 
 ### Question 15
-Which test activity is commonly suitable for automation?
+Underestimating time, cost, and effort to introduce a tool and maintain scripts is:
 
-A. Repetitive regression checks
-B. Understanding an unknown product for the first time
-C. Interviewing users
-D. Making all product decisions
+A. A benefit  
+B. A risk of test automation  
+C. Always avoidable without analysis  
+D. The same as test policy  
 
-**Answer:** A  
-**Explanation:** Repetitive, stable regression checks can often gain significant value from automation.
+**Answer:** B  
+**Explanation:** Inaccurate estimates of introduction, script maintenance, and process change effort are a known risk.
 
 ---
 
 ### Question 16
-What is one limitation of test tools?
+Using a test tool when manual testing would be more appropriate is:
 
-A. They support testing but do not replace critical thinking
-B. They can never produce results
-C. They cannot repeat a test
-D. They always remove defects automatically
+A. Always recommended  
+B. A risk of test automation  
+C. A mandatory exit criterion  
+D. Part of the test pyramid base  
 
-**Answer:** A  
-**Explanation:** Tools assist testers, but people still need to design meaningful tests, interpret results, and assess risks.
+**Answer:** B  
+**Explanation:** Using a tool when manual testing is more appropriate is listed as a risk.
+
+---
+
+### Question 17
+Relying on a tool too much and ignoring human critical thinking is:
+
+A. A benefit of automation  
+B. A risk of automation  
+C. Required by the syllabus  
+D. The definition of risk level  
+
+**Answer:** B  
+**Explanation:** Over-reliance on a tool (e.g. ignoring human critical thinking) is a risk.
+
+---
+
+### Question 18
+Dependency on a vendor that may go out of business or provide poor support is:
+
+A. A benefit  
+B. A risk of test automation  
+C. Impossible in practice  
+D. Only related to static testing  
+
+**Answer:** B  
+**Explanation:** Vendor dependency (business failure, tool retirement, sale, poor support) is a syllabus risk.
+
+---
+
+### Question 19
+Which is a risk specific to open-source automation tools?
+
+A. Guaranteed lifetime support  
+B. The project may be abandoned or components may need frequent updates  
+C. They never need maintenance  
+D. They always meet every safety standard  
+
+**Answer:** B  
+**Explanation:** Open-source software may be abandoned or require frequent internal component updates.
+
+---
+
+### Question 20
+A tool that is not compatible with the development platform or does not meet regulatory/safety standards represents:
+
+A. Only a benefit  
+B. Risks of tool selection / automation  
+C. Entry criteria for unit testing only  
+D. The test completion report  
+
+**Answer:** B  
+**Explanation:** Incompatibility with the platform and non-compliance with regulatory or safety standards are listed risks.
