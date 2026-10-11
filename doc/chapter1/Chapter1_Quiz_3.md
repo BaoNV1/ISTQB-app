@@ -1,74 +1,132 @@
-# ISTQB CTFL v4.0.1 – Chapter 1 Additional Quiz 3
-## Fundamentals of Testing - Part 3
+# ISTQB CTFL v4.0.1 – Chapter 1 Practice Quiz 3
+## Focus: Objectives, Defect Chain & Skills
 
 ---
 
 ### Question 1
-The "Pesticide Paradox" in testing refers to:
+Which is NOT a typical valid test objective?
 
-A. Using the same test cases repeatedly leads to finding fewer new defects  
-B. Testing can eliminate all defects  
-C. Automated tests are always better than manual tests  
-D. All software has the same types of defects  
+A. Providing stakeholders with quality-related information  
+B. Proving that no failures will ever occur after go-live  
+C. Verifying that specified requirements are fulfilled  
+D. Preventing defects through early reviews  
 
-**Answer:** A  
-**Explanation:**  
-The pesticide paradox indicates that running the same tests repeatedly will eventually stop finding new defects. Tests need to be updated and maintained.
+**Answer:** B  
+**Explanation:** You cannot prove future production will never fail (principle 1 / 7).
 
 ---
 
 ### Question 2
-Which testing principle emphasizes that defects are not uniformly distributed throughout software?
+Static testing finds a wrong formula in a requirements document. No code has been run. This is discovery of a:
 
-A. Early testing  
-B. Test shows presence, not absence of defects  
-C. Defect clustering  
-D. Pesticide paradox  
+A. Failure only  
+B. Defect in a work product (without observing a failure)  
+C. Root cause that is also a failure  
+D. Confirmation test  
 
-**Answer:** C  
-**Explanation:**  
-Defect clustering principle states that most failures come from a small number of modules. Defects tend to cluster in specific areas.
+**Answer:** B  
+**Explanation:** Defects can be found without execution; failures appear when software runs.
 
 ---
 
 ### Question 3
-Why is a "whole team" approach important in modern testing?
+The fundamental reason a defect was introduced (e.g. unclear requirement workshop) is the:
 
-A. Only testers need to understand quality  
-B. Everyone (developers, testers, business analysts) should share responsibility for quality  
-C. Developers should never test  
-D. It reduces the number of testers needed  
+A. Failure  
+B. Root cause  
+C. Test condition  
+D. Exit criterion  
 
 **Answer:** B  
-**Explanation:**  
-A whole team approach means quality is a shared responsibility across all team members, not just testers.
+**Explanation:** Root cause is the underlying reason for the defect (FL-1.2.3).
 
 ---
 
 ### Question 4
-Which of the following represents the correct sequence in the error-defect-failure relationship?
+Which skill is least characteristic of a typical tester role?
 
-A. Failure is made → Defect is found → Error is recorded  
-B. Developer makes an error → Creates a defect → May cause a failure  
-C. Defect is created → Failure is detected → Error is corrected  
-D. Error occurs → System stops → Defect is logged  
+A. Critical thinking  
+B. Domain knowledge  
+C. Defining the long-term product vision alone  
+D. Clear communication of defects  
 
-**Answer:** B  
-**Explanation:**  
-When a developer makes an error, it results in a defect in the code. Under certain conditions, this defect may cause a failure in the system.
+**Answer:** C  
+**Explanation:** Product vision is primarily a business/product role (FL-1.5.1).
 
 ---
 
 ### Question 5
-The practice of "Shift-Left" in testing involves:
+Traceability from a failed test back to a requirement mainly helps:
 
-A. Moving all testing to the end of development  
-B. Involving testers only after code review  
-C. Beginning testing activities as early as possible in the software lifecycle  
-D. Shifting test team members between projects  
+A. Hide defects from stakeholders  
+B. Impact analysis and understanding of what is broken relative to needs  
+C. Delete the requirement automatically  
+D. Avoid writing any further tests  
 
-**Answer:** C  
-**Explanation:**  
-Shift-Left means moving testing activities to the left (earlier) in the software development lifecycle, catching defects sooner.
+**Answer:** B  
+**Explanation:** Traceability supports impact analysis and coverage insight (FL-1.4.4).
 
 ---
+
+### Question 6
+Testers and developers reviewing design decisions together early is valuable because:
+
+A. It delays all coding forever  
+B. It improves mutual understanding and can detect defects early  
+C. It removes the need for system testing  
+D. It replaces configuration management  
+
+**Answer:** B  
+**Explanation:** Collaboration and early involvement support success (FL-1.2.1).
+
+---
+
+### Question 7
+Independence of testing is best described as:
+
+A. Always external outsourcing  
+B. A spectrum from author self-test to separate teams/organizations, with trade-offs  
+C. Forbidding any contact with developers  
+D. Identical to continuous deployment  
+
+**Answer:** B  
+**Explanation:** Independence levels vary; each has benefits and drawbacks (FL-1.5.3).
+
+---
+
+### Question 8
+Which statement about QA and testing is TRUE?
+
+A. QA and testing are always the same department name only  
+B. QA is largely process-focused prevention; testing is product-focused detection/evaluation  
+C. Testing never contributes to quality  
+D. QA only means running UI scripts  
+
+**Answer:** B  
+**Explanation:** FL-1.2.2 distinguishes QA (process) from testing (product).
+
+---
+
+### Question 9
+Selecting regression tests after a change using links from requirements to cases is an example of using:
+
+A. Absence-of-defects fallacy  
+B. Traceability  
+C. Exhaustive testing  
+D. Debugging only  
+
+**Answer:** B  
+**Explanation:** Traceability enables focused selection of tests affected by change.
+
+---
+
+### Question 10
+A valid reason testing is necessary is:
+
+A. Software is always defect-free without testing  
+B. Failures can cause significant harm; testing reduces risk and informs decisions  
+C. Exhaustive testing is easy and cheap  
+D. Stakeholders never need quality information  
+
+**Answer:** B  
+**Explanation:** Risk reduction and decision support are core reasons testing is needed (FL-1.2.1).

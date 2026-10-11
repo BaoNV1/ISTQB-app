@@ -1,83 +1,152 @@
-# ISTQB CTFL v4.0.1 – Chapter 2: Testing Throughout the Software Development Lifecycle
+# ISTQB CTFL v4.0.1 – Chapter 2: Testing Throughout the SDLC
 
-## 2.1 Testing in the Context of a Software Development Lifecycle (SDLC)
+**Exam focus:** Impact of SDLC on testing, good practices for all models, TDD/ATDD/BDD, DevOps impact, shift-left, retrospectives, test levels, test types, confirmation vs regression, maintenance testing.
 
-### 2.1.1 Impact of the Software Development Lifecycle on Testing
-The chosen SDLC model affects:
-- The scope and timing of test activities (test levels and test types)
-- The level of detail of test documentation
-- The selection of test techniques and approaches
-- The degree of test automation
-- The roles and responsibilities of testers
+**Learning objectives:**
+- FL-2.1.1 (K2) Explain impact of the chosen SDLC on testing  
+- FL-2.1.2 (K1) Recall good testing practices for all SDLCs  
+- FL-2.1.3 (K1) Recall examples of test-first approaches  
+- FL-2.1.4 (K2) Summarize how DevOps may impact testing  
+- FL-2.1.5 (K2) Explain shift-left  
+- FL-2.1.6 (K2) Explain retrospectives for process improvement  
+- FL-2.2.1 (K2) Distinguish different test levels  
+- FL-2.2.2 (K2) Distinguish different test types  
+- FL-2.2.3 (K2) Distinguish confirmation testing from regression testing  
+- FL-2.3.1 (K2) Summarize maintenance testing and its triggers  
 
-### 2.1.2 Software Development Lifecycle and Good Testing Practices
-Good testing practices that apply to all SDLC models include:
-- For every development activity, there is a corresponding testing activity
-- Different test levels have specific and distinct objectives (to ensure adequate coverage without unnecessary overlap)
-- Test analysis and design for a test level start during the corresponding development phase (supporting the early testing principle)
-- Testers are involved in reviewing work products as early as possible
+---
 
-### 2.1.3 Testing as a Driver for Software Development (Test-First Approaches)
-Examples of test-first approaches:
-- **TDD (Test-Driven Development)**: Write a failing automated test → write the minimum code to pass the test → refactor
-- **ATDD (Acceptance Test-Driven Development)**: Define acceptance tests before development
-- **BDD (Behavior-Driven Development)**: Describe behavior using a structured language (e.g., Given-When-Then)
+## 2.1 Testing in the Context of an SDLC
 
-### 2.1.4 DevOps and Testing
-DevOps emphasizes continuous integration and continuous delivery (CI/CD).
+### 2.1.1 Impact of the SDLC on testing (FL-2.1.1)
 
-**Benefits for testing include:**
-- Fast feedback on code quality and whether changes break existing functionality
-- Promotion of the shift-left approach
-- Encouragement of high-quality code supported by component tests and static analysis
-- Greater focus on non-functional quality characteristics
-- Reduction of repetitive manual testing through automation
+The chosen model affects:
+- Scope and **timing** of test activities (levels and types)  
+- Level of detail of test documentation  
+- Selection of techniques and approaches  
+- Degree of **test automation**  
+- Roles and responsibilities of testers  
 
-### 2.1.5 Shift-Left Approach
-Shift-left means performing testing activities earlier in the SDLC (e.g., reviewing requirements, designing tests, or writing automated tests before or during coding).  
-It does **not** mean that later testing activities can be ignored.
+### 2.1.2 Good testing practices for all SDLCs (FL-2.1.2)
 
-### 2.1.6 Retrospectives and Process Improvement
-Retrospectives allow the team to:
-- Reflect on what went well and what did not
-- Identify improvements to both development and testing processes
+| Practice | Meaning |
+|----------|---------|
+| Corresponding test activity | For every development activity there is a related testing activity |
+| Distinct level objectives | Each test level has specific objectives (avoid useless overlap) |
+| Early test analysis/design | Analysis and design start during the corresponding development phase |
+| Early involvement | Testers review work products as early as possible |
+
+**Exam tip:** The rule “for every SDLC activity there is a corresponding test activity” holds for **sequential, incremental, and iterative** models.
+
+### 2.1.3 Test-first approaches (FL-2.1.3)
+
+| Approach | Idea |
+|----------|------|
+| **TDD** | Write a failing automated **component** test → minimal code to pass → refactor |
+| **ATDD** | Create tests from **acceptance criteria** to drive development of the related software |
+| **BDD** | Describe desired **behavior** (often Given–When–Then) so the team shares understanding |
+
+**Exam tip:** ATDD = tests from acceptance criteria drive development. Given/When/Then is more typical of **BDD**.
+
+### 2.1.4 DevOps and testing (FL-2.1.4)
+
+DevOps emphasizes CI/CD and collaboration.
+
+**Impacts / benefits for testing:**
+- Fast feedback on quality and regressions  
+- Supports **shift-left**  
+- Encourages high-quality code via component tests and static analysis  
+- More attention to non-functional quality  
+- Less repetitive manual testing through automation  
+
+### 2.1.5 Shift-left (FL-2.1.5)
+
+**Shift-left** = perform testing activities **earlier** in the SDLC.
+
+Examples:
+- Review requirements before formal acceptance  
+- Write component tests before code (TDD)  
+- Perform some non-functional tests early (e.g. performance of a component)  
+
+**Not** shift-left: writing test scripts before configuration management exists (scripts should be under CM).
+
+Shift-left does **not** mean later testing can be skipped.
+
+### 2.1.6 Retrospectives (FL-2.1.6)
+
+Retrospectives identify **process** strengths and weaknesses and feed continuous improvement.
+
+**Exam tip:** Best argument for retrospectives: process issues found become a to-do list for improvement — not mainly about pleasing clients or collecting end-user product feedback in that meeting.
 
 ---
 
 ## 2.2 Test Levels and Test Types
 
-### 2.2.1 Test Levels
-The syllabus describes the following main test levels:
+### 2.2.1 Test levels (FL-2.2.1)
 
-| Test Level                    | Main Focus                                      | Typically Performed By     | Typical Test Basis                  |
-|------------------------------|--------------------------------------------------|----------------------------|-------------------------------------|
-| Component (Unit) Testing     | Testing individual components in isolation       | Developers                 | Code, detailed design               |
-| Component Integration Testing| Testing interfaces between components            | Developers / Testers       | Architecture, design specifications |
-| System Testing               | Testing the complete system                      | Independent testers        | Requirements, system design         |
-| System Integration Testing   | Testing the system with external systems         | Testers                    | System architecture, interfaces     |
-| Acceptance Testing           | Validating that the system meets user needs      | Users / Customers / BA     | Business requirements, user stories |
+| Level | Typical focus / failures found |
+|-------|--------------------------------|
+| **Component (unit)** | Logic in the code; individual components in isolation |
+| **Component integration** | Interfaces and communication between components |
+| **System** | End-to-end system behavior; business rules implemented in the system |
+| **Acceptance** | Whether the system meets user/business needs |
 
-**Note:** In iterative and incremental models, test levels may overlap in time.
+**Exam tip – match failure type to level:**
+- Failures in code logic → component  
+- Failures in communication between components → component integration  
+- Incorrectly implemented business rules → system  
+- System does not meet user business needs → acceptance  
 
-### 2.2.2 Test Types
-Test types group testing activities related to specific quality characteristics. They can generally be performed at any test level.
+### 2.2.2 Test types (FL-2.2.2)
 
-- **Functional Testing**: Checks whether the system does what it is supposed to do
-- **Non-functional Testing**: Checks how well the system performs (performance, security, usability, reliability, etc.)
-- **White-box Testing**: Based on the internal structure (code, architecture)
-- **Black-box Testing**: Based on external specifications / behavior
+| Type | Purpose |
+|------|---------|
+| **Functional** | What the system does (functions, features) |
+| **Non-functional** | How the system behaves (performance, security, usability…) |
+| **White-box** | Based on internal structure (code, architecture) |
+| **Black-box** | Based on external behavior / specification |
+| **Related to changes** | Confirmation and regression (see below) |
 
-### 2.2.3 Confirmation Testing and Regression Testing
-- **Confirmation Testing (Retest)**: Re-running tests related to a defect that has been fixed to confirm the fix was successful
-- **Regression Testing**: Testing to ensure that recent changes (fixes or new features) have not negatively affected previously working functionality
+Test types can be applied at **any** test level.
+
+### 2.2.3 Confirmation vs regression (FL-2.2.3)
+
+| | **Confirmation (re-testing)** | **Regression** |
+|--|------------------------------|----------------|
+| Purpose | Verify that a **specific defect fix** worked | Check that changes did **not break** existing functionality |
+| Scope | Focused on the fixed defect / related tests | Broader suite of previously passing tests |
+| When | After a fix is delivered | After any change (fix, new feature, environment…) |
+
+**Exam tip:** After defects are fixed and a new build arrives, re-running previously failed tests that should now pass is confirmation; re-running previously passed tests to ensure nothing broke is regression.
 
 ---
 
-## 2.3 Maintenance Testing
+## 2.3 Maintenance Testing (FL-2.3.1)
 
-Maintenance testing is performed on an operational system when one of the following occurs:
-- **Modifications** (bug fixes, enhancements, or new features)
-- **Migration** (moving to a new environment or platform)
-- **Retirement** (decommissioning the system)
+**Maintenance testing** is testing changes to an operational system (or during retirement).
 
-**Key point:** Impact analysis is essential to determine the scope of testing required.
+**Typical triggers:**
+- Modifications (enhancements, corrective fixes, hotfixes)  
+- Migration (platform, environment, data)  
+- Retirement (archive, data migration, replace system)  
+
+Often includes impact analysis and a strong **regression** suite.
+
+---
+
+## Quick exam checklist – Chapter 2
+
+| Topic | Remember |
+|-------|----------|
+| All SDLCs | Corresponding test activity for every development activity |
+| ATDD | Tests from acceptance criteria drive development |
+| TDD | Failing component test first, then code |
+| BDD | Behavior / Given-When-Then shared understanding |
+| Shift-left | Test earlier (reviews, TDD, early non-functional) — not skip later tests |
+| Retrospectives | Process improvement, not mainly client marketing |
+| Levels | Component → integration → system → acceptance |
+| Confirmation | Fix works |
+| Regression | Nothing else broke |
+| Maintenance triggers | Modification, migration, retirement |
+
+**Related practice:** Chapter 2 Quiz 1–3, mock exams.

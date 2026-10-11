@@ -1,74 +1,132 @@
-# ISTQB CTFL v4.0.1 – Chapter 1 Additional Quiz 2
-## Fundamentals of Testing - Part 2
+# ISTQB CTFL v4.0.1 – Chapter 1 Practice Quiz 2
+## Focus: Principles, Process & Roles
 
 ---
 
 ### Question 1
-Which of the following is NOT a fundamental test activity?
+Which principle states that testing all combinations of inputs and preconditions is not feasible?
 
-A. Planning and control  
-B. Test implementation  
-C. Code compilation  
-D. Test closure  
+A. Tests wear out  
+B. Exhaustive testing is impossible  
+C. Defects cluster together  
+D. Absence-of-defects fallacy  
 
-**Answer:** C  
-**Explanation:**  
-The fundamental test activities are planning, monitoring and control, implementation, execution, and closure. Code compilation is a development activity, not a test activity.
+**Answer:** B  
+**Explanation:** Principle 2 — exhaustive testing is impossible; use risk and techniques instead.
 
 ---
 
 ### Question 2
-What is the purpose of test monitoring and control?
+A small set of modules historically contains most production defects. Which principle is illustrated?
 
-A. To fix defects found in testing  
-B. To gather metrics and compare actual progress against the test plan  
-C. To execute the test cases  
-D. To select which tests to run  
+A. Tests wear out  
+B. Early testing  
+C. Defects cluster together  
+D. Context independence  
 
-**Answer:** B  
-**Explanation:**  
-Monitoring compares actual progress with the test plan. Control takes corrective actions when needed.
+**Answer:** C  
+**Explanation:** Principle 4 — defects tend to cluster in a minority of components.
 
 ---
 
 ### Question 3
-Which of the following is a key characteristic of effective testing?
+Deriving concrete test cases and choosing boundary values is primarily part of:
 
-A. Testing should be performed only at the end of development  
-B. Early and continuous testing  
-C. Testing by developers only  
-D. Testing only in production  
+A. Test planning  
+B. Test analysis  
+C. Test design  
+D. Test completion  
 
-**Answer:** B  
-**Explanation:**  
-Early testing helps catch defects sooner and reduces cost. Continuous testing means testing throughout the software lifecycle.
+**Answer:** C  
+**Explanation:** Test design turns conditions into test cases, data, and coverage items.
 
 ---
 
 ### Question 4
-Test execution includes all the following EXCEPT:
+Archiving testware and writing a test completion report belong to:
 
-A. Running test cases  
-B. Comparing actual results with expected results  
-C. Logging defects  
-D. Planning test resources  
+A. Test execution  
+B. Test completion  
+C. Test analysis  
+D. Debugging only  
 
-**Answer:** D  
-**Explanation:**  
-Test execution involves running test cases and comparing results. Planning test resources is part of test planning, not execution.
+**Answer:** B  
+**Explanation:** Test completion consolidates experience, archives testware, and reports outcomes.
 
 ---
 
 ### Question 5
-What is the primary goal of independent testing?
+Which statement about context is TRUE?
 
-A. To reduce the cost of testing  
-B. To provide an unbiased view of software quality  
-C. To eliminate the need for developers to test  
-D. To find all defects  
+A. The same test approach always fits every project  
+B. Testing is context dependent (domain, risks, SDLC, regulations)  
+C. Context never affects documentation level  
+D. Only tool choice is context-dependent  
 
 **Answer:** B  
-**Explanation:**  
-Independent testing (performed by people who did not develop the software) provides an objective and unbiased assessment of quality.
+**Explanation:** Principle 6 and FL-1.4.2 — context shapes the process and approach.
 
 ---
+
+### Question 6
+Who typically owns maintaining the product backlog?
+
+A. Testers only  
+B. Product owner / business representative  
+C. External auditors only  
+D. Configuration management tools automatically  
+
+**Answer:** B  
+**Explanation:** Backlog ownership is a product-owner responsibility, not mainly a testing-role task.
+
+---
+
+### Question 7
+A drawback of high independence of testing can be:
+
+A. Finding more author-blind defects  
+B. Isolation and slower communication with developers  
+C. Stronger critical review of assumptions  
+D. More objective assessment  
+
+**Answer:** B  
+**Explanation:** Independence has benefits and drawbacks such as distance from the development team (FL-1.5.3).
+
+---
+
+### Question 8
+Testware includes:
+
+A. Only production source code  
+B. Plans, cases, scripts, data, environments, logs, and reports that support testing  
+C. Only marketing materials  
+D. Only hardware invoices  
+
+**Answer:** B  
+**Explanation:** Testware is the set of work products that support test activities (FL-1.4.3).
+
+---
+
+### Question 9
+“Testing shows that defects are present” means:
+
+A. Testing proves the product is perfect  
+B. Testing can demonstrate defects exist but cannot prove all defects are gone  
+C. Testing is unnecessary after one pass  
+D. Failures never occur in production  
+
+**Answer:** B  
+**Explanation:** Principle 1 — presence of defects, not absolute absence.
+
+---
+
+### Question 10
+Monitoring test progress against the plan and issuing corrective actions is:
+
+A. Test analysis only  
+B. Test monitoring and test control  
+C. Only acceptance testing  
+D. Root-cause analysis of production incidents only  
+
+**Answer:** B  
+**Explanation:** Monitoring collects data; control takes corrective action (FL-1.4.1).

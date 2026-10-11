@@ -1,328 +1,169 @@
-# ISTQB CTFL v4.0.1 – Chapter 2 Practice Quiz
+# ISTQB CTFL v4.0.1 – Chapter 2 Practice Quiz 1
+## Testing Throughout the SDLC
+
+**Inspired by official sample-exam patterns — original practice questions only**
+
+---
 
 ### Question 1
-Which of the following is most affected by the choice of Software Development Lifecycle (SDLC)?
+The rule “for every SDLC activity there is a corresponding test activity” applies to:
 
-A. The programming language used  
-B. The scope and timing of test activities  
-C. The color scheme of the user interface  
-D. The number of developers in the team  
+A. Only waterfall projects  
+B. Only agile sprints  
+C. Sequential, incremental, and iterative development models  
+D. Only projects without automation  
 
-**Answer:** B  
-**Explanation:**  
-The chosen SDLC strongly influences the scope, timing, documentation level, techniques, automation degree, and roles of testing.
+**Answer:** C  
+**Explanation:** Good practice for all SDLC models (FL-2.1.2).
 
 ---
 
 ### Question 2
-Which of the following is a good testing practice that applies to all SDLC models?
+Which statement BEST describes ATDD?
 
-A. Only perform testing after coding is finished  
-B. Each development activity should have a corresponding testing activity  
-C. Testers should never participate in reviews  
-D. Test documentation should always be very detailed  
+A. Tests are mainly code-oriented component tests written after coding  
+B. Tests are created from acceptance criteria to drive development of the related software  
+C. Tests must always use only performance tools  
+D. ATDD forbids any collaboration with business representatives  
 
 **Answer:** B  
-**Explanation:**  
-A fundamental good practice is that every development activity has a corresponding testing activity so that quality is controlled throughout.
+**Explanation:** ATDD uses acceptance criteria to drive development (FL-2.1.3). Given/When/Then is more typical of BDD.
 
 ---
 
 ### Question 3
-Which approach involves writing automated tests before writing the production code?
+Which is NOT an example of the shift-left approach?
 
-A. Waterfall  
-B. Test-Driven Development (TDD)  
-C. Big Bang Integration  
-D. Exploratory Testing  
+A. Reviewing user requirements before formal stakeholder acceptance  
+B. Writing a component test before the corresponding code  
+C. Running a performance test on a component during component testing  
+D. Writing automated scripts before any configuration management process exists  
 
-**Answer:** B  
-**Explanation:**  
-TDD is a test-first approach: write a failing test → write the minimum code to pass → refactor.
+**Answer:** D  
+**Explanation:** Test scripts should be under configuration management; creating them before CM is set up is not sensible shift-left (FL-2.1.5).
 
 ---
 
 ### Question 4
-What is the main idea of the Shift-Left approach?
+Which argument best supports holding retrospectives after each release cycle?
 
-A. Moving testing activities later in the lifecycle  
-B. Performing testing earlier in the SDLC  
-C. Only testing in production  
-D. Eliminating system testing  
+A. Retrospectives are fashionable and clients always demand them  
+B. Process weaknesses found can feed a continuous improvement action list  
+C. Retrospectives replace all testing  
+D. Retrospectives are only for collecting end-user product compliments  
 
 **Answer:** B  
-**Explanation:**  
-Shift-Left means starting testing activities as early as possible (e.g., reviewing requirements, writing tests before code).
+**Explanation:** Retrospectives support process improvement when follow-up actions are taken (FL-2.1.6).
 
 ---
 
 ### Question 5
-Which of the following is a benefit of DevOps for testing?
+Match failure types to test levels:
 
-A. Complete elimination of manual testing  
-B. Faster feedback on code quality  
-C. No need for non-functional testing  
-D. Testers no longer need to understand the system  
+1. System behavior deviates from user’s business needs  
+2. Failures in communication between components  
+3. Failures in logic inside a single unit of code  
+4. Business rules incorrectly implemented in the integrated system  
 
-**Answer:** B  
-**Explanation:**  
-DevOps (especially CI/CD) provides fast feedback on whether changes break existing functionality and promotes earlier testing.
+A. Component  B. Component integration  C. System  D. Acceptance  
+
+Which mapping is BEST?
+
+A. 1-D, 2-B, 3-A, 4-C  
+B. 1-A, 2-C, 3-D, 4-B  
+C. 1-B, 2-A, 3-D, 4-C  
+D. 1-C, 2-D, 3-B, 4-A  
+
+**Answer:** A  
+**Explanation:** Acceptance ↔ user needs; integration ↔ communication; component ↔ code logic; system ↔ business rules in the system (FL-2.2.1).
 
 ---
 
 ### Question 6
-Which test level focuses on testing individual components in isolation?
+After a defect fix, you re-run the test that previously failed to see if the fix works. This is:
 
-A. System Testing  
-B. Acceptance Testing  
-C. Component (Unit) Testing  
-D. System Integration Testing  
+A. Regression testing only  
+B. Confirmation testing (re-testing)  
+C. Load testing  
+D. Maintenance retirement testing only  
 
-**Answer:** C  
-**Explanation:**  
-Component testing (also called unit testing) tests components in isolation, usually performed by developers.
+**Answer:** B  
+**Explanation:** Confirmation checks that the specific fix worked (FL-2.2.3).
 
 ---
 
 ### Question 7
-Who typically performs Acceptance Testing?
+You re-run a set of previously passing tests after a new feature is merged to ensure nothing else broke. This is:
 
-A. Only developers  
-B. Only independent testers  
-C. Users, customers, or business representatives  
-D. Only the test manager  
+A. Confirmation testing only  
+B. Regression testing  
+C. Only static analysis  
+D. Only acceptance criteria writing  
 
-**Answer:** C  
-**Explanation:**  
-Acceptance testing is mainly performed by users/customers to validate that the system meets their needs.
+**Answer:** B  
+**Explanation:** Regression checks for unintended side effects (FL-2.2.3).
 
 ---
 
 ### Question 8
-Functional testing and Performance testing are examples of:
+Which is a typical impact of DevOps on testing?
 
-A. Test Levels  
-B. Test Types  
-C. Test Techniques  
-D. Test Tools  
+A. Slower feedback on quality  
+B. Fast feedback via CI/CD, more automation, and support for shift-left  
+C. Banning all component tests  
+D. Removing non-functional testing forever  
 
 **Answer:** B  
-**Explanation:**  
-Test types group testing activities according to quality characteristics (functional, non-functional, etc.). They can be applied at different test levels.
+**Explanation:** DevOps promotes rapid feedback, automation, and earlier quality activities (FL-2.1.4).
 
 ---
 
 ### Question 9
-What is the main purpose of Confirmation Testing?
+TDD is best characterized as:
 
-A. To check that a fixed defect has been correctly resolved  
-B. To find new defects in unrelated areas  
-C. To measure system performance  
-D. To test the user interface only  
+A. Write production code first, then maybe a test  
+B. Write a failing automated test, write minimal code to pass, then refactor  
+C. Only manual exploratory testing  
+D. Only user acceptance sign-off  
 
-**Answer:** A  
-**Explanation:**  
-Confirmation testing (retesting) verifies that a specific defect has been successfully fixed.
+**Answer:** B  
+**Explanation:** Classic red–green–refactor TDD cycle (FL-2.1.3).
 
 ---
 
 ### Question 10
-What is the main purpose of Regression Testing?
+Maintenance testing is typically triggered by:
 
-A. To confirm that a specific bug fix works  
-B. To check that changes have not introduced new defects in existing functionality  
-C. To test only new features  
-D. To replace all other types of testing  
+A. Only brand-new greenfield projects  
+B. Modification, migration, or retirement of an operational system  
+C. Only writing the first user story  
+D. Only choosing a programming language  
 
 **Answer:** B  
-**Explanation:**  
-Regression testing aims to ensure that recent changes (bug fixes or new features) have not broken previously working parts of the system.
+**Explanation:** Maintenance testing responds to changes in live systems, migrations, or retirement (FL-2.3.1).
 
 ---
 
 ### Question 11
-When is Maintenance Testing typically performed?
+Functional testing focuses on:
 
-A. Only during the initial development  
-B. When the system is already in operation and changes are made  
-C. Only before the first release  
-D. Only by end users  
+A. How fast the system responds under load only  
+B. What the system does (features and functions)  
+C. Only source-code complexity metrics  
+D. Only hardware temperature  
 
 **Answer:** B  
-**Explanation:**  
-Maintenance testing is performed on an operational system due to modifications, migration, or retirement.
+**Explanation:** Functional type = behavior of functions; non-functional = quality characteristics like performance (FL-2.2.2).
 
 ---
 
 ### Question 12
-Which of the following is an example of a test-first approach?
+Shift-left means:
 
-A. Writing code first, then writing tests  
-B. Acceptance Test-Driven Development (ATDD)  
-C. Performing only exploratory testing  
-D. Testing only after system integration  
-
-**Answer:** B  
-**Explanation:**  
-ATDD, TDD, and BDD are examples of test-first approaches mentioned in the syllabus.
-
----
-
-### Question 13
-In which situation is Impact Analysis especially important?
-
-A. During component testing only  
-B. When planning maintenance testing  
-C. When writing user stories  
-D. When choosing a programming language  
+A. Skipping system and acceptance testing  
+B. Moving testing activities earlier without abandoning later levels  
+C. Testing only after production release  
+D. Removing developers from code reviews  
 
 **Answer:** B  
-**Explanation:**  
-In maintenance testing, impact analysis helps determine which parts of the system may be affected by a change and therefore need to be tested.
-
----
-
-### Question 14
-Which statement about Test Levels and Test Types is correct?
-
-A. Test levels and test types are the same thing  
-B. A test type can be performed at different test levels  
-C. System testing can only be functional testing  
-D. White-box testing can only be done at acceptance level  
-
-**Answer:** B  
-**Explanation:**  
-Test levels and test types are two different dimensions. Any test type (functional, non-functional, white-box…) can generally be applied at multiple test levels.
-
----
-
-**End of Chapter 2 Quiz**
-
-### Question 15
-Which test level focuses on interactions between components or systems?
-
-A. Component testing
-B. Integration testing
-C. Acceptance testing
-D. Usability testing
-
-**Answer:** B  
-**Explanation:** Integration testing examines interfaces and interactions between integrated components or systems.
-
----
-
-### Question 16
-What is a key characteristic of iterative development?
-
-A. Testing occurs only after the final release
-B. The product is developed and tested in repeated cycles
-C. Requirements can never change
-D. Reviews are prohibited
-
-**Answer:** B  
-**Explanation:** Iterative development delivers increments through repeated development and testing cycles.
-
----
-
-### Question 17
-What does Continuous Integration encourage?
-
-A. Integrating changes frequently and checking them with automated tests
-B. Waiting until the end of the project to merge code
-C. Removing version control
-D. Testing only manually
-
-**Answer:** A  
-**Explanation:** Frequent integration with automated checks provides rapid feedback on changes.
-
----
-
-### Question 18
-Which test type evaluates characteristics such as performance or usability?
-
-A. Functional testing
-B. Non-functional testing
-C. Confirmation testing
-D. Component testing
-
-**Answer:** B  
-**Explanation:** Non-functional testing evaluates quality characteristics other than specific business functions.
-
----
-
-### Question 19
-What is the purpose of acceptance testing?
-
-A. To verify that the system meets business and user needs
-B. To check only internal code branches
-C. To replace component testing
-D. To measure developer productivity
-
-**Answer:** A  
-**Explanation:** Acceptance testing assesses whether the product is acceptable to its intended users or customers.
-
----
-
-### Question 20
-Which activity is especially valuable before implementing a user story?
-
-A. Collaborative clarification of acceptance criteria
-B. Deleting the test basis
-C. Disabling regression tests
-D. Deferring all questions until release
-
-**Answer:** A  
-**Explanation:** Early collaboration clarifies expected behavior and improves shared understanding.
-
----
-
-### Question 21
-What does regression testing focus on after a change?
-
-A. Only the new code author
-B. Existing functionality that could have been affected
-C. The project budget
-D. The user interface color
-
-**Answer:** B  
-**Explanation:** Regression testing checks whether changes caused problems in previously working functionality.
-
----
-
-### Question 22
-Which event can trigger maintenance testing?
-
-A. Migration to a new platform
-B. Choosing a team name
-C. Writing the first requirement
-D. Closing a review meeting
-
-**Answer:** A  
-**Explanation:** Migration, modification, or retirement of an operational system can require maintenance testing.
-
----
-
-### Question 23
-What is a benefit of testing throughout the lifecycle?
-
-A. Problems can be detected closer to when they are introduced
-B. Testers no longer need domain knowledge
-C. All test cases become unnecessary
-D. Requirements cannot change
-
-**Answer:** A  
-**Explanation:** Frequent testing gives earlier feedback and can reduce the cost of correction.
-
----
-
-### Question 24
-Which statement about test levels is correct?
-
-A. Each test level uses exactly one test type
-B. Different test levels provide different scopes of testing
-C. Acceptance testing always occurs first
-D. Component testing evaluates the whole business process
-
-**Answer:** B  
-**Explanation:** Test levels organize testing by scope, from individual components to complete systems and business acceptance.
----
+**Explanation:** Earlier testing activities; later testing remains necessary (FL-2.1.5).

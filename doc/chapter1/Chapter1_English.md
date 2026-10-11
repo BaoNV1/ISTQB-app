@@ -1,113 +1,187 @@
 # ISTQB CTFL v4.0.1 – Chapter 1: Fundamentals of Testing
 
+**Exam focus:** Test objectives, testing vs debugging, why testing is needed, error/defect/failure/root cause, seven principles, test process activities, context factors, testware & traceability, roles, tester skills, whole-team approach, independence of testing.
+
+**Learning objectives:**
+- FL-1.1.1 (K1) Identify typical test objectives  
+- FL-1.1.2 (K2) Differentiate testing from debugging  
+- FL-1.2.1 (K2) Exemplify why testing is necessary  
+- FL-1.2.2 (K1) Recall the relation between testing and quality assurance  
+- FL-1.2.3 (K2) Distinguish root cause, error, defect, and failure  
+- FL-1.3.1 (K2) Explain the seven testing principles  
+- FL-1.4.1 (K2) Explain test activities and related tasks  
+- FL-1.4.2 (K2) Explain the impact of context on the test process  
+- FL-1.4.3 (K2) Differentiate the testware that supports test activities  
+- FL-1.4.4 (K2) Explain the value of maintaining traceability  
+- FL-1.4.5 (K2) Compare the different roles in testing  
+- FL-1.5.1 (K2) Give examples of generic skills required for testing  
+- FL-1.5.2 (K1) Recall advantages of the whole team approach  
+- FL-1.5.3 (K2) Distinguish benefits and drawbacks of independence of testing  
+
+---
+
 ## 1.1 What is Testing?
 
-Testing is a set of activities to discover defects and evaluate the quality of software work products (test objects).
+Testing is a set of activities to **discover defects** and **evaluate quality** of work products (test objects).
 
-### Typical Test Objectives
-- Finding defects
-- Gaining confidence in the level of quality
-- Providing information to stakeholders
-- Preventing defects (especially through early static testing)
-- Verifying that specified requirements have been fulfilled
-- Validating that the system meets user needs
+### Typical test objectives (FL-1.1.1)
 
-### Testing vs Debugging
-- **Testing**: Finds defects and failures.
-- **Debugging**: Finds the root cause of defects and fixes them (usually performed by developers).
+| Objective | Meaning |
+|-----------|---------|
+| Find defects | Detect defects and failures |
+| Gain confidence | Build confidence in quality level |
+| Provide information | Support decisions with quality information |
+| Prevent defects | Especially via early static testing and reviews |
+| Verify requirements | Check that specified requirements are fulfilled |
+| Validate user needs | Check that the system meets user/stakeholder needs |
+| Comply with contract/regulation | Meet contractual or legal obligations |
+
+**Exam tip:** Testing **cannot prove** there are no defects or that production will never fail. A valid objective is to **reduce risk** and **build confidence**.
+
+### Testing vs debugging (FL-1.1.2)
+
+| | **Testing** | **Debugging** |
+|--|-------------|----------------|
+| Goal | Find defects / failures; evaluate quality | Find, analyze, and **remove** the cause of defects |
+| Who | Often testers (and developers) | Primarily developers |
+| Output | Failures, defect reports, quality information | Fixed code / corrected work product |
 
 ---
 
 ## 1.2 Why is Testing Necessary?
 
-Testing is necessary because software defects can lead to serious consequences (financial loss, reputation damage, safety issues, etc.).
+### Why testing is needed (FL-1.2.1)
 
-### Key Points
-- Testing contributes to project success by finding defects early (cheaper to fix).
-- Testing reduces the risk of software failure in operation.
-- Testing provides information for decision-making (e.g., release decisions).
+- Software is complex; defects are common  
+- Failures can cause serious harm (money, safety, reputation)  
+- Testing reduces risk and provides information for decisions  
+- Early involvement of testers helps detect defects in work products early  
 
-### Testing vs Quality Assurance (QA)
-- **Testing** is a form of quality control (product-oriented – detects defects).
-- **QA** is process-oriented – aims to prevent defects by improving processes.
+### Testing and quality assurance (FL-1.2.2)
 
-### Error → Defect → Failure → Root Cause
-| Term        | Definition |
-|-------------|----------|
-| **Error**   | A human action that produces an incorrect result (mistake). |
-| **Defect**  | A flaw in a work product caused by an error (also called bug or fault). |
-| **Failure** | Deviation of the actual result from the expected result when the system is executed. |
-| **Root Cause** | The fundamental reason for the occurrence of a defect. |
+| Concept | Focus |
+|---------|--------|
+| **Quality assurance (QA)** | Process-oriented: prevent defects by improving processes |
+| **Testing** | Product-oriented: detect defects and evaluate product quality |
 
----
+Testing is part of quality management but is **not** the same as QA.
 
-## 1.3 Testing Principles (7 Principles)
+### Error → Defect → Failure → Root cause (FL-1.2.3)
 
-1. **Testing shows the presence of defects, not their absence**  
-   Testing can prove that defects exist, but cannot prove that there are no defects.
+| Term | Meaning |
+|------|---------|
+| **Error (mistake)** | Human action that produces an incorrect result |
+| **Defect (bug, fault)** | Flaw in a work product (e.g. wrong code, wrong requirement) |
+| **Failure** | Deviation of actual from expected result when the system is **executed** |
+| **Root cause** | Fundamental reason a defect was introduced |
 
-2. **Exhaustive testing is impossible**  
-   Testing everything is not feasible except in trivial cases. Use techniques, prioritization, and risk-based testing instead.
-
-3. **Early testing saves time and money**  
-   The earlier a defect is found, the cheaper it is to fix.
-
-4. **Defects cluster together**  
-   A small number of modules usually contain most of the defects (Pareto principle).
-
-5. **Tests wear out (Pesticide Paradox)**  
-   Repeating the same tests will eventually stop finding new defects. Tests need to be reviewed and updated.
-
-6. **Testing is context dependent**  
-   Testing is done differently in different contexts (e.g., safety-critical vs. mobile apps).
-
-7. **Absence-of-errors is a fallacy**  
-   Finding and fixing defects does not help if the system built is unusable or does not fulfill users’ needs.
+**Chain:** Error → may introduce Defect → may cause Failure when executed.  
+Static testing can find defects **without** failures; dynamic testing observes failures then investigates defects.
 
 ---
 
-## 1.4 Test Activities, Testware and Test Roles
+## 1.3 Seven Testing Principles (FL-1.3.1)
 
-### Main Test Activities (Test Process)
-1. Test Planning
-2. Test Monitoring and Control
-3. Test Analysis
-4. Test Design
-5. Test Implementation
-6. Test Execution
-7. Test Completion
+| # | Principle | Exam meaning |
+|---|-----------|--------------|
+| 1 | Testing shows the presence of defects | Testing can show defects exist; it **cannot prove** absence of all defects |
+| 2 | Exhaustive testing is impossible | Cannot test all combinations; use risk, priorities, techniques |
+| 3 | Early testing saves time and money | Start testing as early as possible (shift-left) |
+| 4 | Defects cluster together | A small number of modules often contain most defects |
+| 5 | Tests wear out | Repeating the same tests eventually finds fewer new defects → refresh tests |
+| 6 | Testing is context dependent | Approach depends on domain, risks, SDLC, regulations… |
+| 7 | Absence-of-defects fallacy | Finding/fixing many defects does **not** guarantee success if the product does not meet user needs |
 
-### Testware
-All artifacts produced during the testing process (test plans, test cases, test data, test scripts, defect reports, test reports, etc.).
-
-### Traceability
-The ability to link the **test basis** (requirements, user stories, etc.) to the **testware** (test cases).  
-Very valuable for impact analysis, coverage measurement, and change management.
-
-### Roles in Testing
-- Test Manager / Test Lead
-- Tester
-- Other roles can also perform testing activities (developers, business analysts, users) → **Whole Team Approach**
+**Exam tip:** Unchanged regression suite with no new failures for many iterations → principle **“tests wear out”**.
 
 ---
 
-## 1.5 Essential Skills and Good Practices in Testing
+## 1.4 Test Process, Context, Testware, Traceability, Roles
 
-### Generic Skills Required for Testing
-- Analytical thinking
-- Communication skills
-- Curiosity and attention to detail
-- Domain knowledge
-- Technical knowledge
+### Main test activities (FL-1.4.1)
 
-### Whole Team Approach
-Everyone on the team shares responsibility for quality.  
-**Advantages**: Better collaboration, shared ownership, earlier feedback.
+| Activity | Typical tasks |
+|----------|----------------|
+| **Test planning** | Define objectives, approach, resources, schedule, risks, entry/exit criteria |
+| **Test monitoring & control** | Track progress vs plan; take corrective actions |
+| **Test analysis** | Analyze test basis; identify **test conditions** (what to test) |
+| **Test design** | Design test cases, coverage items, test data using techniques |
+| **Test implementation** | Create test procedures, scripts, environments, test suites |
+| **Test execution** | Run tests, log results, compare expected vs actual, report defects |
+| **Test completion** | Archive testware, lessons learned, completion report |
 
-### Independence of Testing
-**Benefits**: More objective testing, different viewpoint.  
-**Drawbacks**: Possible isolation, communication barriers, delayed feedback.
+**Exam tip:** Defining “what should be tested” (test conditions) → **test analysis**. Deriving test data with BVA → **test design**. Logging a failure → **test execution**.
+
+### Context factors influencing the test process (FL-1.4.2)
+
+Significant influences include:
+- **SDLC** model  
+- **Product risks**  
+- **Regulatory / contractual** requirements  
+- Stakeholders, domain, tools, organizational culture, complexity  
+
+(Number of past defects or environment setup alone is usually less central than risks, SDLC, and regulations.)
+
+### Testware (FL-1.4.3)
+
+Work products that support testing: test plans, test cases, scripts, data, environments, defect reports, logs, completion reports, etc.
+
+### Traceability (FL-1.4.4)
+
+Links between requirements/risks ↔ test conditions ↔ test cases ↔ results ↔ defects.
+
+**Value:** impact analysis, coverage assessment, auditability, focused regression selection.
+
+### Roles (FL-1.4.5)
+
+| Role focus | Examples of tasks |
+|------------|-------------------|
+| **Testing role** | Analyze test basis, design tests, execute tests, configure test environments (as needed) |
+| **Management role** | Test plan ownership, resource decisions, reporting to stakeholders |
+| **Others** | Product owner maintains backlog; developers design solutions |
 
 ---
 
-**Study Tip**: Focus on understanding and applying the 7 Testing Principles and the difference between Error – Defect – Failure – Root Cause.
+## 1.5 Skills, Whole Team, Independence
+
+### Generic tester skills (FL-1.5.1)
+
+Important skills include:
+- **Domain knowledge**  
+- **Critical thinking**  
+- Being a **good team player**  
+- Communication, curiosity, attention to detail  
+
+(Creating product vision or organizing the whole team’s work is typically not the tester’s main skill focus.)
+
+### Whole team approach (FL-1.5.2)
+
+Testers, developers, and business representatives collaborate.
+
+**Advantage example:** Testers help business representatives create suitable **acceptance tests**.
+
+### Independence of testing (FL-1.5.3)
+
+| Benefits | Drawbacks |
+|----------|-----------|
+| Different viewpoint; finds defects authors miss | Isolation from developers; communication delays |
+| Challenge assumptions | May be seen as bottleneck or adversarial |
+| Objective assessment | Knowledge of system may be weaker |
+
+Independence can range from author testing their own work → separate team → external organization.
+
+---
+
+## Quick exam checklist – Chapter 1
+
+| Topic | Remember |
+|-------|----------|
+| Objectives | Reduce risk, build confidence — not “prove zero defects” |
+| Testing vs debugging | Find vs fix |
+| Error/defect/failure | Human mistake → flaw in product → wrong runtime behavior |
+| Principles | Presence of defects; exhaustive impossible; early testing; clustering; wear out; context; absence-of-defects fallacy |
+| Analysis vs design | Conditions vs concrete cases/data |
+| Skills | Domain, critical thinking, teamwork |
+| Whole team | Collaborate on acceptance tests |
+
+**Related practice:** Chapter 1 Quiz 1–3, mock exams.

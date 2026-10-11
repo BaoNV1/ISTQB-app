@@ -1,74 +1,132 @@
-# ISTQB CTFL v4.0.1 – Chapter 2 Additional Quiz 2
-## Test Integration in SDLC Models - Part 2
+# ISTQB CTFL v4.0.1 – Chapter 2 Practice Quiz 2
+## Focus: SDLC Practices, Test-First & Levels
 
 ---
 
 ### Question 1
-In a traditional Waterfall model, testing typically begins:
+Good testing practice across SDLCs includes:
 
-A. As soon as requirements are available  
-B. After all code has been written  
-C. During requirements review  
-D. Immediately after the design phase  
+A. Starting test analysis only after coding is 100% finished in all models  
+B. Testers reviewing work products as early as possible  
+C. Using identical documentation depth for every project regardless of risk  
+D. Avoiding any automation in iterative models  
 
 **Answer:** B  
-**Explanation:**  
-In traditional Waterfall, testing is typically scheduled to start only after development is complete. This makes late defect discovery more expensive.
+**Explanation:** Early involvement and early analysis/design support the early-testing principle (FL-2.1.2).
 
 ---
 
 ### Question 2
-Which SDLC model emphasizes continuous testing and frequent releases?
+BDD primarily emphasizes:
 
-A. Waterfall  
-B. V-Model  
-C. Agile  
-D. Big Bang  
+A. Only database indexing strategies  
+B. Describing desired behavior so the team shares understanding (e.g. structured scenarios)  
+C. Only white-box path coverage  
+D. Forbidding acceptance criteria  
 
-**Answer:** C  
-**Explanation:**  
-Agile and Continuous Delivery/DevOps models emphasize continuous testing throughout short iteration cycles with frequent releases.
+**Answer:** B  
+**Explanation:** BDD focuses on behavior and shared understanding (FL-2.1.3).
 
 ---
 
 ### Question 3
-Behavioral-Driven Development (BDD) focuses on:
+Component integration testing is most appropriate to find:
 
-A. Testing the internal structure of the code  
-B. Writing tests in a language close to natural language that describes behavior  
-C. Performing testing only at the end  
-D. Eliminating the need for testers  
+A. Failures in communication between components  
+B. Whether the product meets long-term business strategy alone  
+C. Only spelling mistakes in the user manual  
+D. Only hardware vendor invoices  
 
-**Answer:** B  
-**Explanation:**  
-BDD uses a specification language (like Gherkin) to write tests that describe the expected behavior in a format understandable to both technical and non-technical team members.
+**Answer:** A  
+**Explanation:** Integration level targets interfaces and interactions (FL-2.2.1).
 
 ---
 
 ### Question 4
-What is a key characteristic of Acceptance Test-Driven Development (ATDD)?
+System testing is most associated with:
 
-A. Tests are written after development is complete  
-B. Only developers write acceptance tests  
-C. Acceptance criteria are defined and tested collaboratively before implementation  
-D. Acceptance testing is done only by business analysts  
+A. A single function in isolation with mocked collaborators only  
+B. End-to-end system behavior and correctly implemented business rules  
+C. Only compiler warnings  
+D. Only retirement data archival  
 
-**Answer:** C  
-**Explanation:**  
-ATDD involves teams (developers, testers, business analysts) collaboratively creating acceptance tests before implementation begins.
+**Answer:** B  
+**Explanation:** System level exercises the system as a whole against system requirements/rules.
 
 ---
 
 ### Question 5
-In a CI/CD pipeline, automated tests are:
+Which pair is CORRECT?
 
-A. Run manually before each release  
-B. Triggered automatically on each commit/build and provide rapid feedback  
-C. Only run once a month  
-D. Only run by the QA team  
+A. Confirmation = side-effect checks; Regression = verify one fix  
+B. Confirmation = verify a fix; Regression = check existing features still work  
+C. Both always mean the same activity  
+D. Neither is used after changes  
 
 **Answer:** B  
-**Explanation:**  
-CI/CD pipelines use automation to run tests automatically whenever code changes are committed, enabling rapid feedback and detection of issues early.
+**Explanation:** Clear distinction in FL-2.2.3.
 
 ---
+
+### Question 6
+An operational system will be moved to a new cloud platform. Testing focused on that change is best classified as:
+
+A. Only brand-new component testing with no regression  
+B. Maintenance testing triggered by migration  
+C. Only informal buddy checks with no plan  
+D. Only writing the original product vision  
+
+**Answer:** B  
+**Explanation:** Migration is a classic maintenance-testing trigger (FL-2.3.1).
+
+---
+
+### Question 7
+White-box testing is based on:
+
+A. External behavior only  
+B. Internal structure (e.g. code or architecture)  
+C. Only marketing claims  
+D. Only user interviews without any structure  
+
+**Answer:** B  
+**Explanation:** White-box uses knowledge of internal structure (FL-2.2.2).
+
+---
+
+### Question 8
+The SDLC choice affects testing mainly by changing:
+
+A. The laws of physics  
+B. Timing of levels, documentation detail, techniques, automation, and roles  
+C. Only the office furniture  
+D. Nothing related to testing  
+
+**Answer:** B  
+**Explanation:** FL-2.1.1 lists these impacts.
+
+---
+
+### Question 9
+Executing performance efficiency tests early on a critical component is an example of:
+
+A. Ignoring non-functional quality  
+B. Shift-left  
+C. Absence-of-defects fallacy  
+D. Vendor lock-in  
+
+**Answer:** B  
+**Explanation:** Early non-functional testing is a shift-left example (FL-2.1.5).
+
+---
+
+### Question 10
+Distinct objectives per test level help mainly to:
+
+A. Maximize useless overlap of the same tests at every level  
+B. Ensure adequate coverage without unnecessary duplication  
+C. Eliminate acceptance testing  
+D. Avoid all integration testing  
+
+**Answer:** B  
+**Explanation:** Good practice: specific objectives per level (FL-2.1.2).
