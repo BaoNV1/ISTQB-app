@@ -290,10 +290,19 @@ function renderMarkdown(markdown) {
       .replace(/`([^`]+)`/g, '<code>$1</code>');
   };
 
+  const isTableSeparator = (line) => /^\|[\s|:\-]+\|$/.test(line.trim());
   const renderTable = (rows) => {
-    const header = rows[0].split('|').map((cell) => cell.trim()).filter(Boolean);
-    const bodyRows = rows.slice(2).map((row) => row.split('|').map((cell) => cell.trim()).filter(Boolean));
-    return `<table style="width:100%; border-collapse:collapse; margin:12px 0;"><thead><tr>${header.map((cell) => `<th style="text-align:left; padding:8px; border:1px solid #334155; background:#0f172a;">${formatInline(cell)}</th>`).join('')}</tr></thead><tbody>${bodyRows.map((row) => `<tr>${row.map((cell) => `<td style="padding:8px; border:1px solid #334155; vertical-align:top;">${formatInline(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    const parsed = rows
+      .filter((r) => !isTableSeparator(r))
+      .map((r) => r.split('|').slice(1, -1).map((cell) => cell.trim()));
+    if (!parsed.length) return '';
+    const header = parsed[0];
+    const bodyRows = parsed.slice(1);
+    const thead = `<thead><tr>${header.map((c) => `<th>${formatInline(c)}</th>`).join('')}</tr></thead>`;
+    const tbody = `<tbody>${bodyRows.map((row) =>
+      `<tr>${row.map((c) => `<td>${formatInline(c)}</td>`).join('')}</tr>`
+    ).join('')}</tbody>`;
+    return `<div class="md-table-wrap"><table class="md-table">${thead}${tbody}</table></div>`;
   };
 
   for (let i = 0; i < lines.length; i++) {
@@ -345,6 +354,11 @@ function renderMarkdown(markdown) {
     if (/^---$/.test(trimmed)) {
       closeList();
       html.push('<hr />');
+      continue;
+    }
+    if (/^\*\*(Exam tip|Study tip|Key|Note|Mẹo)/i.test(trimmed)) {
+      closeList();
+      html.push(`<div class="callout">${formatInline(trimmed)}</div>`);
       continue;
     }
     closeList();
